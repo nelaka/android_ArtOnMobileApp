@@ -24,6 +24,7 @@ The app will:
 <li>Αllow the user to mark an art object as a favorite in the details view by tapping on the fab button with the heart. This is for a local art objects collection that will be maintain and does not require an API request*.</li>
 <li>Allow the user to view a collection with his favorites art objects via a choice in navigation drawer.</li>
 <li>Allow the user to display his favorite art objects in a widget.</li>
+  </ul>
 
 ## Libraries:
 <ul>
