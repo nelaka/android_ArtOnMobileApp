@@ -1,0 +1,80 @@
+apply plugin: 'com.android.application'
+
+// Begin of reading the sensitive data
+def noKeyFound = '"NO_KEY_FOUND"'
+def rijksmuseumApiKey = noKeyFound
+
+def sensitiveDataFile = file('../sensitive_data.txt')
+Properties sensitiveData = new Properties()
+
+if (sensitiveDataFile.canRead()) {
+    // Read the sensitive data from file sensitive_data.txt
+    sensitiveData.load(new FileInputStream(sensitiveDataFile))
+
+    if (sensitiveData != null) {
+        if (sensitiveData.containsKey('rijksmuseumApiKey')) {
+            rijksmuseumApiKey = sensitiveData['rijksmuseumApiKey']
+        }
+    }
+}
+
+// In this section a reviewer can insert directly his own
+// sensitive data by replacing the strings beginning with REVIEWERS_
+// Just double click on the string and paste you own data
+if (rijksmuseumApiKey == noKeyFound) {
+    rijksmuseumApiKey = '"RIJKSMUSEUM_API_KEY_GOES_HERE"'
+}
+// End of reading the sensitive data
+
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.example.android.android_artonmobileapp"
+        minSdkVersion 18
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // add a Constant Field
+        buildConfigField "String", "RIJKSMUSEUM_API_KEY", rijksmuseumApiKey
+        // add a Resource String for the same key-value pair
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support:preference-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:exifinterface:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    //CardView
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    //Butterknife
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    //Retrofit and Gson
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.google.code.gson:gson:2.8.4'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    //Logging Network Calls
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}

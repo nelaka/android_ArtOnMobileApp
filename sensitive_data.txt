@@ -1,0 +1,2 @@
+﻿
+rijksmuseumApiKey = "0MCRcrjF"

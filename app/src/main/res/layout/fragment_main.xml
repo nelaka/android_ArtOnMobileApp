@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/main_view"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/appbar_elevation"
+        android:background="@color/colorPrimary"
+        android:fitsSystemWindows="true">
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/items_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/default_padding_small"
+            android:paddingLeft="@dimen/default_padding_small"
+            android:paddingRight="@dimen/default_padding_small"
+            android:paddingTop="?actionBarSize"
+            android:scrollbarStyle="outsideOverlay" />
+        <TextView
+            android:id="@+id/tv_error_message_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/default_padding"
+            android:text="@string/error_message"
+            android:textSize="@dimen/text_size_error_message"
+            android:visibility="invisible" />
+
+        <!-- A progress bar that will be shown to users to indicate that movies data are loading -->
+        <ProgressBar
+            android:id="@+id/pb_loading_indicator"
+            android:layout_width="@dimen/progress_bar_dimension"
+            android:layout_height="@dimen/progress_bar_dimension"
+            android:layout_gravity="center"
+            android:visibility="invisible" />
+        <!-- A message when there are no favorite movies in user list -->
+        <TextView
+            android:id="@+id/tv_no_fav_art_objects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/default_padding"
+            android:text="@string/no_fav_items_message"
+            android:textSize="@dimen/text_size_error_message"
+            android:visibility="invisible" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

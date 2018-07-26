@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/menu_first"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_allworksofarts"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/nav_all_works_of_arts"/>
+        <item
+            android:id="@+id/nav_allpaintings"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/nav_all_paintings"/>
+    </group>
+    <group
+        android:id="@+id/menu_rijksstudio"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_styles"
+            android:title="@string/nav_styles"
+            android:checkable="false"/>
+    </group>
+
+    <group
+        android:id="@+id/menu_second"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_favorites"
+            android:title="@string/nav_favorites"/>
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>
+
+</menu>
+
+

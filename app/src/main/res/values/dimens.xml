@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- paddings -->
+    <dimen name="zero_padding">0dp</dimen>
+    <dimen name="default_padding_small">8dp</dimen>
+    <dimen name="default_padding">16dp</dimen>
+
+    <!-- text sizes -->
+    <dimen name="default_text_size">16sp</dimen>
+    <dimen name="detail_title_text_size">20sp</dimen>
+    <dimen name="text_size_error_message">20sp</dimen>
+
+    <!-- elevations -->
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="appbar_elevation">4dp</dimen>
+    <dimen name="fab_elevation">6dp</dimen>
+
+    <dimen name="progress_bar_dimension">42dp</dimen>
+    <dimen name="pressed_translation_z">12dp</dimen>
+
+    <!-- fab dimensions -->
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- list -->
+    <dimen name="list_side_margin">4dp</dimen>
+    <dimen name="list_toolbar_side_margin">0dp</dimen>
+    <integer name="list_column_count">2</integer>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+</resources>
