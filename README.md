@@ -40,10 +40,9 @@ The app will:
 <li>Google Mobile Ads to display ads (in app’s free flavor). Notice that test ads will be displayed.</li>
 </ul>
 
-## Notes
-In order to use the app you should get an API key from Rijksmuseum site
-Instructions are here: // https://docs.google.com/document/d/1ZlN1fUsCSKuInLECcJkslIqvpKlP7jWL2TP9m6UiA6I/pub?embedded=true
-And you should then put the key in build.gradle (Module app) where you can find // THEMOVIEDB_API_KEY_GOES_HERE
+## Access to the API
+To access the data and images, you will first need to obtain an API key. You can do this via the advanced settings of your Rijksstudio account [https://www.rijksmuseum.nl/en/rijksstudio/my/profile]. You will be given a key instantly upon request. Every request to the API must be accompanied by this key.
+And you should then put the key in build.gradle (Module app) where you can find RIJKSMUSEUM_API_KEY_GOES_HERE
 
 
 <h2> App's screenshots</h2>
