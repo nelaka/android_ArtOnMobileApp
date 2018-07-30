@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/style_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/card_style_height"
+        android:contentDescription="TODO"
+        android:scaleType="centerCrop" />
+
+
+    <TextView
+        android:id="@+id/recipe_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/default_padding"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        tools:text="Cake" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/default_padding"
+        android:contentDescription="@string/desc_of_arrow_right_white"
+        android:gravity="center_vertical|end"
+        android:src="@drawable/ic_keyboard_arrow_right" />
+</FrameLayout>

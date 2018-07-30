@@ -34,7 +34,7 @@ public class ArtObjectViewHolder extends RecyclerView.ViewHolder implements View
         public void bindArtObjects (int position) {
             ArtObject artObject = mArtObjects.get(position);
 
-            String url = artObject.getWebImage().getUrl();
+            String url = artObject.getWebImage();
             Log.v("adapterART OBJECT", "url = " + url );
 
             Picasso.get().load(url)

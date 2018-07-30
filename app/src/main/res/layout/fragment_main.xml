@@ -2,7 +2,8 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main_view"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_fragment_container"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -13,7 +14,12 @@
         android:background="@color/colorPrimary"
         android:fitsSystemWindows="true">
 
-
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Theme.AppCompat.Light" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -25,11 +31,8 @@
             android:id="@+id/items_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="?attr/actionBarSize"
             android:clipToPadding="false"
-            android:paddingBottom="@dimen/default_padding_small"
-            android:paddingLeft="@dimen/default_padding_small"
-            android:paddingRight="@dimen/default_padding_small"
-            android:paddingTop="?actionBarSize"
             android:scrollbarStyle="outsideOverlay" />
         <TextView
             android:id="@+id/tv_error_message_display"

@@ -1,7 +1,9 @@
 package com.example.android.android_artonmobileapp;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -17,6 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.android_artonmobileapp.adapter.ArtObjectsAdapter;
+import com.example.android.android_artonmobileapp.adapter.FavItemsAdapter;
+import com.example.android.android_artonmobileapp.data.ArtObjectsContract;
 import com.example.android.android_artonmobileapp.holder.ArtObjectViewHolder;
 import com.example.android.android_artonmobileapp.model.ArtObject;
 import com.example.android.android_artonmobileapp.model.ArtObjectResponse;
@@ -24,8 +28,8 @@ import com.example.android.android_artonmobileapp.rest.ApiClient;
 import com.example.android.android_artonmobileapp.rest.ApiInterface;
 import com.example.android.android_artonmobileapp.utils.Config;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +37,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.app.Activity.RESULT_OK;
+import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_ART_OBJECT_ID;
+import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_IMAGE;
+import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_MAKER;
+import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_TITLE;
+import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_TITLE_LONG;
+import static com.example.android.android_artonmobileapp.utils.Config.BUNDLE_FAVORITES;
+import static com.example.android.android_artonmobileapp.utils.Config.CHANGES_IN_FAV_ITEMS;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,6 +70,7 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
 
         private Context mContext;
         private ArtObjectsAdapter mArtObjectsAdapter;
+    private FavItemsAdapter mFavItemsAdapter;
         private Parcelable mSavedRecyclerLayoutState;
         private GridLayoutManager mLayoutManager;
         private OnFragmentInteractionListener mListener;
@@ -90,11 +103,21 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
          * change the child layout size in the RecyclerView
          */
         mRecyclerView.setHasFixedSize(true);
+
+
         Intent intent = getActivity().getIntent();
         if (intent != null) {
             if (intent.hasExtra(Config.BUNDLE_STYLE)) {
                 mQuery = intent.getStringExtra(Config.BUNDLE_STYLE);
-            }}
+            } else if (intent.hasExtra(Config.BUNDLE_QUERY)) {
+                mQuery = intent.getStringExtra(Config.BUNDLE_QUERY);
+            } else if (intent.hasExtra(BUNDLE_FAVORITES)) {
+                artObjectsFromDB();
+            }
+
+        }
+
+
         if (savedInstanceState != null) {
             mItems = savedInstanceState.getParcelableArrayList(Config.BUNDLE_ART_OBJECTS);
             mSavedRecyclerLayoutState = savedInstanceState.getParcelable(Config.BUNDLE_RECYCLER_LAYOUT);
@@ -113,8 +136,13 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
         if (mItems == null) {
 
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-            if (mQuery == null) mQuery = "masterpieces";
-            Call<ArtObjectResponse> call = apiService.getArtObjects(Config.rijksmuseumApiKey, "json", 30, true);
+            Call<ArtObjectResponse> call;
+            if (mQuery == null) {
+                call = apiService.getArtObjects(Config.rijksmuseumApiKey, "json", 30, true);
+            } else {
+                call = apiService.getPaintings(Config.rijksmuseumApiKey, "json", 30, true, mQuery);
+            }
+
             call.enqueue(new Callback<ArtObjectResponse>() {
 
                 @Override
@@ -174,6 +202,51 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
         /* Then, show the error */
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
 
+    }
+
+    private void artObjectsFromDB() {
+        Uri uri = ArtObjectsContract.ArtObjectsEntry.CONTENT_URI;
+        ContentResolver resolver = getActivity().getContentResolver();
+        Cursor itemsResponse = resolver.query(uri, null, null, null, null);
+
+        if (itemsResponse.getCount() <= 0) {
+            //showNoFavMovieMessage();
+            return;
+        }
+        // Create an empty ArrayList that we can start adding movies to
+        ArrayList<ArtObject> items = new ArrayList<>();
+
+        for (int i = 0; i < itemsResponse.getCount(); i++) {
+            int itemIdIndex = itemsResponse.getColumnIndex(COLUMN_ART_OBJECT_ID);
+            int itemTitleIndex = itemsResponse.getColumnIndex(COLUMN_TITLE);
+            int itemMakerIndex = itemsResponse.getColumnIndex(COLUMN_MAKER);
+            int itemTitleLongIndex = itemsResponse.getColumnIndex(COLUMN_TITLE_LONG);
+            int itemImageIndex = itemsResponse.getColumnIndex(COLUMN_IMAGE);
+
+            itemsResponse.moveToPosition(i);
+
+            items.add(new ArtObject(itemsResponse.getString(itemIdIndex), itemsResponse.getString(itemTitleIndex), itemsResponse.getString(itemMakerIndex), itemsResponse.getString(itemTitleLongIndex), itemsResponse.getString(itemImageIndex)));
+        }
+        /* Setting the adapter attaches it to the RecyclerView in our layout. */
+        mFavItemsAdapter.setData(mItems);
+
+        /* Setting the adapter attaches it to the RecyclerView in our layout. */
+        mRecyclerView.setAdapter(mFavItemsAdapter);
+        //showMovieDataView();
+        itemsResponse.close();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Check which request we're responding to
+        if (requestCode == CHANGES_IN_FAV_ITEMS) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                mSavedRecyclerLayoutState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+                itemsRequest();
+            }
+        }
     }
 
     @Override

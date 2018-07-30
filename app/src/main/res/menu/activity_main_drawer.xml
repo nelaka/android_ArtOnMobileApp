@@ -9,19 +9,19 @@
         <item
             android:id="@+id/nav_allworksofarts"
             android:icon="@drawable/ic_menu_camera"
-            android:title="@string/nav_all_works_of_arts"/>
+            android:title="@string/nav_all_works_of_arts" />
         <item
             android:id="@+id/nav_allpaintings"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/nav_all_paintings"/>
+            android:title="@string/nav_all_paintings" />
     </group>
     <group
         android:id="@+id/menu_rijksstudio"
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_styles"
-            android:title="@string/nav_styles"
-            android:checkable="false"/>
+            android:checkable="false"
+            android:title="@string/nav_styles" />
     </group>
 
     <group
@@ -29,7 +29,7 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_favorites"
-            android:title="@string/nav_favorites"/>
+            android:title="@string/nav_favorites" />
     </group>
 
     <item android:title="Communicate">
@@ -46,5 +46,3 @@
     </item>
 
 </menu>
-
-

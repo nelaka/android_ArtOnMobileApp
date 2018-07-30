@@ -81,6 +81,13 @@
                 android:layout_height="wrap_content"
                 android:textColorLink="@color/colorAccent" />
 
+            <TextView
+                android:id="@+id/art_object_maker_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorLink="@color/colorAccent" />
+
+
             <!-- A progress bar that will be shown to users to indicate that movies data are loading -->
             <ProgressBar
                 android:id="@+id/pb_loading_indicator"

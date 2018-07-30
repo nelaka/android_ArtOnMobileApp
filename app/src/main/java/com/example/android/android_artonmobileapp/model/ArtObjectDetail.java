@@ -3,7 +3,6 @@ package com.example.android.android_artonmobileapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -11,9 +10,7 @@ import java.util.List;
 
 public class ArtObjectDetail implements Parcelable {
 
-        @SerializedName("links")
-        private Links links;
-        @SerializedName("id")
+    @SerializedName("id")
         private String id;
         @SerializedName("priref")
         private String priref;
@@ -115,13 +112,12 @@ public class ArtObjectDetail implements Parcelable {
         };
 
         private ArtObjectDetail(Parcel in) {
-            this.links = ((Links) in.readValue((Links.class.getClassLoader())));
             this.id = in.readString();
             this.priref = in.readString();
             this.objectNumber = in.readString();
             this.language = in.readString();
             this.title = in.readString();
-            this.copyrightHolder = ((Object) in.readValue((Object.class.getClassLoader())));
+            this.copyrightHolder = in.readValue((Object.class.getClassLoader()));
             this.webImage = ((WebImage) in.readValue((WebImage.class.getClassLoader())));
             mColors = in.readArrayList(String.class.getClassLoader());
             this.colorsWithNormalization = in.readArrayList(ColorsWithNormalization.class.getClassLoader());
@@ -129,7 +125,7 @@ public class ArtObjectDetail implements Parcelable {
             in.readList(this.normalized32Colors, (java.lang.String.class.getClassLoader()));
             in.readList(this.titles, (java.lang.String.class.getClassLoader()));
             this.description = ((String) in.readValue((String.class.getClassLoader())));
-            this.labelText = ((Object) in.readValue((Object.class.getClassLoader())));
+            this.labelText = in.readValue((Object.class.getClassLoader()));
             in.readList(this.objectTypes, (java.lang.String.class.getClassLoader()));
             in.readList(this.objectCollection, (java.lang.String.class.getClassLoader()));
             in.readList(this.makers, (java.lang.Object.class.getClassLoader()));
@@ -137,7 +133,7 @@ public class ArtObjectDetail implements Parcelable {
             this.plaqueDescriptionDutch = ((String) in.readValue((String.class.getClassLoader())));
             this.plaqueDescriptionEnglish = ((String) in.readValue((String.class.getClassLoader())));
             this.principalMaker = ((String) in.readValue((String.class.getClassLoader())));
-            this.artistRole = ((Object) in.readValue((Object.class.getClassLoader())));
+            this.artistRole = in.readValue((Object.class.getClassLoader()));
             in.readList(this.associations, (java.lang.Object.class.getClassLoader()));
             this.acquisition = ((Acquisition) in.readValue((Acquisition.class.getClassLoader())));
             in.readList(this.exhibitions, (java.lang.Object.class.getClassLoader()));
@@ -163,9 +159,11 @@ public class ArtObjectDetail implements Parcelable {
             this.location = ((String) in.readValue((String.class.getClassLoader())));
         }
 
-        public ArtObjectDetail(Links links, String id, String priref, String objectNumber, String language, String title, Object copyrightHolder, WebImage webImage, ArrayList<String> colors, ArrayList<ColorsWithNormalization> colorsWithNormalization, List<String> normalizedColors, List<String> normalized32Colors, List<String> titles, String description, Object labelText, List<String> objectTypes, List<String> objectCollection, List<Object> makers, List<PrincipalMaker> principalMakers, String plaqueDescriptionDutch, String plaqueDescriptionEnglish, String principalMaker, Object artistRole, List<Object> associations, Acquisition acquisition, List<Object> exhibitions, List<String> materials, List<Object> techniques, List<String> productionPlaces, Dating dating, Classification classification, Boolean hasImage, List<String> historicalPersons, List<Object> inscriptions, List<String> documentation, List<Object> catRefRPK, String principalOrFirstMaker, List<Dimension> dimensions, List<Object> physicalProperties, String physicalMedium, String longTitle, String subTitle, String scLabelLine, Label label, Boolean showImage, String location) {
+    public ArtObjectDetail() {
+    }
+
+    public ArtObjectDetail(String id, String priref, String objectNumber, String language, String title, Object copyrightHolder, WebImage webImage, ArrayList<String> colors, ArrayList<ColorsWithNormalization> colorsWithNormalization, List<String> normalizedColors, List<String> normalized32Colors, List<String> titles, String description, Object labelText, List<String> objectTypes, List<String> objectCollection, List<Object> makers, List<PrincipalMaker> principalMakers, String plaqueDescriptionDutch, String plaqueDescriptionEnglish, String principalMaker, Object artistRole, List<Object> associations, Acquisition acquisition, List<Object> exhibitions, List<String> materials, List<Object> techniques, List<String> productionPlaces, Dating dating, Classification classification, Boolean hasImage, List<String> historicalPersons, List<Object> inscriptions, List<String> documentation, List<Object> catRefRPK, String principalOrFirstMaker, List<Dimension> dimensions, List<Object> physicalProperties, String physicalMedium, String longTitle, String subTitle, String scLabelLine, Label label, Boolean showImage, String location) {
             super();
-            this.links = links;
             this.id = id;
             this.priref = priref;
             this.objectNumber = objectNumber;
@@ -213,11 +211,8 @@ public class ArtObjectDetail implements Parcelable {
             this.location = location;
         }
 
-        public Links getLinks() {
-            return links;
-        }
 
-        public String getId() {
+    public String getId() {
             return id;
         }
 
@@ -577,7 +572,6 @@ public class ArtObjectDetail implements Parcelable {
         }
 
         public void writeToParcel(Parcel dest, int flags) {
-            dest.writeValue(links);
             dest.writeString(id);
             dest.writeString(priref);
             dest.writeString(objectNumber);
