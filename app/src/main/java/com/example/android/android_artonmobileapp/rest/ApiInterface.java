@@ -1,7 +1,7 @@
 package com.example.android.android_artonmobileapp.rest;
 
 
-import com.example.android.android_artonmobileapp.model.ArtObjectDetailResponse;
+import com.example.android.android_artonmobileapp.model.ArtObjectDetail;
 import com.example.android.android_artonmobileapp.model.ArtObjectResponse;
 import com.example.android.android_artonmobileapp.model.StyleDetails;
 import com.example.android.android_artonmobileapp.model.StylesResponse;
@@ -24,7 +24,7 @@ public interface ApiInterface {
     Call<ArtObjectResponse> getArtObjectQuery(@Query("q") String query, @Query("key") String apiKey, @Query("format") String format, @Query("ps") int resultsPerPage, @Query("imgonly") boolean imgOnly, @Query("type") String type);
 
     @GET("en/collection/{id}/")
-    Call<ArtObjectDetailResponse> getArtObjectDetails(@Path("id") String id, @Query("key") String apiKey, @Query("format") String format);
+    Call<ArtObjectDetail> getArtObjectDetails(@Path("id") String id, @Query("key") String apiKey, @Query("format") String format);
 
 
     @GET("pages/en/rijksstudio/styles")

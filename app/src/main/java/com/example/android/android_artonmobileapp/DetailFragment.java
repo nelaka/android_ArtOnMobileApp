@@ -21,15 +21,11 @@ import android.widget.TextView;
 import com.example.android.android_artonmobileapp.data.ArtObjectsContract;
 import com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
 import com.example.android.android_artonmobileapp.model.ArtObjectDetail;
-import com.example.android.android_artonmobileapp.model.ArtObjectDetailResponse;
 import com.example.android.android_artonmobileapp.rest.ApiClient;
 import com.example.android.android_artonmobileapp.rest.ApiInterface;
 import com.example.android.android_artonmobileapp.utils.Config;
 import com.example.android.android_artonmobileapp.utils.Utils;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,20 +36,14 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 
-
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link DetailFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link DetailFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+ * {@link DetailFragment}.
+ * */
 public class DetailFragment extends Fragment {
-    //  ArtObject mItem;
-    ArtObjectDetail mDetails = new ArtObjectDetail();
-    List<String> mColors = new ArrayList<>();
+    ArtObjectDetail mDetails;
+    private String mTitle;
     @BindView(R.id.art_object_iv)
     ImageView mArtObjectView;
     @BindView(R.id.art_object_desc_tv)
@@ -74,7 +64,7 @@ public class DetailFragment extends Fragment {
     Boolean mFavorite = false;
     private String mId;
  private Context mContext;
-  //  private OnFragmentInteractionListener mListener;
+
 
     public DetailFragment() {
         // Required empty public constructor
@@ -102,15 +92,13 @@ public class DetailFragment extends Fragment {
 
                 // Display the current selected movie title on the Action Bar
                 //      getSupportActionBar()
-                mToolbar.setTitle(mDetails.getTitle());
-                String url = mDetails.getWebImage().getUrl();
-                Log.v("adapterART OBJECT", "url = " + url);
+                mToolbar.setTitle(mTitle);
+                //    Log.v("adapterART OBJECT", "url = " + mUrl);
 
-                Picasso.get().load(url).placeholder(R.drawable.placeholder1200).error(R.drawable.placeholder1200).into(mArtObjectView);
+                Picasso.get().load(mDetails.getWebImage().getUrl()).placeholder(R.drawable.placeholder1200).error(R.drawable.placeholder1200).into(mArtObjectView);
 
-                mArtObjectDescView.setText(mDetails.getDescription());
-                mArtObjectMakerView.setText(mDetails.getPrincipalOrFirstMaker());
-                mColors = mDetails.getNormalizedColors();
+                //   mArtObjectDescView.setText(mDescription);
+                //  mArtObjectMakerView.setText(mMaker);
                 //   int intColorValue = Color.parseColor(mColors.get(0));
                 //     mArtObjectColorsView.setBackgroundColor(intColorValue);
             }
@@ -138,19 +126,23 @@ public class DetailFragment extends Fragment {
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
-        Call<ArtObjectDetailResponse> call = apiService.getArtObjectDetails(id, Config.rijksmuseumApiKey, "json");
-        call.enqueue(new Callback<ArtObjectDetailResponse>() {
+        Call<ArtObjectDetail> call = apiService.getArtObjectDetails(id, Config.rijksmuseumApiKey, "json");
+        call.enqueue(new Callback<ArtObjectDetail>() {
 
             @Override
-            public void onResponse(@NonNull Call<ArtObjectDetailResponse> call, @NonNull Response<ArtObjectDetailResponse> response) {
-                mDetails = response.body().getArtObjectDetail();
+            public void onResponse(@NonNull Call<ArtObjectDetail> call, @NonNull Response<ArtObjectDetail> response) {
+                if ((response.body()) != null) {
+                    mDetails = response.body();
+                    Log.d(TAG, "Recipe title is " + response.body().getTitle());
+                    mTitle = response.body().getTitle();
 
-                Log.d("DETAIL ", "Number of colors results received: " + mDetails.getColors().size());
+                }
+                Log.d("DETAIL ", "Number of colors results received: " + mDetails.getTitle());
                 mLoadingIndicator.setVisibility(View.INVISIBLE);
             }
 
             @Override
-            public void onFailure(@NonNull Call<ArtObjectDetailResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ArtObjectDetail> call, @NonNull Throwable t) {
                 // Log error here since request failed
                 Log.e("detail", t.toString());
             }
@@ -198,7 +190,7 @@ public class DetailFragment extends Fragment {
         contentValues.put(ArtObjectsEntry.COLUMN_ART_OBJECT_ID, id);
         contentValues.put(ArtObjectsEntry.COLUMN_TITLE, mDetails.getTitle());
         contentValues.put(ArtObjectsEntry.COLUMN_MAKER, mDetails.getPrincipalOrFirstMaker());
-        contentValues.put(ArtObjectsEntry.COLUMN_TITLE_LONG, mDetails.getLongTitle());
+        contentValues.put(ArtObjectsEntry.COLUMN_TITLE_LONG, mDetails.getDescription());
         contentValues.put(ArtObjectsEntry.COLUMN_IMAGE, mDetails.getWebImage().getUrl());
 
         // Insert the content values via a ContentResolver
