@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.example.android.android_artonmobileapp.data.ArtObjectsContract;
 import com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
 import com.example.android.android_artonmobileapp.model.ArtObjectDetail;
+import com.example.android.android_artonmobileapp.model.ArtObjectDetailResponse;
 import com.example.android.android_artonmobileapp.rest.ApiClient;
 import com.example.android.android_artonmobileapp.rest.ApiInterface;
 import com.example.android.android_artonmobileapp.utils.Config;
@@ -90,17 +91,7 @@ public class DetailFragment extends Fragment {
                 artObjectDetailsRequest(mId);
 
 
-                // Display the current selected movie title on the Action Bar
-                //      getSupportActionBar()
-                mToolbar.setTitle(mTitle);
-                //    Log.v("adapterART OBJECT", "url = " + mUrl);
 
-                Picasso.get().load(mDetails.getWebImage().getUrl()).placeholder(R.drawable.placeholder1200).error(R.drawable.placeholder1200).into(mArtObjectView);
-
-                //   mArtObjectDescView.setText(mDescription);
-                //  mArtObjectMakerView.setText(mMaker);
-                //   int intColorValue = Color.parseColor(mColors.get(0));
-                //     mArtObjectColorsView.setBackgroundColor(intColorValue);
             }
         }
 
@@ -126,15 +117,27 @@ public class DetailFragment extends Fragment {
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
-        Call<ArtObjectDetail> call = apiService.getArtObjectDetails(id, Config.rijksmuseumApiKey, "json");
-        call.enqueue(new Callback<ArtObjectDetail>() {
+        Call<ArtObjectDetailResponse> call = apiService.getArtObjectDetails(id, Config.rijksmuseumApiKey, "json");
+        call.enqueue(new Callback<ArtObjectDetailResponse>() {
 
             @Override
-            public void onResponse(@NonNull Call<ArtObjectDetail> call, @NonNull Response<ArtObjectDetail> response) {
+            public void onResponse(@NonNull Call<ArtObjectDetailResponse> call, @NonNull Response<ArtObjectDetailResponse> response) {
                 if ((response.body()) != null) {
-                    mDetails = response.body();
-                    Log.d(TAG, "Recipe title is " + response.body().getTitle());
-                    mTitle = response.body().getTitle();
+                    mDetails = response.body().getArtObject();
+                    Log.d(TAG, "Recipe title is " + response.body().getArtObject().getTitle());
+                    mTitle = response.body().getArtObject().getTitle();
+
+                    // Display the current selected movie title on the Action Bar
+                    //      getSupportActionBar()
+                    mToolbar.setTitle(mTitle);
+                    //    Log.v("adapterART OBJECT", "url = " + mUrl);
+
+                    Picasso.get().load(mDetails.getWebImage().getUrl()).placeholder(R.drawable.placeholder1200).error(R.drawable.placeholder1200).into(mArtObjectView);
+
+                    mArtObjectDescView.setText(mDetails.getDescription());
+                      mArtObjectMakerView.setText(mDetails.getPrincipalOrFirstMaker());
+                    //   int intColorValue = Color.parseColor(mColors.get(0));
+                    //     mArtObjectColorsView.setBackgroundColor(intColorValue);
 
                 }
                 Log.d("DETAIL ", "Number of colors results received: " + mDetails.getTitle());
@@ -142,7 +145,7 @@ public class DetailFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ArtObjectDetail> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ArtObjectDetailResponse> call, @NonNull Throwable t) {
                 // Log error here since request failed
                 Log.e("detail", t.toString());
             }

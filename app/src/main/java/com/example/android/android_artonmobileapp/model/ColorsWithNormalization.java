@@ -6,54 +6,59 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ColorsWithNormalization implements Parcelable {
+public class ColorsWithNormalization implements Parcelable
+    {
 
         @SerializedName("originalHex")
-        private String mOriginalHex;
+        @Expose
+        private String originalHex;
         @SerializedName("normalizedHex")
-        private String mNormalizedHex;
-        public final static Parcelable.Creator<ColorsWithNormalization> CREATOR = new Creator<ColorsWithNormalization>() {
+        @Expose
+        private String normalizedHex;
+        public final static Parcelable.Creator<com.example.android.android_artonmobileapp.model.ColorsWithNormalization> CREATOR = new Parcelable.Creator<ColorsWithNormalization>() {
 
 
-           public ColorsWithNormalization createFromParcel(Parcel in) {
-                return new ColorsWithNormalization(in);
+            @SuppressWarnings({
+                    "unchecked"
+            })
+            public com.example.android.android_artonmobileapp.model.ColorsWithNormalization createFromParcel(Parcel in) {
+                return new com.example.android.android_artonmobileapp.model.ColorsWithNormalization(in);
             }
 
-            public ColorsWithNormalization[] newArray(int size) {
-                return (new ColorsWithNormalization[size]);
+            public com.example.android.android_artonmobileapp.model.ColorsWithNormalization[] newArray(int size) {
+                return (new com.example.android.android_artonmobileapp.model.ColorsWithNormalization[size]);
             }
-        };
 
-        private ColorsWithNormalization(Parcel in) {
-            mOriginalHex = in.readString();
-            mNormalizedHex = in.readString();
+        }
+                ;
+
+        protected ColorsWithNormalization(Parcel in) {
+            this.originalHex = ((String) in.readValue((String.class.getClassLoader())));
+            this.normalizedHex = ((String) in.readValue((String.class.getClassLoader())));
         }
 
-        public ColorsWithNormalization(String originalHex, String normalizedHex) {
-            super();
-            mOriginalHex = originalHex;
-            mNormalizedHex = normalizedHex;
+        public ColorsWithNormalization() {
         }
 
         public String getOriginalHex() {
-            return mOriginalHex;
+            return originalHex;
         }
 
         public void setOriginalHex(String originalHex) {
-            mOriginalHex = originalHex;
+            this.originalHex = originalHex;
         }
 
         public String getNormalizedHex() {
-            return mNormalizedHex;
+            return normalizedHex;
         }
 
         public void setNormalizedHex(String normalizedHex) {
-            mNormalizedHex = normalizedHex;
+            this.normalizedHex = normalizedHex;
         }
 
-        public void writeToParcel(Parcel out, int flags) {
-            out.writeString(mOriginalHex);
-            out.writeString(mNormalizedHex);
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeValue(originalHex);
+            dest.writeValue(normalizedHex);
         }
 
         public int describeContents() {
@@ -61,5 +66,3 @@ public class ColorsWithNormalization implements Parcelable {
         }
 
     }
-
-
