@@ -228,7 +228,7 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
             items.add(new ArtObject(itemsResponse.getString(itemIdIndex), itemsResponse.getString(itemTitleIndex), itemsResponse.getString(itemMakerIndex), itemsResponse.getString(itemTitleLongIndex), itemsResponse.getString(itemImageIndex)));
         }
         /* Setting the adapter attaches it to the RecyclerView in our layout. */
-        mFavItemsAdapter.setData(mItems);
+       // mFavItemsAdapter.setData(mItems);
 
         /* Setting the adapter attaches it to the RecyclerView in our layout. */
         mRecyclerView.setAdapter(mFavItemsAdapter);

@@ -28,10 +28,10 @@ public class FavItemViewHolder extends RecyclerView.ViewHolder implements View.O
         view.setOnClickListener(this);
     }
 
-    public void bindArtObjects(int position) {
-        ArtObject artObject = mFavItems.get(position);
+    public void bindArtObjects(String url) {
+        //ArtObject artObject = mFavItems.get(position);
 
-        String url = artObject.getWebImage();
+        //String url = artObject.getWebImage();
         Log.v("adapterART OBJECT", "url = " + url);
 
         Picasso.get().load(url).placeholder(R.drawable.placeholder1200).error(R.drawable.placeholder1200).into(artObjectView);
