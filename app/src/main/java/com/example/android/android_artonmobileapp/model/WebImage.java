@@ -3,78 +3,114 @@ package com.example.android.android_artonmobileapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class WebImage implements Parcelable {
-    /*   @SerializedName("guid")
-       private String mGuid;
-       @SerializedName("offsetPercentageX")
-       private Integer mOffsetPercentageX;
-       @SerializedName("offsetPercentageY")
-       private Integer mOffsetPercentageY;
-       @SerializedName("width")
-       private Integer mWidth;
-       @SerializedName("height")
-       private Integer mHeight;*/
+public class WebImage implements Parcelable
+    {
+
+        @SerializedName("guid")
+        @Expose
+        private String guid;
+        @SerializedName("offsetPercentageX")
+        @Expose
+        private int offsetPercentageX;
+        @SerializedName("offsetPercentageY")
+        @Expose
+        private int offsetPercentageY;
+        @SerializedName("width")
+        @Expose
+        private int width;
+        @SerializedName("height")
+        @Expose
+        private int height;
         @SerializedName("url")
-        private String mUrl;
+        @Expose
+        private String url;
+        public final static Parcelable.Creator<com.example.android.android_artonmobileapp.model.WebImage> CREATOR = new Creator<com.example.android.android_artonmobileapp.model.WebImage>() {
 
-        public final static Parcelable.Creator<WebImage> CREATOR = new Creator<WebImage>() {
-            public WebImage createFromParcel(Parcel in) {
-                return new WebImage(in);
+
+            @SuppressWarnings({
+                    "unchecked"
+            })
+            public com.example.android.android_artonmobileapp.model.WebImage createFromParcel(Parcel in) {
+                return new com.example.android.android_artonmobileapp.model.WebImage(in);
             }
 
-            public WebImage[] newArray(int size) {
-                return (new WebImage[size]);
+            public com.example.android.android_artonmobileapp.model.WebImage[] newArray(int size) {
+                return (new com.example.android.android_artonmobileapp.model.WebImage[size]);
             }
-        };
 
-        private WebImage(Parcel in) {
-         /*   mGuid = in.readString();
-            mOffsetPercentageX = in.readInt();
-            mOffsetPercentageY = in.readInt();
-            mWidth = in.readInt();
-            mHeight = in.readInt();*/
-            mUrl = in.readString();
+        }
+                ;
+
+        protected WebImage(Parcel in) {
+            this.guid = ((String) in.readValue((String.class.getClassLoader())));
+            this.offsetPercentageX = ((int) in.readValue((int.class.getClassLoader())));
+            this.offsetPercentageY = ((int) in.readValue((int.class.getClassLoader())));
+            this.width = ((int) in.readValue((int.class.getClassLoader())));
+            this.height = ((int) in.readValue((int.class.getClassLoader())));
+            this.url = ((String) in.readValue((String.class.getClassLoader())));
         }
 
-    public WebImage(/*String guid, Integer offsetPercentageX, Integer offsetPercentageY, Integer width, Integer height,*/ String url) {
-            super();
-            /*mGuid = guid;
-            mOffsetPercentageX = offsetPercentageX;
-            mOffsetPercentageY = offsetPercentageY;
-            mWidth = width;
-            mHeight = height;*/
-            mUrl = url;
+        public WebImage() {
         }
 
-    /*  public String getGuid() {
-          return mGuid;
-      }
-      public Integer getOffsetPercentageX() {
-          return mOffsetPercentageX;
-      }
-      public Integer getOffsetPercentageY() {
-          return mOffsetPercentageY;
-      }
-      public Integer getWidth() {
-          return mWidth;
-      }
-      public Integer getHeight() {
-          return mHeight;
-      }
-      */
-    public String getUrl() {
-            return mUrl;
+        public String getGuid() {
+            return guid;
         }
 
-        public void writeToParcel(Parcel out, int flags) {
-          /*  out.writeString(mGuid);
-            out.writeInt(mOffsetPercentageX);
-            out.writeInt(mOffsetPercentageY);
-            out.writeInt(mWidth);
-            out.writeInt(mHeight);*/
-            out.writeString(mUrl);
+        public void setGuid(String guid) {
+            this.guid = guid;
+        }
+
+        public int getOffsetPercentageX() {
+            return offsetPercentageX;
+        }
+
+        public void setOffsetPercentageX(int offsetPercentageX) {
+            this.offsetPercentageX = offsetPercentageX;
+        }
+
+        public int getOffsetPercentageY() {
+            return offsetPercentageY;
+        }
+
+        public void setOffsetPercentageY(int offsetPercentageY) {
+            this.offsetPercentageY = offsetPercentageY;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public void setWidth(int width) {
+            this.width = width;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+
+        public void setHeight(int height) {
+            this.height = height;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeValue(guid);
+            dest.writeValue(offsetPercentageX);
+            dest.writeValue(offsetPercentageY);
+            dest.writeValue(width);
+            dest.writeValue(height);
+            dest.writeValue(url);
         }
 
         public int describeContents() {
