@@ -1,0 +1,10 @@
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_main"
+    android:name="com.example.android.android_artonmobileapp.MainFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_span="@integer/no_of_columns"
+    tools:context=".MainActivity"
+    tools:layout="@layout/fragment_main"
+    tools:showIn="@layout/app_bar_main" />

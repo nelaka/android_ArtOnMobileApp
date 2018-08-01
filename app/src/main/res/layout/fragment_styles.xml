@@ -11,4 +11,12 @@
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/styles_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="?attr/actionBarSize"
+        android:scrollbarStyle="outsideOverlay" />
+
 </FrameLayout>

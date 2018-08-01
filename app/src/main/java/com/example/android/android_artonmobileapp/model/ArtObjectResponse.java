@@ -9,9 +9,7 @@ import java.util.List;
 
 public class ArtObjectResponse implements Parcelable {
 
-        @SerializedName("elapsedMilliseconds")
-        private Integer mElapsedMilliseconds;
-        @SerializedName("count")
+    @SerializedName("count")
         private Integer mCount;
         @SerializedName("countFacets")
         private CountFacets mCountFacets;
@@ -31,25 +29,20 @@ public class ArtObjectResponse implements Parcelable {
         };
 
         private ArtObjectResponse(Parcel in) {
-            mElapsedMilliseconds = in.readInt();
             mCount = in.readInt();
             mCountFacets = ((CountFacets) in.readValue((CountFacets.class.getClassLoader())));
             in.readList(mArtObjects, (ArtObject.class.getClassLoader()));
             in.readList(mFacets, (Facet.class.getClassLoader()));
         }
 
-        public ArtObjectResponse(Integer elapsedMilliseconds, Integer count, CountFacets countFacets, List<ArtObject> artObjects, List<Facet> facets) {
+    public ArtObjectResponse(Integer count, CountFacets countFacets, List<ArtObject> artObjects, List<Facet> facets) {
             super();
-            mElapsedMilliseconds = elapsedMilliseconds;
             mCount = count;
             mCountFacets = countFacets;
             mArtObjects = artObjects;
             mFacets = facets;
         }
 
-        public Integer getElapsedMilliseconds() {
-            return mElapsedMilliseconds;
-        }
         public Integer getCount() {
             return mCount;
         }
@@ -64,7 +57,6 @@ public class ArtObjectResponse implements Parcelable {
         }
 
         public void writeToParcel(Parcel out, int flags) {
-            out.writeInt(mElapsedMilliseconds);
             out.writeInt(mCount);
             out.writeValue(mCountFacets);
             out.writeList(mArtObjects);
