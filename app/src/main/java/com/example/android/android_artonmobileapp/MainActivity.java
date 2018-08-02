@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     ActionBarDrawerToggle mToggle;
+    @BindView(R.id.fab_mail)
+    FloatingActionButton mFab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -36,8 +38,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();

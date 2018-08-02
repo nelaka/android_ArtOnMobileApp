@@ -6,78 +6,56 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ArtObjectDetailResponse implements Parcelable
-    {
+public class ArtObjectDetailResponse implements Parcelable {
 
-        @SerializedName("elapsedMilliseconds")
-        @Expose
-        private int elapsedMilliseconds;
-        @SerializedName("artObject")
-        @Expose
-        private ArtObjectDetail artObject;
-        @SerializedName("artObjectPage")
-        @Expose
-        private ArtObjectPage artObjectPage;
-        public final static Parcelable.Creator<ArtObjectDetailResponse> CREATOR = new Creator<ArtObjectDetailResponse>() {
+    @SerializedName("artObject")
+    private ArtObjectDetail mArtObject;
+    @SerializedName("artObjectPage")
+    private ArtObjectPage mArtObjectPage;
+    public final static Parcelable.Creator<ArtObjectDetailResponse> CREATOR = new Creator<ArtObjectDetailResponse>() {
 
-
-            @SuppressWarnings({
-                    "unchecked"
-            })
-            public ArtObjectDetailResponse createFromParcel(Parcel in) {
-                return new ArtObjectDetailResponse(in);
-            }
-
-            public ArtObjectDetailResponse[] newArray(int size) {
-                return (new ArtObjectDetailResponse[size]);
-            }
-
-        }
-                ;
-
-        protected ArtObjectDetailResponse(Parcel in) {
-            this.elapsedMilliseconds = ((int) in.readValue((int.class.getClassLoader())));
-            this.artObject = ((ArtObjectDetail) in.readValue((ArtObjectDetail.class.getClassLoader())));
-            this.artObjectPage = ((ArtObjectPage) in.readValue((ArtObjectPage.class.getClassLoader())));
+        public ArtObjectDetailResponse createFromParcel(Parcel in) {
+            return new ArtObjectDetailResponse(in);
         }
 
-        public ArtObjectDetailResponse() {
+        public ArtObjectDetailResponse[] newArray(int size) {
+            return (new ArtObjectDetailResponse[size]);
         }
+    };
 
-        public int getElapsedMilliseconds() {
-            return elapsedMilliseconds;
-        }
-
-        public void setElapsedMilliseconds(int elapsedMilliseconds) {
-            this.elapsedMilliseconds = elapsedMilliseconds;
-        }
-
-        public ArtObjectDetail getArtObject() {
-            return artObject;
-        }
-
-        public void setArtObject(ArtObjectDetail artObject) {
-            this.artObject = artObject;
-        }
-
-        public ArtObjectPage getArtObjectPage() {
-            return artObjectPage;
-        }
-
-        public void setArtObjectPage(ArtObjectPage artObjectPage) {
-            this.artObjectPage = artObjectPage;
-        }
-
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeValue(elapsedMilliseconds);
-            dest.writeValue(artObject);
-            dest.writeValue(artObjectPage);
-        }
-
-        public int describeContents() {
-            return 0;
-        }
-
+    private ArtObjectDetailResponse(Parcel in) {
+        mArtObject = ((ArtObjectDetail) in.readValue((ArtObjectDetail.class.getClassLoader())));
+        mArtObjectPage = ((ArtObjectPage) in.readValue((ArtObjectPage.class.getClassLoader())));
     }
+
+    public ArtObjectDetailResponse() {
+    }
+
+    public ArtObjectDetail getArtObject() {
+        return mArtObject;
+    }
+
+    public void setArtObject(ArtObjectDetail artObject) {
+        mArtObject = artObject;
+    }
+
+    public ArtObjectPage getArtObjectPage() {
+        return mArtObjectPage;
+    }
+
+    public void setArtObjectPage(ArtObjectPage artObjectPage) {
+        mArtObjectPage = artObjectPage;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeValue(mArtObject);
+        out.writeValue(mArtObjectPage);
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+}
 
 

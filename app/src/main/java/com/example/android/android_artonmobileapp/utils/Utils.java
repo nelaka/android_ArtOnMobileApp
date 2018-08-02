@@ -16,14 +16,6 @@ public class Utils {
         snackbar.show();
     }
 
-    public void mySnackBar(View view, String message, int textColor, int bgColor) {
-        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
-        View snackbarView = snackbar.getView();
-        TextView textView = snackbarView.findViewById(R.id.snackbar_text);
-        textView.setTextColor(view.getResources().getColor(textColor));
-        snackbarView.setBackgroundColor(view.getResources().getColor(bgColor));
-        snackbar.show();
-    }
 
 
 }

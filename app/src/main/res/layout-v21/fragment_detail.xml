@@ -25,7 +25,7 @@
                 android:id="@+id/art_object_iv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/art_object_desc"
+                android:contentDescription="@string/desc_art_object"
                 android:adjustViewBounds="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -94,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/default_padding"
-                android:text="@string/error_message"
+                android:text="@string/msg_error"
                 android:textSize="@dimen/text_size_error_message"
                 android:visibility="invisible"
                 />

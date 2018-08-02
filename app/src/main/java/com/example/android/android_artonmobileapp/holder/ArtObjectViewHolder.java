@@ -21,6 +21,7 @@ public class ArtObjectViewHolder extends RecyclerView.ViewHolder implements View
         @BindView(R.id.list_item)
         ImageView artObjectView;
 
+
         public ArtObjectViewHolder(View itemView, ArtObjectAdapterOnClickHandler clickHandler, List<ArtObject> artObjects) {
             super(itemView);
 
@@ -41,6 +42,8 @@ public class ArtObjectViewHolder extends RecyclerView.ViewHolder implements View
                     .placeholder(R.drawable.placeholder1200)
                     .error(R.drawable.placeholder1200)
                     .into(artObjectView);
+
+            artObjectView.setContentDescription(artObject.getLongTitle());
 
         }
 

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -51,9 +53,18 @@ public class DetailFragment extends Fragment {
     TextView mArtObjectDescView;
     @BindView(R.id.art_object_maker_tv)
     TextView mArtObjectMakerView;
-    //  @BindView(R.id.art_object_colors_tv)
-    // TextView mArtObjectColorsView;
-
+    @BindView(R.id.color1)
+    Button mArtObjectColor1;
+    @BindView(R.id.color2)
+    Button mArtObjectColor2;
+    @BindView(R.id.color3)
+    Button mArtObjectColor3;
+    @BindView(R.id.color4)
+    Button mArtObjectColor4;
+    @BindView(R.id.color5)
+    Button mArtObjectColor5;
+    @BindView(R.id.color6)
+    Button mArtObjectColor6;
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
@@ -89,10 +100,7 @@ public class DetailFragment extends Fragment {
             if (intent.hasExtra(Config.BUNDLE_ART_OBJECT_ID)) {
                 mId = intent.getStringExtra(Config.BUNDLE_ART_OBJECT_ID);
                 artObjectDetailsRequest(mId);
-
-
-
-            }
+           }
         }
 
         mFavorite = isFavorite(mId);
@@ -122,9 +130,9 @@ public class DetailFragment extends Fragment {
 
             @Override
             public void onResponse(@NonNull Call<ArtObjectDetailResponse> call, @NonNull Response<ArtObjectDetailResponse> response) {
-                if ((response.body()) != null) {
+                if ((response.body())!= null) {
                     mDetails = response.body().getArtObject();
-                    Log.d(TAG, "Recipe title is " + response.body().getArtObject().getTitle());
+
                     mTitle = response.body().getArtObject().getTitle();
 
                     // Display the current selected movie title on the Action Bar
@@ -134,10 +142,26 @@ public class DetailFragment extends Fragment {
 
                     Picasso.get().load(mDetails.getWebImage().getUrl()).placeholder(R.drawable.placeholder1200).error(R.drawable.placeholder1200).into(mArtObjectView);
 
-                    mArtObjectDescView.setText(mDetails.getDescription());
+                    mArtObjectDescView.setText(mDetails.getPlaqueDescriptionEnglish());
                       mArtObjectMakerView.setText(mDetails.getPrincipalOrFirstMaker());
-                    //   int intColorValue = Color.parseColor(mColors.get(0));
-                    //     mArtObjectColorsView.setBackgroundColor(intColorValue);
+           /*            int intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(0));
+                    Log.d(TAG, "COlor is : " + mDetails.getNormalizedColors().get(0));
+                    Log.d(TAG, "COlor is : " + Math.abs(intColorValue));
+
+                    mArtObjectColor1.setBackgroundColor(Math.abs(intColorValue));
+             intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(1));
+                    Log.d(TAG, "COlor is : " + mDetails.getNormalizedColors().get(1));
+                    mArtObjectColor2.setBackgroundColor(Math.abs(intColorValue));
+                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(2));
+                    Log.d(TAG, "COlor is : " + mDetails.getNormalizedColors().get(2));
+                    mArtObjectColor3.setBackgroundColor(Math.abs(intColorValue));
+                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(3));
+                    mArtObjectColor4.setBackgroundColor(Math.abs(intColorValue));
+                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(4));
+                    mArtObjectColor5.setBackgroundColor(Math.abs(intColorValue));
+                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(5));
+                    mArtObjectColor6.setBackgroundColor(Math.abs(intColorValue));
+*/
 
                 }
                 Log.d("DETAIL ", "Number of colors results received: " + mDetails.getTitle());
@@ -193,7 +217,7 @@ public class DetailFragment extends Fragment {
         contentValues.put(ArtObjectsEntry.COLUMN_ART_OBJECT_ID, id);
         contentValues.put(ArtObjectsEntry.COLUMN_TITLE, mDetails.getTitle());
         contentValues.put(ArtObjectsEntry.COLUMN_MAKER, mDetails.getPrincipalOrFirstMaker());
-        contentValues.put(ArtObjectsEntry.COLUMN_TITLE_LONG, mDetails.getDescription());
+        contentValues.put(ArtObjectsEntry.COLUMN_TITLE_LONG, mDetails.getPlaqueDescriptionEnglish());
         contentValues.put(ArtObjectsEntry.COLUMN_IMAGE, mDetails.getWebImage().getUrl());
 
         // Insert the content values via a ContentResolver
