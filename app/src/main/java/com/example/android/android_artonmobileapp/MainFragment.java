@@ -38,12 +38,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_ART_OBJECT_ID;
-import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_IMAGE;
-import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_MAKER;
-import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_TITLE;
-import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_TITLE_LONG;
-import static com.example.android.android_artonmobileapp.utils.Config.BUNDLE_FAVORITES;
+import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
+
+
 import static com.example.android.android_artonmobileapp.utils.Config.CHANGES_IN_FAV_ITEMS;
 
 /**
@@ -111,7 +108,7 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
                 mQuery = intent.getStringExtra(Config.BUNDLE_STYLE);
             } else if (intent.hasExtra(Config.BUNDLE_QUERY)) {
                 mQuery = intent.getStringExtra(Config.BUNDLE_QUERY);
-            } else if (intent.hasExtra(BUNDLE_FAVORITES)) {
+            } else if (intent.hasExtra(Config.BUNDLE_FAVORITES)) {
                 artObjectsFromDB();
             }
 
@@ -217,15 +214,14 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
         ArrayList<ArtObject> items = new ArrayList<>();
 
         for (int i = 0; i < itemsResponse.getCount(); i++) {
-            int itemIdIndex = itemsResponse.getColumnIndex(COLUMN_ART_OBJECT_ID);
-            int itemTitleIndex = itemsResponse.getColumnIndex(COLUMN_TITLE);
-            int itemMakerIndex = itemsResponse.getColumnIndex(COLUMN_MAKER);
-            int itemTitleLongIndex = itemsResponse.getColumnIndex(COLUMN_TITLE_LONG);
-            int itemImageIndex = itemsResponse.getColumnIndex(COLUMN_IMAGE);
+            int itemIdIndex = itemsResponse.getColumnIndex(ArtObjectsEntry.COLUMN_ART_OBJECT_ID);
+            int itemTitleIndex = itemsResponse.getColumnIndex(ArtObjectsEntry.COLUMN_TITLE);
+            int itemMakerIndex = itemsResponse.getColumnIndex(ArtObjectsEntry.COLUMN_MAKER);
+            int itemImageIndex = itemsResponse.getColumnIndex(ArtObjectsEntry.COLUMN_IMAGE);
 
             itemsResponse.moveToPosition(i);
 
-            items.add(new ArtObject(itemsResponse.getString(itemIdIndex), itemsResponse.getString(itemTitleIndex), itemsResponse.getString(itemMakerIndex), itemsResponse.getString(itemTitleLongIndex), itemsResponse.getString(itemImageIndex)));
+            items.add(new ArtObject(itemsResponse.getString(itemIdIndex), itemsResponse.getString(itemTitleIndex), itemsResponse.getString(itemMakerIndex), itemsResponse.getString(itemImageIndex)));
         }
         /* Setting the adapter attaches it to the RecyclerView in our layout. */
        // mFavItemsAdapter.setData(mItems);

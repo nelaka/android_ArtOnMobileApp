@@ -43,7 +43,7 @@ public class ArtObjectViewHolder extends RecyclerView.ViewHolder implements View
                     .error(R.drawable.placeholder1200)
                     .into(artObjectView);
 
-            artObjectView.setContentDescription(artObject.getLongTitle());
+            artObjectView.setContentDescription(artObject.getTitle());
 
         }
 

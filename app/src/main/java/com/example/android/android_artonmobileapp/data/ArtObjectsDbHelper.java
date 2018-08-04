@@ -48,7 +48,12 @@ public class ArtObjectsDbHelper extends SQLiteOpenHelper {
 
                 "CREATE TABLE " + ArtObjectsEntry.TABLE_NAME + " (" +
 
-                        ArtObjectsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + ArtObjectsEntry.COLUMN_ART_OBJECT_ID + " TEXT NOT NULL, " + ArtObjectsEntry.COLUMN_TITLE + " TEXT NOT NULL, " + ArtObjectsEntry.COLUMN_MAKER + " TEXT, " + ArtObjectsEntry.COLUMN_TITLE_LONG + " TEXT, " + ArtObjectsEntry.COLUMN_IMAGE + " TEXT NOT NULL " + ");";
+                        ArtObjectsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        ArtObjectsEntry.COLUMN_ART_OBJECT_ID + " TEXT NOT NULL, " +
+                        ArtObjectsEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
+                        ArtObjectsEntry.COLUMN_MAKER + " TEXT, " +
+                        ArtObjectsEntry.COLUMN_IMAGE + " TEXT NOT NULL, " +
+                        ArtObjectsEntry.COLUMN_DESC + " TEXT " +");";
         /*
          * Execute SQL with the execSQL method of the SQLite database object.
          */

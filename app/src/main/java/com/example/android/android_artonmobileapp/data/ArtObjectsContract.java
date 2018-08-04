@@ -44,8 +44,8 @@ public class ArtObjectsContract {
         public static final String COLUMN_ART_OBJECT_ID = "id";
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_MAKER = "maker";
-        public static final String COLUMN_TITLE_LONG = "title_long";
         public static final String COLUMN_IMAGE = "image";
+        public static final String COLUMN_DESC = "description";
 
     }
 

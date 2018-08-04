@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 public class FavItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private final FavItemsAdapterOnClickHandler mClickHandler;
     private final List<ArtObject> mFavItems;
-    @BindView(R.id.list_item)
+    @BindView(R.id.fav_list_item)
     ImageView artObjectView;
 
     public FavItemViewHolder(View view, FavItemsAdapterOnClickHandler clickHandler, List<ArtObject> items) {

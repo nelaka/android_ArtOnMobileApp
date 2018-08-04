@@ -144,14 +144,14 @@ public class DetailFragment extends Fragment {
 
                     mArtObjectDescView.setText(mDetails.getPlaqueDescriptionEnglish());
                       mArtObjectMakerView.setText(mDetails.getPrincipalOrFirstMaker());
-           /*            int intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(0));
-                    Log.d(TAG, "COlor is : " + mDetails.getNormalizedColors().get(0));
-                    Log.d(TAG, "COlor is : " + Math.abs(intColorValue));
+                       int intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(0));
+  //                  Log.d(TAG, "COlor is : " + mDetails.getNormalizedColors().get(0));
+    //                Log.d(TAG, "COlor is : " + Math.abs(intColorValue));
 
-                    mArtObjectColor1.setBackgroundColor(Math.abs(intColorValue));
-             intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(1));
+                    //mArtObjectColor1.setBackgroundColor(Math.abs(intColorValue));
+        /*     intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(1));
                     Log.d(TAG, "COlor is : " + mDetails.getNormalizedColors().get(1));
-                    mArtObjectColor2.setBackgroundColor(Math.abs(intColorValue));
+                    mArtObjectColor2.setBackgroundColor(intColorValue);
                     intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(2));
                     Log.d(TAG, "COlor is : " + mDetails.getNormalizedColors().get(2));
                     mArtObjectColor3.setBackgroundColor(Math.abs(intColorValue));
@@ -217,12 +217,11 @@ public class DetailFragment extends Fragment {
         contentValues.put(ArtObjectsEntry.COLUMN_ART_OBJECT_ID, id);
         contentValues.put(ArtObjectsEntry.COLUMN_TITLE, mDetails.getTitle());
         contentValues.put(ArtObjectsEntry.COLUMN_MAKER, mDetails.getPrincipalOrFirstMaker());
-        contentValues.put(ArtObjectsEntry.COLUMN_TITLE_LONG, mDetails.getPlaqueDescriptionEnglish());
         contentValues.put(ArtObjectsEntry.COLUMN_IMAGE, mDetails.getWebImage().getUrl());
 
         // Insert the content values via a ContentResolver
         Uri uri = getContext().getContentResolver().insert(ArtObjectsEntry.CONTENT_URI, contentValues);
-        Log.d(TAG, "rowsDeleted =" + uri + " " + String.valueOf(id));
+        Log.d(TAG, "Uri =" + uri + " " + String.valueOf(id));
 
         if (uri != null) {
             Utils.mySnackBar(getView(), R.string.msg_added_to_fav);

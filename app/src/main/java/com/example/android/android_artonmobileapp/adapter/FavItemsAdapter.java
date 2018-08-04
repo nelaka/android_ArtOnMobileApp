@@ -20,16 +20,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_ART_OBJECT_ID;
-import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_IMAGE;
-import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_MAKER;
-import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_TITLE;
-import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.COLUMN_TITLE_LONG;
+import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
 
 public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
     private static final String TAG = FavItemsAdapter.class.getSimpleName();
-    private static final String POSTER_WIDTH = "w185";
-    private static final String POSTER_IMAGES_URL = "http://image.tmdb.org/t/p";
 
     /* The context we use to utility methods, app resources and layout inflaters */
     private final Context mContext;
@@ -39,10 +33,10 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
 
     // Create a String array containing the names of the desired data columns from our ContentProvider
     public static final String[] FAV_OBJECTS_PROJECTION = {
-            ArtObjectsContract.ArtObjectsEntry.COLUMN_ART_OBJECT_ID,
-            ArtObjectsContract.ArtObjectsEntry.COLUMN_TITLE,
-            ArtObjectsContract.ArtObjectsEntry.COLUMN_MAKER,
-            ArtObjectsContract.ArtObjectsEntry.COLUMN_IMAGE
+            ArtObjectsEntry.COLUMN_ART_OBJECT_ID,
+            ArtObjectsEntry.COLUMN_TITLE,
+            ArtObjectsEntry.COLUMN_MAKER,
+            ArtObjectsEntry.COLUMN_IMAGE
     };
 
     //Create constant int values representing each column name's position above
@@ -72,7 +66,7 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
     @NonNull
     @Override
     public FavItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.list_item, viewGroup, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.fav_list_item, viewGroup, false);
 
         view.setFocusable(true);
         return new FavItemViewHolder(view, mClickHandler, mFavItems);
@@ -89,6 +83,7 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
         /* Get human readable string using our utility method */
         String title = mCursor.getString(INDEX_ART_OBJECT_TITLE);
         String maker = mCursor.getString(INDEX_ART_OBJECT_MAKER);
+
         String image_url = mCursor.getString(INDEX_ART_OBJECT_IMAGE);
 
         holder.bindArtObjects(image_url);
@@ -109,18 +104,20 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
     public void setData(Cursor cursor) {
       //  data = new ArrayList<>();
         for (int i = 0; i < cursor.getCount(); i++) {
-            int itemIdIndex = cursor.getColumnIndex(COLUMN_ART_OBJECT_ID);
-            int itemTitleIndex = cursor.getColumnIndex(COLUMN_TITLE);
-            int itemMakerIndex = cursor.getColumnIndex(COLUMN_MAKER);
-            int itemTitleLongIndex = cursor.getColumnIndex(COLUMN_TITLE_LONG);
-            int itemImageIndex = cursor.getColumnIndex(COLUMN_IMAGE);
+            int itemIdIndex = cursor.getColumnIndex(ArtObjectsEntry.COLUMN_ART_OBJECT_ID);
+            int itemTitleIndex = cursor.getColumnIndex(ArtObjectsEntry.COLUMN_TITLE);
+            int itemMakerIndex = cursor.getColumnIndex(ArtObjectsEntry.COLUMN_MAKER);
+            int itemImageIndex = cursor.getColumnIndex(ArtObjectsEntry.COLUMN_IMAGE);
 
             cursor.moveToPosition(i);
+            mFavItems.add(new ArtObject(cursor.getString(itemIdIndex),
+                    cursor.getString(itemTitleIndex),
+                    cursor.getString(itemMakerIndex),
 
-            mFavItems.add(new ArtObject(cursor.getString(itemIdIndex), cursor.getString(itemTitleIndex), cursor.getString(itemMakerIndex), cursor.getString(itemTitleLongIndex), cursor.getString(itemImageIndex)));
-
+                    cursor.getString(itemImageIndex)));
+mCursor = cursor;
         }
-       // notifyDataSetChanged();
+        notifyDataSetChanged();
 
     }
 

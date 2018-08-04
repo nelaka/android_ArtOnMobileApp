@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
         if (id == R.id.nav_allworksofarts) {
             // Handle the camera action
-
+            allartobjects();
         } else if (id == R.id.nav_allpaintings) {
             allpaintings();
 
@@ -111,7 +111,15 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+    public void allartobjects() {
 
+        Intent intent = new Intent(this, MainActivity.class);
+        //startActivity(intent);
+
+        startActivityForResult(intent, Config.NEED_TO_REFRESH_LIST);
+
+
+    }
     public void allpaintings() {
 
         Intent intent = new Intent(this, MainActivity.class);

@@ -27,18 +27,17 @@ public class ArtObject implements Parcelable {
             mId = in.readString();
             mTitle = in.readString();
             mPrincipalOrFirstMaker = in.readString();
-            mLongTitle = in.readString();
+
             mWebImage = (WebImage) in.readValue(WebImage.class.getClassLoader());
 
         }
 
 
-    public ArtObject(String id, String title, String principalOrFirstMaker, String longTitle, String webImage) {
+    public ArtObject(String id, String title, String principalOrFirstMaker, String webImage) {
             super();
             mId = id;
             mTitle = title;
         mPrincipalOrFirstMaker = principalOrFirstMaker;
-            mLongTitle = longTitle;
         mImage = webImage;
     }
 
@@ -52,9 +51,6 @@ public class ArtObject implements Parcelable {
         public String getPrincipalOrFirstMaker() {
             return mPrincipalOrFirstMaker;
         }
-        public String getLongTitle() {
-            return mLongTitle;
-        }
 
     public String getWebImage() {
         return mWebImage.getUrl();
@@ -67,7 +63,6 @@ public class ArtObject implements Parcelable {
             out.writeString(mId);
             out.writeString(mTitle);
             out.writeString(mPrincipalOrFirstMaker);
-            out.writeString(mLongTitle);
             out.writeValue(mWebImage);
         }
 
