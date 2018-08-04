@@ -3,7 +3,6 @@ package com.example.android.android_artonmobileapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class ArtObjectDetailResponse implements Parcelable {

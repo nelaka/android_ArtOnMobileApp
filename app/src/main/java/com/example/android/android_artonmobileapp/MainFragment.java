@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -39,8 +40,6 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
-
-
 import static com.example.android.android_artonmobileapp.utils.Config.CHANGES_IN_FAV_ITEMS;
 
 /**
@@ -48,34 +47,32 @@ import static com.example.android.android_artonmobileapp.utils.Config.CHANGES_IN
  * Activities that contain this fragment must implement the
  * {@link MainFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MainFragment#newInstance} factory method to
+ * Use the  factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObjectAdapterOnClickHandler{
+public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObjectAdapterOnClickHandler {
 
-        private String mQuery;
-        private List<ArtObject> mItems;
-
-        @BindView(R.id.items_rv)
-        RecyclerView mRecyclerView;
-        @BindView(R.id.pb_loading_indicator)
-        ProgressBar mLoadingIndicator;
-        @BindView(R.id.tv_error_message_display)
-        TextView mErrorMessageDisplay;
-        @BindView(R.id.tv_no_fav_art_objects)
-        TextView mNoFavArtObjectsView;
-
-        private Context mContext;
-        private ArtObjectsAdapter mArtObjectsAdapter;
+    @BindView(R.id.items_rv)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.pb_loading_indicator)
+    ProgressBar mLoadingIndicator;
+    @BindView(R.id.tv_error_message_display)
+    TextView mErrorMessageDisplay;
+    @BindView(R.id.tv_no_fav_art_objects)
+    TextView mNoFavArtObjectsView;
+    private String mQuery;
+    private List<ArtObject> mItems;
+    private Context mContext;
+    private ArtObjectsAdapter mArtObjectsAdapter;
     private FavItemsAdapter mFavItemsAdapter;
-        private Parcelable mSavedRecyclerLayoutState;
-        private GridLayoutManager mLayoutManager;
-        private OnFragmentInteractionListener mListener;
+    private Parcelable mSavedRecyclerLayoutState;
+    private GridLayoutManager mLayoutManager;
+    private OnFragmentInteractionListener mListener;
 
 
-        public MainFragment() {
-            // Required empty public constructor
-        }
+    public MainFragment() {
+        // Required empty public constructor
+    }
 
 
     @Override
@@ -85,7 +82,7 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, rootView);
@@ -101,27 +98,16 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
          */
         mRecyclerView.setHasFixedSize(true);
 
-
-        Intent intent = getActivity().getIntent();
-        if (intent != null) {
-            if (intent.hasExtra(Config.BUNDLE_STYLE)) {
-                mQuery = intent.getStringExtra(Config.BUNDLE_STYLE);
-            } else if (intent.hasExtra(Config.BUNDLE_QUERY)) {
-                mQuery = intent.getStringExtra(Config.BUNDLE_QUERY);
-            } else if (intent.hasExtra(Config.BUNDLE_FAVORITES)) {
-                artObjectsFromDB();
-            }
-
-        }
-
-
         if (savedInstanceState != null) {
             mItems = savedInstanceState.getParcelableArrayList(Config.BUNDLE_ART_OBJECTS);
             mSavedRecyclerLayoutState = savedInstanceState.getParcelable(Config.BUNDLE_RECYCLER_LAYOUT);
-        }
-        else {
-            itemsRequest();
+        } else {
+            Bundle bundle = getArguments();
 
+            if (bundle != null && bundle.containsKey(Config.BUNDLE_QUERY))
+                mQuery = getArguments().getString(Config.BUNDLE_QUERY);
+
+            itemsRequest();
         }
         return rootView;
     }
@@ -148,11 +134,8 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
                     Log.d("MAIN ", "Number of results received: " + mItems.size());
                     mLoadingIndicator.setVisibility(View.INVISIBLE);
 
-
                     if (mItems != null) {
-
                         mArtObjectsAdapter.setData(mItems);
-
                         /* Setting the adapter attaches it to the RecyclerView in our layout. */
                         mRecyclerView.setAdapter(mArtObjectsAdapter);
                         showDataView();
@@ -167,7 +150,6 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
 
                     mLoadingIndicator.setVisibility(View.INVISIBLE);
                     showErrorMessage();
-
                     // Log error here since request failed
                     Log.e("main", t.toString());
                 }
@@ -224,7 +206,7 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
             items.add(new ArtObject(itemsResponse.getString(itemIdIndex), itemsResponse.getString(itemTitleIndex), itemsResponse.getString(itemMakerIndex), itemsResponse.getString(itemImageIndex)));
         }
         /* Setting the adapter attaches it to the RecyclerView in our layout. */
-       // mFavItemsAdapter.setData(mItems);
+        // mFavItemsAdapter.setData(mItems);
 
         /* Setting the adapter attaches it to the RecyclerView in our layout. */
         mRecyclerView.setAdapter(mFavItemsAdapter);
@@ -279,4 +261,6 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(ArtObject artObject);
     }
+
+   
 }

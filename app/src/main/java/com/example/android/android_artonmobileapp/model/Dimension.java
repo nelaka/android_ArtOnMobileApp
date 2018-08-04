@@ -38,10 +38,10 @@ public class Dimension implements Parcelable
     }
             ;
 
-    protected Dimension(Parcel in) {
+    Dimension(Parcel in) {
         this.unit = ((String) in.readValue((String.class.getClassLoader())));
         this.type = ((String) in.readValue((String.class.getClassLoader())));
-        this.part = ((Object) in.readValue((Object.class.getClassLoader())));
+        this.part = in.readValue((Object.class.getClassLoader()));
         this.value = ((String) in.readValue((String.class.getClassLoader())));
     }
 

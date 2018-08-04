@@ -64,16 +64,16 @@ public class ArtObjectPage implements Parcelable
         }
                 ;
 
-        protected ArtObjectPage(Parcel in) {
+        ArtObjectPage(Parcel in) {
             this.id = ((String) in.readValue((String.class.getClassLoader())));
             in.readList(this.similarPages, (java.lang.Object.class.getClassLoader()));
             this.lang = ((String) in.readValue((String.class.getClassLoader())));
             this.objectNumber = ((String) in.readValue((String.class.getClassLoader())));
             in.readList(this.tags, (java.lang.Object.class.getClassLoader()));
             this.plaqueDescription = ((String) in.readValue((String.class.getClassLoader())));
-            this.audioFile1 = ((Object) in.readValue((Object.class.getClassLoader())));
-            this.audioFileLabel1 = ((Object) in.readValue((Object.class.getClassLoader())));
-            this.audioFileLabel2 = ((Object) in.readValue((Object.class.getClassLoader())));
+            this.audioFile1 = in.readValue((Object.class.getClassLoader()));
+            this.audioFileLabel1 = in.readValue((Object.class.getClassLoader()));
+            this.audioFileLabel2 = in.readValue((Object.class.getClassLoader()));
             this.createdOn = ((String) in.readValue((String.class.getClassLoader())));
             this.updatedOn = ((String) in.readValue((String.class.getClassLoader())));
             this.adlibOverrides = ((AdlibOverrides) in.readValue((AdlibOverrides.class.getClassLoader())));

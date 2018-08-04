@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
 
-public class ArtObjectsDbHelper extends SQLiteOpenHelper {
+class ArtObjectsDbHelper extends SQLiteOpenHelper {
 
     /*
      * This is the name of our database. Database names should be descriptive and end with the

@@ -11,18 +11,16 @@ public class Config {
         //  public static final String YOU_TUBE_BASE_URL = "https://www.youtube.com/watch?v=";
 
 
-        public static final String RIJKSMUSEUM_STYLES = "https://www.rijksmuseum.nl/api/pages/en/rijksstudio/styles";
+    //    public static final String RIJKSMUSEUM_STYLES = "https://www.rijksmuseum.nl/api/pages/en/rijksstudio/styles";
 
         public static final String BUNDLE_RECYCLER_LAYOUT = "recycler.layout";
         public static final String BUNDLE_ART_OBJECTS = "art_objects";
-        public static final String BUNDLE_ART_OBJECT = "art_object";
-        public static final String BUNDLE_STYLE = "style";
+
     public static final String BUNDLE_QUERY = "query";
     public static final String BUNDLE_PAINTING = "painting";
     public static final int NEED_TO_REFRESH_LIST = 0;  // The request code
     public static final int CHANGES_IN_FAV_ITEMS = 1;  // The request code
     public static final String BUNDLE_ART_OBJECT_ID = "art_object_id";
-    public static final String BUNDLE_ART_OBJECT_IMAGE = "art_object_image";
 
     public static final String BUNDLE_FAVORITES = "favorites";
 

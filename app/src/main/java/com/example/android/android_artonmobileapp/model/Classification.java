@@ -52,7 +52,7 @@ public class Classification implements Parcelable
     }
             ;
 
-    protected Classification(Parcel in) {
+    private Classification(Parcel in) {
         in.readList(this.iconClassIdentifier, (java.lang.String.class.getClassLoader()));
         in.readList(this.iconClassDescription, (java.lang.String.class.getClassLoader()));
         in.readList(this.motifs, (java.lang.Object.class.getClassLoader()));

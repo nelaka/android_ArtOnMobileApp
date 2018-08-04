@@ -41,7 +41,7 @@ public class Label implements Parcelable
     }
             ;
 
-    protected Label(Parcel in) {
+    private Label(Parcel in) {
         this.title = ((String) in.readValue((String.class.getClassLoader())));
         this.makerLine = ((String) in.readValue((String.class.getClassLoader())));
         this.description = ((String) in.readValue((String.class.getClassLoader())));

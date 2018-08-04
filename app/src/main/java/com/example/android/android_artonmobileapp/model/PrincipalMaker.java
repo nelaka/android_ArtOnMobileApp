@@ -70,21 +70,21 @@ public class PrincipalMaker implements Parcelable
     }
             ;
 
-    protected PrincipalMaker(Parcel in) {
+    private PrincipalMaker(Parcel in) {
         this.name = ((String) in.readValue((String.class.getClassLoader())));
-        this.unFixedName = ((Object) in.readValue((Object.class.getClassLoader())));
+        this.unFixedName = in.readValue((Object.class.getClassLoader()));
         this.placeOfBirth = ((String) in.readValue((String.class.getClassLoader())));
         this.dateOfBirth = ((String) in.readValue((String.class.getClassLoader())));
-        this.dateOfBirthPrecision = ((Object) in.readValue((Object.class.getClassLoader())));
+        this.dateOfBirthPrecision = in.readValue((Object.class.getClassLoader()));
         this.dateOfDeath = ((String) in.readValue((String.class.getClassLoader())));
-        this.dateOfDeathPrecision = ((Object) in.readValue((Object.class.getClassLoader())));
+        this.dateOfDeathPrecision = in.readValue((Object.class.getClassLoader()));
         this.placeOfDeath = ((String) in.readValue((String.class.getClassLoader())));
         in.readList(this.occupation, (java.lang.String.class.getClassLoader()));
         in.readList(this.roles, (java.lang.String.class.getClassLoader()));
         this.nationality = ((String) in.readValue((String.class.getClassLoader())));
-        this.biography = ((Object) in.readValue((Object.class.getClassLoader())));
+        this.biography = in.readValue((Object.class.getClassLoader()));
         in.readList(this.productionPlaces, (java.lang.Object.class.getClassLoader()));
-        this.qualification = ((Object) in.readValue((Object.class.getClassLoader())));
+        this.qualification = in.readValue((Object.class.getClassLoader()));
     }
 
     public PrincipalMaker() {

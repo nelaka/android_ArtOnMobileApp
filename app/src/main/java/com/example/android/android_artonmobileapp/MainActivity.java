@@ -2,6 +2,7 @@ package com.example.android.android_artonmobileapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -30,14 +31,14 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     ActionBarDrawerToggle mToggle;
     @BindView(R.id.fab_mail)
     FloatingActionButton mFab;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
-
 
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,19 +88,14 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_allworksofarts) {
-            // Handle the camera action
-            allartobjects();
+            allArtObjects();
         } else if (id == R.id.nav_allpaintings) {
-            allpaintings();
-
-        } else if (id == R.id.nav_styles) {
-            styles();
-
+            allPaintings();
         } else if (id == R.id.nav_favorites) {
             favorites();
         } else if (id == R.id.nav_share) {
@@ -111,35 +107,31 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-    public void allartobjects() {
 
+    private void allArtObjects() {
+        Bundle arguments = new Bundle();
+        MainFragment fragment = new MainFragment();
+        fragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, fragment).addToBackStack(null).commit();
+       /*
         Intent intent = new Intent(this, MainActivity.class);
-        //startActivity(intent);
-
-        startActivityForResult(intent, Config.NEED_TO_REFRESH_LIST);
-
-
+        startActivityForResult(intent, Config.NEED_TO_REFRESH_LIST);*/
     }
-    public void allpaintings() {
 
-        Intent intent = new Intent(this, MainActivity.class);
+    private void allPaintings() {
+
+        Bundle arguments = new Bundle();
+        arguments.putString(Config.BUNDLE_QUERY, "painting");
+        MainFragment fragment = new MainFragment();
+        fragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, fragment).addToBackStack(null).commit();
+
+        /*Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(Config.BUNDLE_QUERY, "painting");
-        //startActivity(intent);
-
-        startActivityForResult(intent, Config.NEED_TO_REFRESH_LIST);
-
-
+        startActivityForResult(intent, Config.NEED_TO_REFRESH_LIST);*/
     }
 
-    public void styles() {
-
-        Intent intent = new Intent(this, StylesActivity.class);
-        startActivity(intent);
-
-
-    }
-
-    public void favorites() {
+    private void favorites() {
         Intent intent = new Intent(this, FavActivity.class);
         startActivity(intent);
     }
@@ -149,8 +141,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         mDrawerLayout.removeDrawerListener(mToggle);
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(Config.BUNDLE_ART_OBJECT_ID, artObject.getId());
-        intent.putExtra(Config.BUNDLE_ART_OBJECT_IMAGE, artObject.getWebImage());
-
         startActivity(intent);
     }
 }

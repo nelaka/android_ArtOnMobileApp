@@ -4,18 +4,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android.android_artonmobileapp.MainActivity;
 import com.example.android.android_artonmobileapp.R;
-import com.example.android.android_artonmobileapp.data.ArtObjectsContract;
 import com.example.android.android_artonmobileapp.holder.FavItemViewHolder;
 import com.example.android.android_artonmobileapp.model.ArtObject;
-import com.example.android.android_artonmobileapp.utils.Config;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +40,10 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
      * access the data from our query. If the order of the Strings above changes, these indices
      * must be adjusted to match the order of the Strings.
      */
-    public static final int INDEX_ART_OBJECT_ID = 0;
-    public static final int INDEX_ART_OBJECT_TITLE = 1;
-    public static final int INDEX_ART_OBJECT_MAKER = 2;
-    public static final int INDEX_ART_OBJECT_IMAGE = 3;
+    private static final int INDEX_ART_OBJECT_ID = 0;
+    private static final int INDEX_ART_OBJECT_TITLE = 1;
+    private static final int INDEX_ART_OBJECT_MAKER = 2;
+    private static final int INDEX_ART_OBJECT_IMAGE = 3;
 
 
 
@@ -57,7 +52,7 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
         mClickHandler = clickHandler;
     }
 
-    public FavItemsAdapter(@NonNull Context context, Cursor cursor, FavItemViewHolder.FavItemsAdapterOnClickHandler clickHandler) {
+    private FavItemsAdapter(@NonNull Context context, Cursor cursor, FavItemViewHolder.FavItemsAdapterOnClickHandler clickHandler) {
         mContext = context;
         mCursor = cursor;
         mClickHandler = clickHandler;
@@ -113,7 +108,6 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
             mFavItems.add(new ArtObject(cursor.getString(itemIdIndex),
                     cursor.getString(itemTitleIndex),
                     cursor.getString(itemMakerIndex),
-
                     cursor.getString(itemImageIndex)));
 mCursor = cursor;
         }

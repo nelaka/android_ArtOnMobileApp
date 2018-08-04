@@ -35,7 +35,7 @@ public class Acquisition implements Parcelable
     }
             ;
 
-    protected Acquisition(Parcel in) {
+    private Acquisition(Parcel in) {
         this.method = ((String) in.readValue((String.class.getClassLoader())));
         this.date = ((String) in.readValue((String.class.getClassLoader())));
         this.creditLine = ((String) in.readValue((String.class.getClassLoader())));

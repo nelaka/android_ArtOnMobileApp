@@ -44,7 +44,7 @@ public class WebImage implements Parcelable
         }
                 ;
 
-        protected WebImage(Parcel in) {
+        WebImage(Parcel in) {
             this.guid = ((String) in.readValue((String.class.getClassLoader())));
             this.offsetPercentageX = ((int) in.readValue((int.class.getClassLoader())));
             this.offsetPercentageY = ((int) in.readValue((int.class.getClassLoader())));

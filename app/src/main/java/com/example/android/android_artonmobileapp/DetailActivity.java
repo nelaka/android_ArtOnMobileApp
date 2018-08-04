@@ -1,20 +1,18 @@
 package com.example.android.android_artonmobileapp;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
-    @BindView(R.id.nav_view)
-    NavigationView mNavigationView;
+
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
@@ -22,32 +20,9 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        setSupportActionBar(mToolbar);
-
-   /*     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }
-        });
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
-        mNavigationView.setNavigationItemSelectedListener(this);    */
+        ButterKnife.bind(this);
     }
 
-    /*  @Override
-      public void onBackPressed() {
-          if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-              mDrawerLayout.closeDrawer(GravityCompat.START);
-          } else {
-              super.onBackPressed();
-          }
-      }
-  */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -63,12 +38,39 @@ public class DetailActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        if (id == android.R.id.home){
+            finish();
+        }
+
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (id == R.id.action_share) {
+
+            Intent shareIntent = createShareArtObjectIntent();
+            startActivity(shareIntent);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Uses the ShareCompat Intent builder to create our Forecast intent for sharing.  All we need
+     * to do is set the type, text and the NEW_DOCUMENT flag so it treats our share as a new task.
+     * See: http://developer.android.com/guide/components/tasks-and-back-stack.html for more info.
+     *
+     * @return the Intent to use to share our weather forecast
+     */
+    private Intent createShareArtObjectIntent() {
 
+        Intent shareIntent = ShareCompat.IntentBuilder.from(this)
+                .setType("text/plain")
+                .getIntent();
+        //shareIntent.putExtra(Intent.EXTRA_TEXT, );
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        return shareIntent;
+
+    }
 }

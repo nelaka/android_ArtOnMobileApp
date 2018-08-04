@@ -35,10 +35,10 @@ public class AdlibOverrides implements Parcelable
         }
                 ;
 
-        protected AdlibOverrides(Parcel in) {
-            this.titel = ((Object) in.readValue((Object.class.getClassLoader())));
-            this.maker = ((Object) in.readValue((Object.class.getClassLoader())));
-            this.etiketText = ((Object) in.readValue((Object.class.getClassLoader())));
+        AdlibOverrides(Parcel in) {
+            this.titel = in.readValue((Object.class.getClassLoader()));
+            this.maker = in.readValue((Object.class.getClassLoader()));
+            this.etiketText = in.readValue((Object.class.getClassLoader()));
         }
 
         public AdlibOverrides() {

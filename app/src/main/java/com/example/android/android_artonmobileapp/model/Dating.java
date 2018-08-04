@@ -42,7 +42,7 @@ public class Dating implements Parcelable
     }
             ;
 
-    protected Dating(Parcel in) {
+    Dating(Parcel in) {
         this.presentingDate = ((String) in.readValue((String.class.getClassLoader())));
         this.sortingDate = ((int) in.readValue((int.class.getClassLoader())));
         this.period = ((int) in.readValue((int.class.getClassLoader())));

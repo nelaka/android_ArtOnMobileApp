@@ -22,7 +22,7 @@ public class Page implements Parcelable {
     @SerializedName("url")
     private String url;
 
-    protected Page(Parcel in) {
+    private Page(Parcel in) {
         this.title = in.readString();
         this.url = in.readString();
     }

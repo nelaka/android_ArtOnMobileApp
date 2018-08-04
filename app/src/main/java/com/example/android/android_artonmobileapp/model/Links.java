@@ -29,7 +29,7 @@ public class Links implements Parcelable
         }
                 ;
 
-        protected Links(Parcel in) {
+        private Links(Parcel in) {
             this.search = ((String) in.readValue((String.class.getClassLoader())));
         }
 

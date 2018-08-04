@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,7 +46,7 @@ import static android.content.ContentValues.TAG;
  * {@link DetailFragment}.
  * */
 public class DetailFragment extends Fragment {
-    ArtObjectDetail mDetails;
+    private ArtObjectDetail mDetails;
     private String mTitle;
     @BindView(R.id.art_object_iv)
     ImageView mArtObjectView;
@@ -73,7 +74,7 @@ public class DetailFragment extends Fragment {
     Toolbar mToolbar;
     @BindView(R.id.pb_loading_indicator)
     ProgressBar mLoadingIndicator;
-    Boolean mFavorite = false;
+    private Boolean mFavorite = false;
     private String mId;
  private Context mContext;
 
@@ -89,7 +90,7 @@ public class DetailFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, rootView);
@@ -102,6 +103,7 @@ public class DetailFragment extends Fragment {
                 artObjectDetailsRequest(mId);
            }
         }
+
 
         mFavorite = isFavorite(mId);
 
@@ -133,38 +135,37 @@ public class DetailFragment extends Fragment {
                 if ((response.body())!= null) {
                     mDetails = response.body().getArtObject();
 
-                    mTitle = response.body().getArtObject().getTitle();
-
                     // Display the current selected movie title on the Action Bar
-                    //      getSupportActionBar()
-                    mToolbar.setTitle(mTitle);
-                    //    Log.v("adapterART OBJECT", "url = " + mUrl);
+                    mToolbar.setTitle(mDetails.getTitle());
+                    mToolbar.setTitleTextColor(Color.WHITE);
+                    ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+                    // add back arrow to toolbar
+                    if (((AppCompatActivity) getActivity()).getSupportActionBar() != null){
+                        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+                    }
 
                     Picasso.get().load(mDetails.getWebImage().getUrl()).placeholder(R.drawable.placeholder1200).error(R.drawable.placeholder1200).into(mArtObjectView);
 
                     mArtObjectDescView.setText(mDetails.getPlaqueDescriptionEnglish());
-                      mArtObjectMakerView.setText(mDetails.getPrincipalOrFirstMaker());
-                       int intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(0));
-  //                  Log.d(TAG, "COlor is : " + mDetails.getNormalizedColors().get(0));
-    //                Log.d(TAG, "COlor is : " + Math.abs(intColorValue));
-
-                    //mArtObjectColor1.setBackgroundColor(Math.abs(intColorValue));
-        /*     intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(1));
-                    Log.d(TAG, "COlor is : " + mDetails.getNormalizedColors().get(1));
+                    mArtObjectMakerView.setText(mDetails.getPrincipalOrFirstMaker());
+                    Log.d("DETAIL ", "Number of colors results received: " + mDetails.getNormalizedColors().size());
+                    int intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(0).replaceAll(" ",""));
+                    mArtObjectColor1.setBackgroundColor(intColorValue);
+                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(1).replaceAll(" ",""));
                     mArtObjectColor2.setBackgroundColor(intColorValue);
-                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(2));
-                    Log.d(TAG, "COlor is : " + mDetails.getNormalizedColors().get(2));
-                    mArtObjectColor3.setBackgroundColor(Math.abs(intColorValue));
-                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(3));
-                    mArtObjectColor4.setBackgroundColor(Math.abs(intColorValue));
-                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(4));
-                    mArtObjectColor5.setBackgroundColor(Math.abs(intColorValue));
-                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(5));
-                    mArtObjectColor6.setBackgroundColor(Math.abs(intColorValue));
-*/
+                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(2).replaceAll(" ",""));
+                    mArtObjectColor3.setBackgroundColor(intColorValue);
+                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(3).replaceAll(" ",""));
+                    mArtObjectColor4.setBackgroundColor(intColorValue);
+                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(4).replaceAll(" ",""));
+                    mArtObjectColor5.setBackgroundColor(intColorValue);
+                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(5).replaceAll(" ",""));
+                    mArtObjectColor6.setBackgroundColor(intColorValue);
+
 
                 }
-                Log.d("DETAIL ", "Number of colors results received: " + mDetails.getTitle());
+
                 mLoadingIndicator.setVisibility(View.INVISIBLE);
             }
 

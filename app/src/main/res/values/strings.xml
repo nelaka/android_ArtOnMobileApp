@@ -16,7 +16,7 @@
     <string name="desc_of_arrow_right_white">Arrow right white</string>
 
     <!-- Sort by -->
-    <string name="sort_by">Sort by...</string>
+    <string name="sort_by">Sort by…</string>
     <string name="sort_by_achronologic">Newests first</string>
     <string name="sort_by_chronologic">Oldest first</string>
 
@@ -27,13 +27,17 @@
 
     <string name="nav_header_title">@string/app_name</string>
     <string name="nav_header_subtitle">Includes art objects from Rijksmuseum</string>
-    <string name="nav_header_subtitle2">Made by Delapanta (c) 2018</string>
+    <string name="nav_header_subtitle2">Made by Delapanta © 2018</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="nav_all_works_of_arts">All Works of Arts</string>
     <string name="nav_all_paintings">All Paintings</string>
     <string name="nav_styles">Rijksstudio Styles</string>
     <string name="nav_favorites">My favorite art objects</string>
 
-    <string name="action_settings">Settings</string>
-<string name="title_activity_detail">Detail</string>
+    <string name="action_settings">Sort by...</string>
+    <string name="title_activity_detail">Detail</string>
+    <string name="title_activity_fav">My favorites</string>
+    <string name="label_maker">Artist:</string>
+    <string name="label_description">Description</string>
+    <string name="action_share">Share</string>
 </resources>

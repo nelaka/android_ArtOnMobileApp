@@ -2,9 +2,6 @@ package com.example.android.android_artonmobileapp.utils;
 
 import android.support.design.widget.Snackbar;
 import android.view.View;
-import android.widget.TextView;
-
-import com.example.android.android_artonmobileapp.R;
 
 public class Utils {
 

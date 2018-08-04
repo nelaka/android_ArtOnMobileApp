@@ -32,7 +32,7 @@ public class ColorsWithNormalization implements Parcelable
         }
                 ;
 
-        protected ColorsWithNormalization(Parcel in) {
+        private ColorsWithNormalization(Parcel in) {
             this.originalHex = ((String) in.readValue((String.class.getClassLoader())));
             this.normalizedHex = ((String) in.readValue((String.class.getClassLoader())));
         }
