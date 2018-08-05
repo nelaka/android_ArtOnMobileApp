@@ -21,15 +21,19 @@ import java.io.IOException;
  * Implementation of App Widget functionality.
  */
 public class ArtOnMobileWidget extends AppWidgetProvider {
-    private static String mImageUrl;
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, String imageUrl, int appWidgetId) {
-mImageUrl = imageUrl;
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.art_on_mobile_widget);
 
         // Create an Intent to launch FavActivity when clicked
         Intent intent = new Intent(context, FavActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+        // Construct the RemoteViews object
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.art_on_mobile_widget);
+
+
+        // Widgets allow click handlers to only launch pending intents
+        views.setOnClickPendingIntent(R.id.appwidget_image, pendingIntent);
 
         // Add the showArtObjectService click handler
         Intent showArtObjectIntent = new Intent(context, WidgetServices.class);
@@ -40,18 +44,31 @@ mImageUrl = imageUrl;
                 showArtObjectIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        views.setOnClickPendingIntent(R.id.appwidget_image, showArtObjectPendingIntent);
+        // Update image
 
+     //   views.setImageViewUri(R.id.appwidget_image, Uri.parse(imageUrl));
+        Picasso.get()
+                .load(imageUrl)
+                .resize(100, 100)
+                .into(views, R.id.appwidget_image, new int[] {appWidgetId});
+//views.setImageViewResource(R.id.appwidget_image, R.drawable.artonmobile_launcher);*/
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, mImageUrl, appWidgetId);
+        //Start the intent service update widget action, the service takes care of updating the widgets UI
+        WidgetServices.startActionShowArtObject(context);
+
+    }
+
+    public static void updateArtObjectWidgets(Context context, AppWidgetManager appWidgetManager,
+                                          String imageUrl, int[] appWidgetIds) {
+      for (int appWidgetId : appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, imageUrl, appWidgetId);
         }
+
     }
 
     @Override

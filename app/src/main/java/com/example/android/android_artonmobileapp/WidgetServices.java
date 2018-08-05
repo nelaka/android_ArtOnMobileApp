@@ -56,10 +56,9 @@ public class WidgetServices extends IntentService {
      * @see IntentService
      */
     // TODO: Customize helper method
-    public static void startActionShowArtObject(Context context, String id) {
+    public static void startActionShowArtObject(Context context) {
         Intent intent = new Intent(context, WidgetServices.class);
         intent.setAction(ACTION_SHOW_ART_OBJECT);
-        intent.putExtra(ART_OBJECT_ID, id);
         context.startService(intent);
     }
 
@@ -72,8 +71,8 @@ public class WidgetServices extends IntentService {
                 //final String param2 = intent.getStringExtra(EXTRA_PARAM2);
                 handleActionChangeArtObject(id /*, param2*/);
             } else if (ACTION_SHOW_ART_OBJECT.equals(action)) {
-                final String id = intent.getStringExtra(ART_OBJECT_ID);
-                handleActionShowArtObject(id);
+
+                handleActionShowArtObject();
             }
         }
     }
@@ -98,20 +97,20 @@ public class WidgetServices extends IntentService {
      * Handle action Baz in the provided background thread with the provided
      * parameters.
      */
-    private void handleActionShowArtObject(String id) {
-        String[] args = { id };
+    private void handleActionShowArtObject() {
 
         Uri uri = ArtObjectsContract.ArtObjectsEntry.CONTENT_URI;
         ContentResolver resolver = getContentResolver();
-        Cursor itemsResponse = resolver.query(uri, null, "id=?", args, null);
-
+        Cursor itemsResponse = resolver.query(uri, null, null, null, null);
+        itemsResponse.moveToPosition(0);
         int itemImageIndex = itemsResponse.getColumnIndex(ArtObjectsContract.ArtObjectsEntry.COLUMN_IMAGE);
         String imageUrl = itemsResponse.getString(itemImageIndex);
+        Log.v("WIDGET SERVICE","WIDGET CURSOR:" + imageUrl );
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, ArtOnMobileWidget.class));
         //Now update all widgets
-        ArtOnMobileWidget.updateAppWidget(this, appWidgetManager, imageUrl, appWidgetIds[0]);
+        ArtOnMobileWidget.updateArtObjectWidgets(this, appWidgetManager, imageUrl, appWidgetIds);
     }
 
 

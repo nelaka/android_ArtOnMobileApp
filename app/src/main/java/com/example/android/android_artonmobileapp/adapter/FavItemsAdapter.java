@@ -111,7 +111,7 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
                     cursor.getString(itemMakerIndex),
                     cursor.getString(itemImageIndex)));
 
-            WidgetServices.startActionShowArtObject(mContext, mFavItems.get(0).getId());
+
 
 
 mCursor = cursor;
