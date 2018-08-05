@@ -1,133 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-android:layout_height="match_parent">
-
+    android:layout_height="match_parent">
 
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+
         android:layout_marginStart="16dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="8dp"
         android:text="@string/label_maker"
         android:textColorLink="@color/colorAccent"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/art_object_desc_tv"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.484" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/art_object_maker_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="116dp"
+        android:layout_width="125dp"
+        android:layout_height="14dp"
+
+        android:layout_marginTop="8dp"
         android:textColorLink="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/art_object_desc_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.14"
         app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="28dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="116dp"
         android:text="@string/label_description"
         android:textColorLink="@color/colorAccent"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/art_object_desc_tv"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/art_object_maker_tv" />
 
     <TextView
         android:id="@+id/art_object_desc_tv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="238dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:textColorLink="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <Button
         android:id="@+id/color1"
         android:layout_width="@dimen/color_button_width"
-        android:layout_height="@dimen/color_button_height"
+        android:layout_height="49dp"
         android:layout_marginTop="8dp"
-        tools:background="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/color2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/art_object_desc_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/art_object_desc_tv"
+        tools:background="@color/colorAccent" />
 
     <Button
         android:id="@+id/color2"
         android:layout_width="@dimen/color_button_width"
         android:layout_height="@dimen/color_button_height"
         android:layout_marginTop="8dp"
-        tools:background="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/color3"
         app:layout_constraintStart_toEndOf="@+id/color1"
-        app:layout_constraintTop_toBottomOf="@+id/art_object_desc_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/art_object_desc_tv"
+        tools:background="@color/colorPrimary" />
 
     <Button
         android:id="@+id/color3"
         android:layout_width="@dimen/color_button_width"
         android:layout_height="@dimen/color_button_height"
         android:layout_marginTop="8dp"
-        tools:background="@color/colorPrimaryLight"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/color4"
         app:layout_constraintStart_toEndOf="@+id/color2"
-        app:layout_constraintTop_toBottomOf="@+id/art_object_desc_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/art_object_desc_tv"
+        tools:background="@color/colorPrimaryLight" />
 
     <Button
         android:id="@+id/color4"
         android:layout_width="@dimen/color_button_width"
         android:layout_height="@dimen/color_button_height"
         android:layout_marginTop="8dp"
-        tools:background="@color/colorPrimaryDark"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/color5"
         app:layout_constraintStart_toEndOf="@+id/color3"
-        app:layout_constraintTop_toBottomOf="@+id/art_object_desc_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/art_object_desc_tv"
+        tools:background="@color/colorPrimaryDark" />
 
     <Button
         android:id="@+id/color5"
         android:layout_width="@dimen/color_button_width"
         android:layout_height="@dimen/color_button_height"
         android:layout_marginTop="8dp"
-        tools:background="@color/colorSecondaryLight"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/color6"
         app:layout_constraintStart_toEndOf="@+id/color4"
-        app:layout_constraintTop_toBottomOf="@+id/art_object_desc_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/art_object_desc_tv"
+        tools:background="@color/colorSecondaryLight" />
 
     <Button
         android:id="@+id/color6"
         android:layout_width="@dimen/color_button_width"
         android:layout_height="@dimen/color_button_height"
         android:layout_marginTop="8dp"
-        tools:background="@color/colorSecondaryDark"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/color5"
-        app:layout_constraintTop_toBottomOf="@+id/art_object_desc_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/art_object_desc_tv"
+        tools:background="@color/colorSecondaryDark" />
+
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544~3347511713"
+        ads:layout_constraintBottom_toBottomOf="parent"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintStart_toStartOf="parent"
+        ads:layout_constraintTop_toBottomOf="@+id/color3"/>
+
 
 </android.support.constraint.ConstraintLayout>

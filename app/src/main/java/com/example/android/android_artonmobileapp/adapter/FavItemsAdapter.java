@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.android_artonmobileapp.R;
+import com.example.android.android_artonmobileapp.WidgetServices;
 import com.example.android.android_artonmobileapp.holder.FavItemViewHolder;
 import com.example.android.android_artonmobileapp.model.ArtObject;
 
@@ -109,6 +110,10 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
                     cursor.getString(itemTitleIndex),
                     cursor.getString(itemMakerIndex),
                     cursor.getString(itemImageIndex)));
+
+            WidgetServices.startActionShowArtObject(mContext, mFavItems.get(0).getId());
+
+
 mCursor = cursor;
         }
         notifyDataSetChanged();

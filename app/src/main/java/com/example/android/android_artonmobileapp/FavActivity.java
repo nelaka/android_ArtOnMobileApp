@@ -160,6 +160,7 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
         //   if (data.getCount() != 0) showWeatherDataView();
         /* Setting the adapter attaches it to the RecyclerView in our layout. */
         mRecyclerView.setAdapter(mFavItemsAdapter);
+
             }
 
     @Override

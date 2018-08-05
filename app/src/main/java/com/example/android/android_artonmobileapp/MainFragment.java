@@ -109,6 +109,8 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
 
             itemsRequest();
         }
+
+
         return rootView;
     }
 
@@ -117,43 +119,8 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
         mLoadingIndicator.setVisibility(View.VISIBLE);
 
         if (mItems == null) {
+            new RetrieveArtObjectsTask().execute();
 
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-            Call<ArtObjectResponse> call;
-            if (mQuery == null) {
-                call = apiService.getArtObjects(Config.rijksmuseumApiKey, "json", 30, true);
-            } else {
-                call = apiService.getPaintings(Config.rijksmuseumApiKey, "json", 30, true, mQuery);
-            }
-
-            call.enqueue(new Callback<ArtObjectResponse>() {
-
-                @Override
-                public void onResponse(@NonNull Call<ArtObjectResponse> call, @NonNull Response<ArtObjectResponse> response) {
-                    mItems = response.body().getArtObjects();
-                    Log.d("MAIN ", "Number of results received: " + mItems.size());
-                    mLoadingIndicator.setVisibility(View.INVISIBLE);
-
-                    if (mItems != null) {
-                        mArtObjectsAdapter.setData(mItems);
-                        /* Setting the adapter attaches it to the RecyclerView in our layout. */
-                        mRecyclerView.setAdapter(mArtObjectsAdapter);
-                        showDataView();
-
-                    } else {
-                        showErrorMessage();
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<ArtObjectResponse> call, @NonNull Throwable t) {
-
-                    mLoadingIndicator.setVisibility(View.INVISIBLE);
-                    showErrorMessage();
-                    // Log error here since request failed
-                    Log.e("main", t.toString());
-                }
-            });
         } else {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
             mArtObjectsAdapter.setData(mItems);
@@ -262,5 +229,48 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
         void onFragmentInteraction(ArtObject artObject);
     }
 
-   
+    public class RetrieveArtObjectsTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            Call<ArtObjectResponse> call;
+            if (mQuery == null) {
+                call = apiService.getArtObjects(Config.rijksmuseumApiKey, "json", 30, true);
+            } else {
+                call = apiService.getPaintings(Config.rijksmuseumApiKey, "json", 30, true, mQuery);
+            }
+
+            call.enqueue(new Callback<ArtObjectResponse>() {
+
+                @Override
+                public void onResponse(@NonNull Call<ArtObjectResponse> call, @NonNull Response<ArtObjectResponse> response) {
+                    mItems = response.body().getArtObjects();
+                    Log.d("MAIN ", "Number of results received: " + mItems.size());
+                    mLoadingIndicator.setVisibility(View.INVISIBLE);
+
+                    if (mItems != null) {
+                        mArtObjectsAdapter.setData(mItems);
+
+                        /* Setting the adapter attaches it to the RecyclerView in our layout. */
+                        mRecyclerView.setAdapter(mArtObjectsAdapter);
+                        showDataView();
+
+                    } else {
+                        showErrorMessage();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ArtObjectResponse> call, @NonNull Throwable t) {
+
+                    mLoadingIndicator.setVisibility(View.INVISIBLE);
+                    showErrorMessage();
+                    // Log error here since request failed
+                    Log.e("main", t.toString());
+                }
+            });
+            return null;
+        }
+    }
+
 }

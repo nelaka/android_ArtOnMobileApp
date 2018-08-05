@@ -17,6 +17,9 @@ import android.view.View;
 
 import com.example.android.android_artonmobileapp.model.ArtObject;
 import com.example.android.android_artonmobileapp.utils.Config;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,13 +34,21 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     ActionBarDrawerToggle mToggle;
     @BindView(R.id.fab_mail)
     FloatingActionButton mFab;
-
+    @BindView(R.id.adView)
+    AdView mAdView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+
         ButterKnife.bind(this);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         setSupportActionBar(mToolbar);
 
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         mToggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
+
+
 
     }
 
