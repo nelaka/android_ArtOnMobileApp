@@ -29,7 +29,7 @@ public class WidgetServices extends IntentService {
 
     // TODO: Rename parameters
     private static final String ART_OBJECT_ID = "com.example.android.android_artonmobileapp.extra.ID";
-    private static final String ART_OBJECT_POSITION = "com.example.android.android_artonmobileapp.extra.POSITION";
+    public static final String ART_OBJECT_POSITION = "com.example.android.android_artonmobileapp.extra.POSITION";
 
     public WidgetServices() {
         super("WidgetServices");

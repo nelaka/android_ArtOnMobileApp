@@ -51,21 +51,28 @@ public class ArtOnMobileWidget extends AppWidgetProvider {
         // Add the prevArtObjectService click handler
         Intent prevArtObjectIntent = new Intent(context, WidgetServices.class);
         prevArtObjectIntent.setAction(WidgetServices.ACTION_PREV_ART_OBJECT);
+        //Update the current widget instance only, by creating an array that contains the widget’s unique ID//
+
+        int[] idArray = new int[]{appWidgetId};
+        prevArtObjectIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, idArray);
+        prevArtObjectIntent.putExtra(WidgetServices.ART_OBJECT_POSITION, position);
         PendingIntent prevArtObjectPendingIntent = PendingIntent.getService(context, 0, prevArtObjectIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         // Widgets allow click handlers to only launch pending intents
         views.setOnClickPendingIntent(R.id.widget_previous_button, prevArtObjectPendingIntent);
 
         // Add the nextArtObjectService click handler
         Intent nextArtObjectIntent = new Intent(context, WidgetServices.class);
+        nextArtObjectIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, idArray);
+        nextArtObjectIntent.putExtra(WidgetServices.ART_OBJECT_POSITION, position);
         nextArtObjectIntent.setAction(WidgetServices.ACTION_NEXT_ART_OBJECT);
         PendingIntent nextArtObjectPendingIntent = PendingIntent.getService(context, 0, nextArtObjectIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
         // Widgets allow click handlers to only launch pending intents
         views.setOnClickPendingIntent(R.id.widget_next_button, nextArtObjectPendingIntent);
+
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
+
 
     public static void updateArtObjectWidgets(Context context, AppWidgetManager appWidgetManager, int position, String imageUrl, String title, int[] appWidgetIds) {
 

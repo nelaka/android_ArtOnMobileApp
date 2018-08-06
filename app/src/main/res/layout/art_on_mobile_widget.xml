@@ -7,40 +7,44 @@
         android:id="@+id/appwidget_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-
-        android:layout_margin="8dp"
+        android:paddingTop="@dimen/zero_padding"
+        android:paddingBottom="@dimen/default_padding"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:contentDescription="@string/desc_appwidget"
         android:src="@drawable/artonmobile_launcher"
-        android:contentDescription="@string/desc_appwidget"/>
+        android:background="@android:color/darker_gray"/>
 
     <TextView
         android:id="@+id/appwidget_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginTop="32dp"
-
         android:text="@string/appwidget_text"
         android:textAlignment="center"
-        android:textColor="#ffffff"
+        android:textColor="@android:color/background_light"
         android:textSize="14sp"
-        android:textStyle="italic" />
+        android:textStyle="italic"
+        android:layout_marginTop="@dimen/default_padding_small"
+        android:padding="@dimen/default_padding_small"/>
 
     <ImageView
         android:id="@+id/widget_previous_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|start"
-        android:src="@drawable/ic_chevron_left" />
+        android:paddingEnd="@dimen/default_padding"
+        android:paddingStart="@dimen/zero_padding"
+        android:src="@drawable/ic_chevron_left"
+       />
 
     <ImageView
         android:id="@+id/widget_next_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|end"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/zero_padding"
         android:src="@drawable/ic_chevron_right" />
 
 </FrameLayout>
