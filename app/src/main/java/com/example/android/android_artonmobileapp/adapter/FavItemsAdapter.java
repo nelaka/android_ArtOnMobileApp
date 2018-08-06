@@ -111,9 +111,6 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
                     cursor.getString(itemMakerIndex),
                     cursor.getString(itemImageIndex)));
 
-
-
-
 mCursor = cursor;
         }
         notifyDataSetChanged();

@@ -215,6 +215,7 @@ public class DetailFragment extends Fragment {
         // Create new empty ContentValues object
         ContentValues contentValues = new ContentValues();
         // Put the task description and selected mPriority into the ContentValues
+
         contentValues.put(ArtObjectsEntry.COLUMN_ART_OBJECT_ID, id);
         contentValues.put(ArtObjectsEntry.COLUMN_TITLE, mDetails.getTitle());
         contentValues.put(ArtObjectsEntry.COLUMN_MAKER, mDetails.getPrincipalOrFirstMaker());

@@ -28,8 +28,6 @@ public class DetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
 
-
-
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
     }
@@ -58,7 +56,6 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_share) {
-
             Intent shareIntent = createShareArtObjectIntent();
             startActivity(shareIntent);
             return true;

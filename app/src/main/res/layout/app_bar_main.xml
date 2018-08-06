@@ -21,6 +21,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />
+
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
