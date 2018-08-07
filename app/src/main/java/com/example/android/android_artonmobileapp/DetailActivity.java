@@ -5,31 +5,36 @@ import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherAdView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
-
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.adView)
-    AdView mAdView;
+    @BindView(R.id.publisherAdView)
+    PublisherAdView mPublisherAdView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
 
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+
+            PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+            mPublisherAdView.loadAd(adRequest);
     }
 
     @Override
@@ -81,4 +86,6 @@ public class DetailActivity extends AppCompatActivity {
         return shareIntent;
 
     }
+
+
 }

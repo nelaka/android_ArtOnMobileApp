@@ -5,5 +5,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetailActivity"
-    tools:layout="@layout/fragment_detail"
-    tools:showIn="@layout/app_bar_detail" />
+    tools:layout="@layout/fragment_detail"/>

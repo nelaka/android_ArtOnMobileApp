@@ -48,6 +48,8 @@ import static android.content.ContentValues.TAG;
 public class DetailFragment extends Fragment {
     private ArtObjectDetail mDetails;
     private String mTitle;
+    @BindView(R.id.title_long)
+    TextView mArtObjectTitleLongView;
     @BindView(R.id.art_object_iv)
     ImageView mArtObjectView;
     @BindView(R.id.art_object_desc_tv)
@@ -68,8 +70,6 @@ public class DetailFragment extends Fragment {
     Button mArtObjectColor6;
     @BindView(R.id.fab)
     FloatingActionButton fab;
-
-
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.pb_loading_indicator)
@@ -103,7 +103,6 @@ public class DetailFragment extends Fragment {
                 artObjectDetailsRequest(mId);
            }
         }
-
 
         mFavorite = isFavorite(mId);
 
@@ -146,26 +145,38 @@ public class DetailFragment extends Fragment {
                     }
 
                     Picasso.get().load(mDetails.getWebImage().getUrl()).placeholder(R.drawable.placeholder1200).error(R.drawable.placeholder1200).into(mArtObjectView);
-
+mArtObjectTitleLongView.setText(mDetails.getLongTitle());
                     mArtObjectDescView.setText(mDetails.getPlaqueDescriptionEnglish());
                     mArtObjectMakerView.setText(mDetails.getPrincipalOrFirstMaker());
-                    Log.d("DETAIL ", "Number of colors results received: " + mDetails.getNormalizedColors().size());
-                    int intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(0).replaceAll(" ",""));
-                    mArtObjectColor1.setBackgroundColor(intColorValue);
-                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(1).replaceAll(" ",""));
-                    mArtObjectColor2.setBackgroundColor(intColorValue);
-                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(2).replaceAll(" ",""));
-                    mArtObjectColor3.setBackgroundColor(intColorValue);
-                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(3).replaceAll(" ",""));
-                    mArtObjectColor4.setBackgroundColor(intColorValue);
-                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(4).replaceAll(" ",""));
-                    mArtObjectColor5.setBackgroundColor(intColorValue);
-                    intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(5).replaceAll(" ",""));
-                    mArtObjectColor6.setBackgroundColor(intColorValue);
-
-
+                    int size = mDetails.getNormalizedColors().size();
+                    int intColorValue;
+                    switch (size) {
+                        case 6:
+                            intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(5).replaceAll(" ", ""));
+                            mArtObjectColor6.setBackgroundColor(intColorValue);
+                            mArtObjectColor6.setVisibility(View.VISIBLE);
+                        case 5:
+                            intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(4).replaceAll(" ", ""));
+                            mArtObjectColor5.setBackgroundColor(intColorValue);
+                            mArtObjectColor5.setVisibility(View.VISIBLE);
+                        case 4:
+                            intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(3).replaceAll(" ", ""));
+                            mArtObjectColor4.setBackgroundColor(intColorValue);
+                            mArtObjectColor4.setVisibility(View.VISIBLE);
+                        case 3:
+                            intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(2).replaceAll(" ", ""));
+                            mArtObjectColor3.setBackgroundColor(intColorValue);
+                            mArtObjectColor3.setVisibility(View.VISIBLE);
+                        case 2:
+                            intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(1).replaceAll(" ", ""));
+                            mArtObjectColor2.setBackgroundColor(intColorValue);
+                            mArtObjectColor2.setVisibility(View.VISIBLE);
+                        case 1:
+                            intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(0).replaceAll(" ", ""));
+                            mArtObjectColor1.setBackgroundColor(intColorValue);
+                            mArtObjectColor1.setVisibility(View.VISIBLE);
+                    }
                 }
-
                 mLoadingIndicator.setVisibility(View.INVISIBLE);
             }
 
@@ -215,12 +226,10 @@ public class DetailFragment extends Fragment {
         // Create new empty ContentValues object
         ContentValues contentValues = new ContentValues();
         // Put the task description and selected mPriority into the ContentValues
-
         contentValues.put(ArtObjectsEntry.COLUMN_ART_OBJECT_ID, id);
         contentValues.put(ArtObjectsEntry.COLUMN_TITLE, mDetails.getTitle());
         contentValues.put(ArtObjectsEntry.COLUMN_MAKER, mDetails.getPrincipalOrFirstMaker());
         contentValues.put(ArtObjectsEntry.COLUMN_IMAGE, mDetails.getWebImage().getUrl());
-
         // Insert the content values via a ContentResolver
         Uri uri = getContext().getContentResolver().insert(ArtObjectsEntry.CONTENT_URI, contentValues);
         Log.d(TAG, "Uri =" + uri + " " + String.valueOf(id));

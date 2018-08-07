@@ -35,30 +35,12 @@
                 android:layout_gravity="bottom"
                 android:orientation="vertical"
                 app:layout_collapseMode="parallax">
-
-                <TextView
-                    android:id="@+id/article_title"
-                    style="?android:attr/textAppearanceLarge"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:lineSpacingMultiplier="0.9"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/detail_title_text_size"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/article_byline"
-                    style="?android:attr/textAppearanceSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimaryDark" />
             </LinearLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="?android:attr/actionBarSize"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="1.0" />
         </android.support.design.widget.CollapsingToolbarLayout>

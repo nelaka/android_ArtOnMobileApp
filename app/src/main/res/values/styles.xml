@@ -15,5 +15,11 @@
 
     <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="subTitles">
+        <item name="android:textColorLink">@color/colorAccent</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_subtitle</item>
+    </style>
 
+    <dimen name="text_size_subtitle">22sp</dimen>
 </resources>

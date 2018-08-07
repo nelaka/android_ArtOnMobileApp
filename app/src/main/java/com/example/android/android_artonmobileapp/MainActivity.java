@@ -20,6 +20,8 @@ import com.example.android.android_artonmobileapp.utils.Config;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,22 +36,16 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     ActionBarDrawerToggle mToggle;
     @BindView(R.id.fab_mail)
     FloatingActionButton mFab;
-    @BindView(R.id.adView)
-    AdView mAdView;
+    Tracker mTracker;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+         ButterKnife.bind(this);
 
-        ButterKnife.bind(this);
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-
-        setSupportActionBar(mToolbar);
+         setSupportActionBar(mToolbar);
 
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,14 +54,15 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             }
         });
 
+        // Obtain the shared Tracker instance.
+        AnalyticsApp application = (AnalyticsApp) getApplication();
+        mTracker = application.getDefaultTracker();
+
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
-
-
-
     }
 
     @Override
@@ -126,9 +123,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         MainFragment fragment = new MainFragment();
         fragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, fragment).addToBackStack(null).commit();
-       /*
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivityForResult(intent, Config.NEED_TO_REFRESH_LIST);*/
     }
 
     private void allPaintings() {
@@ -138,10 +132,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         MainFragment fragment = new MainFragment();
         fragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, fragment).addToBackStack(null).commit();
-
-        /*Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(Config.BUNDLE_QUERY, "painting");
-        startActivityForResult(intent, Config.NEED_TO_REFRESH_LIST);*/
     }
 
     private void favorites() {

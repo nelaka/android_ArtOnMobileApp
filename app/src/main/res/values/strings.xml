@@ -37,7 +37,7 @@
     <string name="action_settings">Sort by...</string>
     <string name="title_activity_detail">Detail</string>
     <string name="title_activity_fav">My favorites</string>
-    <string name="label_maker">Artist:</string>
+    <string name="label_maker">by</string>
     <string name="label_description">Description</string>
     <string name="action_share">Share</string>
     <string name="appwidget_text">Art Object Title</string>
