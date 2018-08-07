@@ -8,11 +8,11 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_allworksofarts"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_gallery"
             android:title="@string/nav_all_works_of_arts" />
         <item
             android:id="@+id/nav_allpaintings"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_palette"
             android:title="@string/nav_all_paintings" />
     </group>
 
@@ -24,16 +24,17 @@
             android:title="@string/nav_favorites" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/nav_sort_by_label">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_sort_by_date"
+                android:icon="@drawable/ic_date_range"
+                android:title="@string/nav_sort_by_date" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_sort_by_artist"
+                android:icon="@drawable/ic_portrait"
+                android:title="@string/nav_sort_by_artist" />
+
         </menu>
     </item>
 

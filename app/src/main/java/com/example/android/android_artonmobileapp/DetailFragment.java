@@ -44,10 +44,8 @@ import static android.content.ContentValues.TAG;
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link DetailFragment}.
- * */
+ */
 public class DetailFragment extends Fragment {
-    private ArtObjectDetail mDetails;
-    private String mTitle;
     @BindView(R.id.title_long)
     TextView mArtObjectTitleLongView;
     @BindView(R.id.art_object_iv)
@@ -74,9 +72,10 @@ public class DetailFragment extends Fragment {
     Toolbar mToolbar;
     @BindView(R.id.pb_loading_indicator)
     ProgressBar mLoadingIndicator;
+    private ArtObjectDetail mDetails;
     private Boolean mFavorite = false;
     private String mId;
- private Context mContext;
+    private Context mContext;
 
 
     public DetailFragment() {
@@ -101,7 +100,7 @@ public class DetailFragment extends Fragment {
             if (intent.hasExtra(Config.BUNDLE_ART_OBJECT_ID)) {
                 mId = intent.getStringExtra(Config.BUNDLE_ART_OBJECT_ID);
                 artObjectDetailsRequest(mId);
-           }
+            }
         }
 
         mFavorite = isFavorite(mId);
@@ -131,7 +130,7 @@ public class DetailFragment extends Fragment {
 
             @Override
             public void onResponse(@NonNull Call<ArtObjectDetailResponse> call, @NonNull Response<ArtObjectDetailResponse> response) {
-                if ((response.body())!= null) {
+                if ((response.body()) != null) {
                     mDetails = response.body().getArtObject();
 
                     // Display the current selected movie title on the Action Bar
@@ -139,13 +138,13 @@ public class DetailFragment extends Fragment {
                     mToolbar.setTitleTextColor(Color.WHITE);
                     ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
                     // add back arrow to toolbar
-                    if (((AppCompatActivity) getActivity()).getSupportActionBar() != null){
+                    if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
                         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
                     }
 
-                    Picasso.get().load(mDetails.getWebImage().getUrl()).placeholder(R.drawable.placeholder1200).error(R.drawable.placeholder1200).into(mArtObjectView);
-mArtObjectTitleLongView.setText(mDetails.getLongTitle());
+                    Picasso.get().load(mDetails.getWebImage().getUrl()).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).into(mArtObjectView);
+                    mArtObjectTitleLongView.setText(mDetails.getLongTitle());
                     mArtObjectDescView.setText(mDetails.getPlaqueDescriptionEnglish());
                     mArtObjectMakerView.setText(mDetails.getPrincipalOrFirstMaker());
                     int size = mDetails.getNormalizedColors().size();

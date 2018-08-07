@@ -12,14 +12,10 @@ import retrofit2.http.Query;
 public interface ApiInterface {
 
     @GET("en/collection")
-    Call<ArtObjectResponse> getArtObjects(@Query("key") String apiKey, @Query("format") String format, @Query("ps") int resultsPerPage, @Query("imgonly") boolean imgOnly);
+    Call<ArtObjectResponse> getArtObjects(@Query("key") String apiKey, @Query("format") String format, @Query("ps") int resultsPerPage, @Query("imgonly") boolean imgOnly, @Query("s") String sortBy);
 
     @GET("en/collection")
-    Call<ArtObjectResponse> getPaintings(@Query("key") String apiKey, @Query("format") String format, @Query("ps") int resultsPerPage, @Query("imgonly") boolean imgOnly, @Query("type") String type);
-
-
-    @GET("en/collection")
-    Call<ArtObjectResponse> getArtObjectQuery(@Query("q") String query, @Query("key") String apiKey, @Query("format") String format, @Query("ps") int resultsPerPage, @Query("imgonly") boolean imgOnly, @Query("type") String type);
+    Call<ArtObjectResponse> getPaintings(@Query("key") String apiKey, @Query("format") String format, @Query("ps") int resultsPerPage, @Query("imgonly") boolean imgOnly, @Query("type") String type, @Query("s") String sortBy);
 
     @GET("en/collection/{objectNumber}")
     Call<ArtObjectDetailResponse> getArtObjectDetails(@Path("objectNumber") String objectNumber, @Query("key") String apiKey, @Query("format") String format);

@@ -22,14 +22,13 @@
 
     <include layout="@layout/content_main" />
 
-
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:contentDescription="@string/desc_fab_mail"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
 </android.support.design.widget.CoordinatorLayout>

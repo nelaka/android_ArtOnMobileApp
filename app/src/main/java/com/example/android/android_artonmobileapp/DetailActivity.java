@@ -4,16 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
 
@@ -21,8 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+
     @BindView(R.id.publisherAdView)
     PublisherAdView mPublisherAdView;
 
@@ -31,10 +23,8 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
-
-
-            PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
-            mPublisherAdView.loadAd(adRequest);
+        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+        mPublisherAdView.loadAd(adRequest);
     }
 
     @Override
@@ -52,12 +42,8 @@ public class DetailActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == android.R.id.home){
+        if (id == android.R.id.home) {
             finish();
-        }
-
-        if (id == R.id.action_settings) {
-            return true;
         }
 
         if (id == R.id.action_share) {
@@ -78,9 +64,7 @@ public class DetailActivity extends AppCompatActivity {
      */
     private Intent createShareArtObjectIntent() {
 
-        Intent shareIntent = ShareCompat.IntentBuilder.from(this)
-                .setType("text/plain")
-                .getIntent();
+        Intent shareIntent = ShareCompat.IntentBuilder.from(this).setType("text/plain").getIntent();
         //shareIntent.putExtra(Intent.EXTRA_TEXT, );
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         return shareIntent;

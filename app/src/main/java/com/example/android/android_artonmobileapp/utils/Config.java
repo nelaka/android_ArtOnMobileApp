@@ -6,7 +6,6 @@ public class Config {
 
         //https://www.rijksmuseum.nl/api/en/collection?key=0MCRcrjF&format=json&q=masterpieces
         public static final String RIJKSMUSEUM_BASE_URL = "https://www.rijksmuseum.nl/api/";
-        //  https://www.europeana.eu/api/v2/search.json?wskey=fgBaMgHDT&query=greece&qf=COUNTRY:greece
         public final static String rijksmuseumApiKey = BuildConfig.RIJKSMUSEUM_API_KEY;
         //  public static final String YOU_TUBE_BASE_URL = "https://www.youtube.com/watch?v=";
 
@@ -17,6 +16,7 @@ public class Config {
         public static final String BUNDLE_ART_OBJECTS = "art_objects";
 
     public static final String BUNDLE_QUERY = "query";
+    public static final String BUNDLE_SORT_BY = "sort_by";
     public static final String BUNDLE_PAINTING = "painting";
     public static final int NEED_TO_REFRESH_LIST = 0;  // The request code
     public static final int CHANGES_IN_FAV_ITEMS = 1;  // The request code
@@ -32,6 +32,10 @@ public class Config {
      * it is unique and consistent.
      */
     public static final int ID_FAV_ITEMS_LOADER = 44;
+
+    public static final int RESULTS_RETURNED = 60;
+    public static final String ORDER_CHRONOLOGICAL = "chronologic";
+    public static final String ORDER_BY_ARTIST = "artist";
 
 
 }

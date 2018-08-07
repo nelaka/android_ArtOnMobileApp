@@ -7,13 +7,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".AnalyticsApp"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@drawable/artonmobile_launcher"
         android:label="@string/app_name"
         android:roundIcon="@drawable/artonmobile_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop">
@@ -57,7 +58,8 @@
 
         <service
             android:name=".WidgetServices"
-            android:exported="false"></service>
+            android:exported="false" />
+
     </application>
 
 </manifest>

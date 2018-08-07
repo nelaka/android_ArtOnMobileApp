@@ -2,7 +2,6 @@ package com.example.android.android_artonmobileapp;
 
 import android.app.Application;
 
-import com.example.android.android_artonmobileapp.R;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 

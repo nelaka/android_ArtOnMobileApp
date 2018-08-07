@@ -1,6 +1,7 @@
 package com.example.android.android_artonmobileapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -11,16 +12,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.android.android_artonmobileapp.model.ArtObject;
 import com.example.android.android_artonmobileapp.utils.Config;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import butterknife.BindView;
@@ -37,20 +33,20 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     @BindView(R.id.fab_mail)
     FloatingActionButton mFab;
     Tracker mTracker;
+    private Boolean mAllArtObjects = true;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
          ButterKnife.bind(this);
-
          setSupportActionBar(mToolbar);
 
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                Snackbar.make(view, "Why don' t you suggest this app to your friends? Send them an e-mail now!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                composeEmail(null, "Maybe you should check out this app! It's awesome!");
             }
         });
 
@@ -74,27 +70,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -103,32 +78,44 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         int id = item.getItemId();
 
         if (id == R.id.nav_allworksofarts) {
-            allArtObjects();
+            allArtObjects(null);
         } else if (id == R.id.nav_allpaintings) {
-            allPaintings();
+            allPaintings(null);
         } else if (id == R.id.nav_favorites) {
             favorites();
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_sort_by_date) {
+            if (mAllArtObjects) {
+                allArtObjects(Config.ORDER_CHRONOLOGICAL);
+            } else {
+                allPaintings(Config.ORDER_CHRONOLOGICAL);
+            }
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_sort_by_artist) {
+            if (mAllArtObjects) {
+                allArtObjects(Config.ORDER_BY_ARTIST);
+            } else {
+                allPaintings(Config.ORDER_BY_ARTIST);
+            }
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void allArtObjects() {
+    private void allArtObjects(String sortBy) {
+        mAllArtObjects = true;
         Bundle arguments = new Bundle();
+        if (sortBy != null) arguments.putString(Config.BUNDLE_SORT_BY, sortBy);
         MainFragment fragment = new MainFragment();
         fragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, fragment).addToBackStack(null).commit();
     }
 
-    private void allPaintings() {
-
+    private void allPaintings(String sortBy) {
+        mAllArtObjects = false;
         Bundle arguments = new Bundle();
         arguments.putString(Config.BUNDLE_QUERY, "painting");
+        if (sortBy != null) arguments.putString(Config.BUNDLE_SORT_BY, sortBy);
         MainFragment fragment = new MainFragment();
         fragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, fragment).addToBackStack(null).commit();
@@ -137,6 +124,19 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     private void favorites() {
         Intent intent = new Intent(this, FavActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * Send email intent
+     */
+    public void composeEmail(String[] addresses, String subject) {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_EMAIL, addresses);
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 
     @Override

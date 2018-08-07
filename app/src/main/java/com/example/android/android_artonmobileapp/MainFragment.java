@@ -1,10 +1,6 @@
 package com.example.android.android_artonmobileapp;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -20,8 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.android_artonmobileapp.adapter.ArtObjectsAdapter;
-import com.example.android.android_artonmobileapp.adapter.FavItemsAdapter;
-import com.example.android.android_artonmobileapp.data.ArtObjectsContract;
 import com.example.android.android_artonmobileapp.holder.ArtObjectViewHolder;
 import com.example.android.android_artonmobileapp.model.ArtObject;
 import com.example.android.android_artonmobileapp.model.ArtObjectResponse;
@@ -29,7 +23,6 @@ import com.example.android.android_artonmobileapp.rest.ApiClient;
 import com.example.android.android_artonmobileapp.rest.ApiInterface;
 import com.example.android.android_artonmobileapp.utils.Config;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -37,10 +30,6 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.app.Activity.RESULT_OK;
-import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
-import static com.example.android.android_artonmobileapp.utils.Config.CHANGES_IN_FAV_ITEMS;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,26 +49,24 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
     TextView mErrorMessageDisplay;
     @BindView(R.id.tv_no_fav_art_objects)
     TextView mNoFavArtObjectsView;
-    private String mQuery;
+    private String mQuery, mSortBy;
     private List<ArtObject> mItems;
     private Context mContext;
     private ArtObjectsAdapter mArtObjectsAdapter;
-    private FavItemsAdapter mFavItemsAdapter;
     private Parcelable mSavedRecyclerLayoutState;
     private GridLayoutManager mLayoutManager;
     private OnFragmentInteractionListener mListener;
 
-
     public MainFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -104,13 +91,16 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
         } else {
             Bundle bundle = getArguments();
 
-            if (bundle != null && bundle.containsKey(Config.BUNDLE_QUERY))
-                mQuery = getArguments().getString(Config.BUNDLE_QUERY);
-
+            if (bundle != null) {
+                if (bundle.containsKey(Config.BUNDLE_QUERY)) {
+                    mQuery = getArguments().getString(Config.BUNDLE_QUERY);
+                }
+                if (bundle.containsKey(Config.BUNDLE_SORT_BY)) {
+                    mSortBy = getArguments().getString(Config.BUNDLE_SORT_BY);
+                }
+            }
             itemsRequest();
         }
-
-
         return rootView;
     }
 
@@ -147,51 +137,6 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
 
         /* Then, show the error */
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
-
-    }
-
-    private void artObjectsFromDB() {
-        Uri uri = ArtObjectsContract.ArtObjectsEntry.CONTENT_URI;
-        ContentResolver resolver = getActivity().getContentResolver();
-        Cursor itemsResponse = resolver.query(uri, null, null, null, null);
-
-        if (itemsResponse.getCount() <= 0) {
-            //showNoFavMovieMessage();
-            return;
-        }
-        // Create an empty ArrayList that we can start adding movies to
-        ArrayList<ArtObject> items = new ArrayList<>();
-
-        for (int i = 0; i < itemsResponse.getCount(); i++) {
-            int itemIdIndex = itemsResponse.getColumnIndex(ArtObjectsEntry.COLUMN_ART_OBJECT_ID);
-            int itemTitleIndex = itemsResponse.getColumnIndex(ArtObjectsEntry.COLUMN_TITLE);
-            int itemMakerIndex = itemsResponse.getColumnIndex(ArtObjectsEntry.COLUMN_MAKER);
-            int itemImageIndex = itemsResponse.getColumnIndex(ArtObjectsEntry.COLUMN_IMAGE);
-
-            itemsResponse.moveToPosition(i);
-
-            items.add(new ArtObject(itemsResponse.getString(itemIdIndex), itemsResponse.getString(itemTitleIndex), itemsResponse.getString(itemMakerIndex), itemsResponse.getString(itemImageIndex)));
-        }
-        /* Setting the adapter attaches it to the RecyclerView in our layout. */
-        // mFavItemsAdapter.setData(mItems);
-
-        /* Setting the adapter attaches it to the RecyclerView in our layout. */
-        mRecyclerView.setAdapter(mFavItemsAdapter);
-        //showMovieDataView();
-        itemsResponse.close();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Check which request we're responding to
-        if (requestCode == CHANGES_IN_FAV_ITEMS) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                mSavedRecyclerLayoutState = mRecyclerView.getLayoutManager().onSaveInstanceState();
-                itemsRequest();
-            }
-        }
     }
 
     @Override
@@ -235,16 +180,18 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
             Call<ArtObjectResponse> call;
             if (mQuery == null) {
-                call = apiService.getArtObjects(Config.rijksmuseumApiKey, "json", 30, true);
+                call = apiService.getArtObjects(Config.rijksmuseumApiKey, "json", Config.RESULTS_RETURNED, true, mSortBy);
             } else {
-                call = apiService.getPaintings(Config.rijksmuseumApiKey, "json", 30, true, mQuery);
+                call = apiService.getPaintings(Config.rijksmuseumApiKey, "json", Config.RESULTS_RETURNED, true, mQuery, mSortBy);
             }
 
             call.enqueue(new Callback<ArtObjectResponse>() {
 
                 @Override
                 public void onResponse(@NonNull Call<ArtObjectResponse> call, @NonNull Response<ArtObjectResponse> response) {
-                    mItems = response.body().getArtObjects();
+                    if (response.body() != null) {
+                        mItems = response.body().getArtObjects();
+                    }
                     Log.d("MAIN ", "Number of results received: " + mItems.size());
                     mLoadingIndicator.setVisibility(View.INVISIBLE);
 
@@ -272,5 +219,4 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
             return null;
         }
     }
-
 }

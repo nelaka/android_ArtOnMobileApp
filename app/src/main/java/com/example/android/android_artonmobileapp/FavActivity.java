@@ -7,14 +7,13 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.android_artonmobileapp.adapter.FavItemsAdapter;
@@ -133,14 +132,11 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
 //         If the loader requested is our fav_items loader, return the appropriate CursorLoader
             case ID_FAV_ITEMS_LOADER:
                 Uri uri = ArtObjectsContract.ArtObjectsEntry.CONTENT_URI;
-                /* Sort order: Ascending by date */
-//        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
                 return new CursorLoader(this, uri, FAV_OBJECTS_PROJECTION, null, null,null);
             default:
                 throw new RuntimeException("Loader Not Implemented: " + id);
         }
     }
-
 
     /**
      * Called when a Loader has finished loading its data.
@@ -157,7 +153,6 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
         mFavItemsAdapter.setData(cursor);
         if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
         mRecyclerView.smoothScrollToPosition(mPosition);
-        //   if (data.getCount() != 0) showWeatherDataView();
         /* Setting the adapter attaches it to the RecyclerView in our layout. */
         mRecyclerView.setAdapter(mFavItemsAdapter);
 
@@ -170,13 +165,6 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -186,10 +174,6 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
         //noinspection SimplifiableIfStatement
         if (id == android.R.id.home){
             finish();
-        }
-
-        if (id == R.id.action_settings) {
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
