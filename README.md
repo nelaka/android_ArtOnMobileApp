@@ -19,7 +19,7 @@ The app will:
 <li>Title</li>
 <li>Artist/Creator</li>
 <li>Description</li>
-<li>Materials</li>
+<li>The basic normalized colors of the art object</li>
 </ul>
 <li>Αllow the user to mark an art object as a favorite in the details view by tapping on the fab button with the heart. This is for a local art objects collection that will be maintain and does not require an API request*.</li>
 <li>Allow the user to view a collection with his favorites art objects via a choice in navigation drawer.</li>
@@ -38,7 +38,7 @@ The app will:
 ## Google Play services:
 <ul>
 <li>Google Analytics to track usage data. Notice that only one analytics instance will be created.</li>
-<li>Google Mobile Ads to display ads (in app’s free flavor). Notice that test ads will be displayed.</li>
+<li>Google Mobile Ads to display banner ads for use with DoubleClick for Publishers (DFP). Notice that test ads will be displayed.</li>
 </ul>
 
 ## Access to the API
