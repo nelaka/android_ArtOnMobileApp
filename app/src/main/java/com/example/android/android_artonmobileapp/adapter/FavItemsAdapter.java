@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.android_artonmobileapp.R;
-import com.example.android.android_artonmobileapp.WidgetServices;
 import com.example.android.android_artonmobileapp.holder.FavItemViewHolder;
 import com.example.android.android_artonmobileapp.model.ArtObject;
 
@@ -72,16 +71,7 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
     public void onBindViewHolder(@NonNull FavItemViewHolder holder, int position) {
         // Move the cursor to the appropriate position
         mCursor.moveToPosition(position);
-
-        // Generate a weather summary with the date, description, high and low
-        /* Read date from the cursor */
-        String id = mCursor.getString(INDEX_ART_OBJECT_ID);
-        /* Get human readable string using our utility method */
-        String title = mCursor.getString(INDEX_ART_OBJECT_TITLE);
-        String maker = mCursor.getString(INDEX_ART_OBJECT_MAKER);
-
         String image_url = mCursor.getString(INDEX_ART_OBJECT_IMAGE);
-
         holder.bindArtObjects(image_url);
     }
 

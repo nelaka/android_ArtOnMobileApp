@@ -1,13 +1,13 @@
 package com.example.android.android_artonmobileapp;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -75,7 +75,6 @@ public class DetailFragment extends Fragment {
     private ArtObjectDetail mDetails;
     private Boolean mFavorite = false;
     private String mId;
-    private Context mContext;
 
 
     public DetailFragment() {
@@ -85,7 +84,23 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = getActivity();
+
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(Config.BUNDLE_ART_OBJECT, mDetails);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            mDetails = savedInstanceState.getParcelable(Config.BUNDLE_ART_OBJECT);
+
+        }
     }
 
     @Override
@@ -94,97 +109,104 @@ public class DetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, rootView);
 
-        Intent intent = getActivity().getIntent();
+        if (savedInstanceState != null && savedInstanceState.containsKey(Config.BUNDLE_ART_OBJECT)) {
+            mDetails = savedInstanceState.getParcelable(Config.BUNDLE_ART_OBJECT);
+        } else {
+            Intent intent = getActivity().getIntent();
 
-        if (intent != null) {
-            if (intent.hasExtra(Config.BUNDLE_ART_OBJECT_ID)) {
-                mId = intent.getStringExtra(Config.BUNDLE_ART_OBJECT_ID);
-                artObjectDetailsRequest(mId);
-            }
-        }
-
-        mFavorite = isFavorite(mId);
-
-        // Setup FAB to open EditorActivity
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mFavorite) {
-                    fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
-                    removeItemFromFavorites(mId);
-                } else {
-                    fab.setImageResource(R.drawable.ic_favorite_white_24dp);
-                    addItemToFavorites(mId);
+            if (intent != null) {
+                if (intent.hasExtra(Config.BUNDLE_ART_OBJECT_ID)) {
+                    mId = intent.getStringExtra(Config.BUNDLE_ART_OBJECT_ID);
+                    artObjectDetailsRequest(mId);
                 }
             }
-        });
+
+            mFavorite = isFavorite(mId);
+
+            // Setup FAB to open EditorActivity
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mFavorite) {
+                        fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+                        removeItemFromFavorites(mId);
+                    } else {
+                        fab.setImageResource(R.drawable.ic_favorite_white_24dp);
+                        addItemToFavorites(mId);
+                    }
+                }
+            });
+        }
         return rootView;
     }
 
     private void artObjectDetailsRequest(String id) {
+        if (mDetails == null) {
+            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            Call<ArtObjectDetailResponse> call = apiService.getArtObjectDetails(id, Config.rijksmuseumApiKey, "json");
+            call.enqueue(new Callback<ArtObjectDetailResponse>() {
 
-        Call<ArtObjectDetailResponse> call = apiService.getArtObjectDetails(id, Config.rijksmuseumApiKey, "json");
-        call.enqueue(new Callback<ArtObjectDetailResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<ArtObjectDetailResponse> call, @NonNull Response<ArtObjectDetailResponse> response) {
+                    if ((response.body()) != null) {
+                        mDetails = response.body().getArtObject();
 
-            @Override
-            public void onResponse(@NonNull Call<ArtObjectDetailResponse> call, @NonNull Response<ArtObjectDetailResponse> response) {
-                if ((response.body()) != null) {
-                    mDetails = response.body().getArtObject();
+                        // Display the current selected movie title on the Action Bar
+                        mToolbar.setTitle(mDetails.getTitle());
+                        //mToolbar.setTitleTextColor(Color.WHITE);
+                        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+                        // add back arrow to toolbar
+                        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+                            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+                        }
 
-                    // Display the current selected movie title on the Action Bar
-                    mToolbar.setTitle(mDetails.getTitle());
-                    mToolbar.setTitleTextColor(Color.WHITE);
-                    ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
-                    // add back arrow to toolbar
-                    if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-                        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+                        Picasso.get().load(mDetails.getWebImage().getUrl()).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).into(mArtObjectView);
+                        mArtObjectTitleLongView.setText(mDetails.getLongTitle());
+                        mArtObjectDescView.setText(mDetails.getPlaqueDescriptionEnglish());
+                        mArtObjectMakerView.setText(mDetails.getPrincipalOrFirstMaker());
+                        int size = mDetails.getNormalizedColors().size();
+                        int intColorValue;
+                        switch (size) {
+                            case 6:
+                                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(5).replaceAll(" ", ""));
+                                mArtObjectColor6.setBackgroundColor(intColorValue);
+                                mArtObjectColor6.setVisibility(View.VISIBLE);
+                            case 5:
+                                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(4).replaceAll(" ", ""));
+                                mArtObjectColor5.setBackgroundColor(intColorValue);
+                                mArtObjectColor5.setVisibility(View.VISIBLE);
+                            case 4:
+                                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(3).replaceAll(" ", ""));
+                                mArtObjectColor4.setBackgroundColor(intColorValue);
+                                mArtObjectColor4.setVisibility(View.VISIBLE);
+                            case 3:
+                                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(2).replaceAll(" ", ""));
+                                mArtObjectColor3.setBackgroundColor(intColorValue);
+                                mArtObjectColor3.setVisibility(View.VISIBLE);
+                            case 2:
+                                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(1).replaceAll(" ", ""));
+                                mArtObjectColor2.setBackgroundColor(intColorValue);
+                                mArtObjectColor2.setVisibility(View.VISIBLE);
+                            case 1:
+                                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(0).replaceAll(" ", ""));
+                                mArtObjectColor1.setBackgroundColor(intColorValue);
+                                mArtObjectColor1.setVisibility(View.VISIBLE);
+                        }
                     }
-
-                    Picasso.get().load(mDetails.getWebImage().getUrl()).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).into(mArtObjectView);
-                    mArtObjectTitleLongView.setText(mDetails.getLongTitle());
-                    mArtObjectDescView.setText(mDetails.getPlaqueDescriptionEnglish());
-                    mArtObjectMakerView.setText(mDetails.getPrincipalOrFirstMaker());
-                    int size = mDetails.getNormalizedColors().size();
-                    int intColorValue;
-                    switch (size) {
-                        case 6:
-                            intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(5).replaceAll(" ", ""));
-                            mArtObjectColor6.setBackgroundColor(intColorValue);
-                            mArtObjectColor6.setVisibility(View.VISIBLE);
-                        case 5:
-                            intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(4).replaceAll(" ", ""));
-                            mArtObjectColor5.setBackgroundColor(intColorValue);
-                            mArtObjectColor5.setVisibility(View.VISIBLE);
-                        case 4:
-                            intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(3).replaceAll(" ", ""));
-                            mArtObjectColor4.setBackgroundColor(intColorValue);
-                            mArtObjectColor4.setVisibility(View.VISIBLE);
-                        case 3:
-                            intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(2).replaceAll(" ", ""));
-                            mArtObjectColor3.setBackgroundColor(intColorValue);
-                            mArtObjectColor3.setVisibility(View.VISIBLE);
-                        case 2:
-                            intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(1).replaceAll(" ", ""));
-                            mArtObjectColor2.setBackgroundColor(intColorValue);
-                            mArtObjectColor2.setVisibility(View.VISIBLE);
-                        case 1:
-                            intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(0).replaceAll(" ", ""));
-                            mArtObjectColor1.setBackgroundColor(intColorValue);
-                            mArtObjectColor1.setVisibility(View.VISIBLE);
-                    }
+                    mLoadingIndicator.setVisibility(View.INVISIBLE);
                 }
-                mLoadingIndicator.setVisibility(View.INVISIBLE);
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<ArtObjectDetailResponse> call, @NonNull Throwable t) {
-                // Log error here since request failed
-                Log.e("detail", t.toString());
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<ArtObjectDetailResponse> call, @NonNull Throwable t) {
+                    // Log error here since request failed
+                    Log.e("detail", t.toString());
+                }
+            });
+        } else {
+
+        }
     }
 
     private boolean isFavorite(String id) {

@@ -14,7 +14,7 @@ public class Config {
 
         public static final String BUNDLE_RECYCLER_LAYOUT = "recycler.layout";
         public static final String BUNDLE_ART_OBJECTS = "art_objects";
-
+    public static final String BUNDLE_ART_OBJECT = "art_object";
     public static final String BUNDLE_QUERY = "query";
     public static final String BUNDLE_SORT_BY = "sort_by";
     public static final String BUNDLE_PAINTING = "painting";

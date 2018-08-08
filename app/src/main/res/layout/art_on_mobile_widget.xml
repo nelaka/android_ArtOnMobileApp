@@ -36,7 +36,7 @@
         android:paddingEnd="@dimen/default_padding"
         android:paddingStart="@dimen/zero_padding"
         android:src="@drawable/ic_chevron_left"
-       />
+        android:contentDescription="@string/desc_widget_go_to_prev" />
 
     <ImageView
         android:id="@+id/widget_next_button"
@@ -45,6 +45,7 @@
         android:layout_gravity="center|end"
         android:paddingStart="@dimen/default_padding"
         android:paddingEnd="@dimen/zero_padding"
+        android:contentDescription="@string/desc_widget_go_to_next"
         android:src="@drawable/ic_chevron_right" />
 
 </FrameLayout>

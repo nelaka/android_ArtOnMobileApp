@@ -15,6 +15,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.android.android_artonmobileapp.adapter.FavItemsAdapter;
 import com.example.android.android_artonmobileapp.data.ArtObjectsContract;
@@ -22,7 +25,7 @@ import com.example.android.android_artonmobileapp.holder.FavItemViewHolder;
 import com.example.android.android_artonmobileapp.model.ArtObject;
 import com.example.android.android_artonmobileapp.utils.Config;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,21 +33,21 @@ import butterknife.ButterKnife;
 import static com.example.android.android_artonmobileapp.adapter.FavItemsAdapter.FAV_OBJECTS_PROJECTION;
 import static com.example.android.android_artonmobileapp.utils.Config.ID_FAV_ITEMS_LOADER;
 
-public class FavActivity extends AppCompatActivity implements FavItemViewHolder.FavItemsAdapterOnClickHandler, LoaderManager.LoaderCallbacks<Cursor>  {
-    @BindView(R.id.items1_rv)
+public class FavActivity extends AppCompatActivity implements FavItemViewHolder.FavItemsAdapterOnClickHandler, LoaderManager.LoaderCallbacks<Cursor> {
+    @BindView(R.id.fav_items_rv)
     RecyclerView mRecyclerView;
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    private List<ArtObject> mItems;
-    /*   @BindView(R.id.pb_loading_indicator)
+    @BindView(R.id.pb_loading_indicator)
        ProgressBar mLoadingIndicator;
+    private ArrayList<ArtObject> mItems;
        @BindView(R.id.tv_error_message_display)
        TextView mErrorMessageDisplay;
        @BindView(R.id.tv_no_fav_art_objects)
        TextView mNoFavArtObjectsView;
-      */
+
     private int mPosition = RecyclerView.NO_POSITION;
     private FavItemsAdapter mFavItemsAdapter;
     private Parcelable mSavedRecyclerLayoutState;
@@ -58,7 +61,7 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
         setSupportActionBar(mToolbar);
 
         // add back arrow to toolbar
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -84,29 +87,48 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
          * created and (if the activity/fragment is currently started) starts the loader. Otherwise
          * the last created loader is re-used.
          */
-         getSupportLoaderManager().initLoader(ID_FAV_ITEMS_LOADER, null, this);
+        getSupportLoaderManager().initLoader(ID_FAV_ITEMS_LOADER, null, this);
 
     }
 
-/*
 
-    private void showDataView() {
-        /* First, make sure the error is invisible */
-  /*      mErrorMessageDisplay.setVisibility(View.INVISIBLE);
-        /* Then, make sure the movies are visible */
-    /*    mRecyclerView.setVisibility(View.VISIBLE);
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(Config.BUNDLE_ART_OBJECTS, mItems);
+        outState.putParcelable(Config.BUNDLE_RECYCLER_LAYOUT, mRecyclerView.getLayoutManager().onSaveInstanceState());
+
     }
 
-    private void showErrorMessage() {
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(Config.BUNDLE_RECYCLER_LAYOUT)) {
+                mItems = savedInstanceState.getParcelableArrayList(Config.BUNDLE_ART_OBJECTS);
+                mSavedRecyclerLayoutState = savedInstanceState.getParcelable(Config.BUNDLE_RECYCLER_LAYOUT);
+                mLayoutManager.onRestoreInstanceState(mSavedRecyclerLayoutState);
+            }
+        }
+    }
+
+    /*
+        private void showDataView() {
+            /* First, make sure the error is invisible */
+    //      mErrorMessageDisplay.setVisibility(View.INVISIBLE);
+    /* Then, make sure the movies are visible */
+    /*  mRecyclerView.setVisibility(View.VISIBLE);
+    }
+*/
+    private void showErrorMessage(String msg) {
         /* First, hide the currently visible data */
-      /*  mRecyclerView.setVisibility(View.INVISIBLE);
+        mRecyclerView.setVisibility(View.INVISIBLE);
         mNoFavArtObjectsView.setVisibility(View.INVISIBLE);
 
         /* Then, show the error */
-      /*  mErrorMessageDisplay.setVisibility(View.VISIBLE);
-
-    }*/
-
+        mErrorMessageDisplay.setText(msg);
+        mErrorMessageDisplay.setVisibility(View.VISIBLE);
+    }
     @Override
     public void onClick(ArtObject artObject) {
 
@@ -132,7 +154,7 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
 //         If the loader requested is our fav_items loader, return the appropriate CursorLoader
             case ID_FAV_ITEMS_LOADER:
                 Uri uri = ArtObjectsContract.ArtObjectsEntry.CONTENT_URI;
-                return new CursorLoader(this, uri, FAV_OBJECTS_PROJECTION, null, null,null);
+                return new CursorLoader(this, uri, FAV_OBJECTS_PROJECTION, null, null, null);
             default:
                 throw new RuntimeException("Loader Not Implemented: " + id);
         }
@@ -150,13 +172,17 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
      */
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-        mFavItemsAdapter.setData(cursor);
-        if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
-        mRecyclerView.smoothScrollToPosition(mPosition);
-        /* Setting the adapter attaches it to the RecyclerView in our layout. */
-        mRecyclerView.setAdapter(mFavItemsAdapter);
+        if (cursor.getCount() > 0) {
+            mFavItemsAdapter.setData(cursor);
+            if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+            mRecyclerView.smoothScrollToPosition(mPosition);
+            /* Setting the adapter attaches it to the RecyclerView in our layout. */
+            mRecyclerView.setAdapter(mFavItemsAdapter);
+        } else {
 
-            }
+            showErrorMessage(getResources().getString(R.string.msg_no_fav_items));
+        }
+    }
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
@@ -172,7 +198,7 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == android.R.id.home){
+        if (id == android.R.id.home) {
             finish();
         }
 

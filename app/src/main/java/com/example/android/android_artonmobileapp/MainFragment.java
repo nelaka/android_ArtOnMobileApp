@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +24,7 @@ import com.example.android.android_artonmobileapp.rest.ApiClient;
 import com.example.android.android_artonmobileapp.rest.ApiInterface;
 import com.example.android.android_artonmobileapp.utils.Config;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,13 +51,13 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
     @BindView(R.id.tv_no_fav_art_objects)
     TextView mNoFavArtObjectsView;
     private String mQuery, mSortBy;
-    private List<ArtObject> mItems;
+    private ArrayList<ArtObject> mItems;
     private Context mContext;
     private ArtObjectsAdapter mArtObjectsAdapter;
     private Parcelable mSavedRecyclerLayoutState;
     private GridLayoutManager mLayoutManager;
     private OnFragmentInteractionListener mListener;
-
+    private String mErrorMsg = null;
     public MainFragment() {
         // Required empty public constructor
     }
@@ -67,6 +68,26 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
         mContext = getActivity();
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(Config.BUNDLE_ART_OBJECTS, mItems);
+        outState.putParcelable(Config.BUNDLE_RECYCLER_LAYOUT, mRecyclerView.getLayoutManager().onSaveInstanceState());
+
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(Config.BUNDLE_RECYCLER_LAYOUT)) {
+                mItems = savedInstanceState.getParcelableArrayList(Config.BUNDLE_ART_OBJECTS);
+                mSavedRecyclerLayoutState = savedInstanceState.getParcelable(Config.BUNDLE_RECYCLER_LAYOUT);
+                mLayoutManager.onRestoreInstanceState(mSavedRecyclerLayoutState);
+            }
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,19 +96,12 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
         ButterKnife.bind(this, rootView);
 
         mArtObjectsAdapter = new ArtObjectsAdapter(this, mContext);
-        mLayoutManager = new GridLayoutManager(mContext, getResources().getInteger(R.integer.no_of_columns));
 
-        /* Association of the LayoutManager with the RecyclerView */
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        /*
-         * Setting to improve performance when changes in content do not
-         * change the child layout size in the RecyclerView
-         */
-        mRecyclerView.setHasFixedSize(true);
 
         if (savedInstanceState != null) {
             mItems = savedInstanceState.getParcelableArrayList(Config.BUNDLE_ART_OBJECTS);
             mSavedRecyclerLayoutState = savedInstanceState.getParcelable(Config.BUNDLE_RECYCLER_LAYOUT);
+
         } else {
             Bundle bundle = getArguments();
 
@@ -99,14 +113,23 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
                     mSortBy = getArguments().getString(Config.BUNDLE_SORT_BY);
                 }
             }
-            itemsRequest();
+
         }
+        itemsRequest();
         return rootView;
     }
 
     private void itemsRequest() {
 
         mLoadingIndicator.setVisibility(View.VISIBLE);
+        mLayoutManager = new GridLayoutManager(mContext, getResources().getInteger(R.integer.no_of_columns));
+        /* Association of the LayoutManager with the RecyclerView */
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        /*
+         * Setting to improve performance when changes in content do not
+         * change the child layout size in the RecyclerView
+         */
+        mRecyclerView.setHasFixedSize(true);
 
         if (mItems == null) {
             new RetrieveArtObjectsTask().execute();
@@ -121,6 +144,7 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
             mRecyclerView.setAdapter(mArtObjectsAdapter);
             showDataView();
         }
+
     }
 
     private void showDataView() {
@@ -130,12 +154,13 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
-    private void showErrorMessage() {
+    private void showErrorMessage(String msg) {
         /* First, hide the currently visible data */
         mRecyclerView.setVisibility(View.INVISIBLE);
         mNoFavArtObjectsView.setVisibility(View.INVISIBLE);
 
         /* Then, show the error */
+        mErrorMessageDisplay.setText(msg);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
@@ -177,46 +202,63 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
     public class RetrieveArtObjectsTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-            Call<ArtObjectResponse> call;
-            if (mQuery == null) {
-                call = apiService.getArtObjects(Config.rijksmuseumApiKey, "json", Config.RESULTS_RETURNED, true, mSortBy);
+            String API_KEY = Config.rijksmuseumApiKey;
+
+            if (API_KEY.isEmpty()) {
+                mErrorMsg = getResources().getString(R.string.msg_error_no_api_key);
+                showErrorMessage(mErrorMsg);
+                mLoadingIndicator.setVisibility(View.INVISIBLE);
+                mErrorMessageDisplay.setVisibility(View.VISIBLE);
+                return null;
             } else {
-                call = apiService.getPaintings(Config.rijksmuseumApiKey, "json", Config.RESULTS_RETURNED, true, mQuery, mSortBy);
+
+
+                ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+                Call<ArtObjectResponse> call;
+                if (mQuery == null) {
+                    call = apiService.getArtObjects(API_KEY, "json", Config.RESULTS_RETURNED, true, mSortBy);
+                } else {
+                    call = apiService.getPaintings(API_KEY, "json", Config.RESULTS_RETURNED, true, mQuery, mSortBy);
+                }
+
+                call.enqueue(new Callback<ArtObjectResponse>() {
+
+                    @Override
+                    public void onResponse(@NonNull Call<ArtObjectResponse> call, @NonNull Response<ArtObjectResponse> response) {
+                        if (response.body() != null) {
+                            mItems = response.body().getArtObjects();
+                        }
+                        Log.d("MAIN ", "Number of results received: " + mItems.size());
+                        mLoadingIndicator.setVisibility(View.INVISIBLE);
+
+                        if (mItems != null) {
+                            mArtObjectsAdapter.setData(mItems);
+
+                            /* Setting the adapter attaches it to the RecyclerView in our layout. */
+                            mRecyclerView.setAdapter(mArtObjectsAdapter);
+                            showDataView();
+
+                        } else {
+                            mErrorMsg = getResources().getString(R.string.msg_error);
+                            showErrorMessage(mErrorMsg);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ArtObjectResponse> call, @NonNull Throwable t) {
+
+                        mLoadingIndicator.setVisibility(View.INVISIBLE);
+                        mErrorMsg = getResources().getString(R.string.msg_error);
+                        showErrorMessage(mErrorMsg);
+                        // Log error here since request failed
+                        Log.e("main", t.toString());
+                    }
+                });
+                return null;
             }
-
-            call.enqueue(new Callback<ArtObjectResponse>() {
-
-                @Override
-                public void onResponse(@NonNull Call<ArtObjectResponse> call, @NonNull Response<ArtObjectResponse> response) {
-                    if (response.body() != null) {
-                        mItems = response.body().getArtObjects();
-                    }
-                    Log.d("MAIN ", "Number of results received: " + mItems.size());
-                    mLoadingIndicator.setVisibility(View.INVISIBLE);
-
-                    if (mItems != null) {
-                        mArtObjectsAdapter.setData(mItems);
-
-                        /* Setting the adapter attaches it to the RecyclerView in our layout. */
-                        mRecyclerView.setAdapter(mArtObjectsAdapter);
-                        showDataView();
-
-                    } else {
-                        showErrorMessage();
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<ArtObjectResponse> call, @NonNull Throwable t) {
-
-                    mLoadingIndicator.setVisibility(View.INVISIBLE);
-                    showErrorMessage();
-                    // Log error here since request failed
-                    Log.e("main", t.toString());
-                }
-            });
-            return null;
         }
+
+
     }
+
 }

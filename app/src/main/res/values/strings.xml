@@ -3,6 +3,7 @@
 
     <!-- Error messages -->
     <string name="msg_error">Connection error!</string>
+    <string name="msg_error_no_api_key">Please obtain an api key first from the Rijksmuseum site!</string>
     <string name="msg_no_fav_items">You don\'t have any favorite art object, yet.</string>
 
     <!-- Informative messages -->
@@ -63,5 +64,9 @@
 
     <!-- Value in SharedPreferences for default option -->
     <string name="pref_sort_by_default" translatable="false">by_date</string>
+
     <string name="nav_sort_by_label">Sort by...</string>
+    <string name="desc_nav_drawer_sort_by">Menu options for sorting</string>
+    <string name="desc_widget_go_to_prev">Arrow with action go to previous image</string>
+    <string name="desc_widget_go_to_next">Arrow with action go to next image</string>
 </resources>

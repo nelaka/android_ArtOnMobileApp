@@ -1,6 +1,7 @@
 package com.example.android.android_artonmobileapp;
 
 import android.content.Intent;
+import android.content.Loader;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,11 +13,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.android.android_artonmobileapp.model.ArtObject;
 import com.example.android.android_artonmobileapp.utils.Config;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import butterknife.BindView;
@@ -34,13 +37,14 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     FloatingActionButton mFab;
     Tracker mTracker;
     private Boolean mAllArtObjects = true;
+    private Loader mLoader;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-         ButterKnife.bind(this);
-         setSupportActionBar(mToolbar);
+        ButterKnife.bind(this);
+        setSupportActionBar(mToolbar);
 
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,12 +58,29 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         AnalyticsApp application = (AnalyticsApp) getApplication();
         mTracker = application.getDefaultTracker();
 
+
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
+        if (getLoaderManager().getLoader(Config.ID_FAV_ITEMS_LOADER) != null) {
+            mLoader = getLoaderManager().getLoader(Config.ID_FAV_ITEMS_LOADER);
+            mLoader.reset();
+        }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //  mLoader.reset();
+
+        String name = "Main Activity";
+        Log.i("MainActivity", "Setting screen name: " + name);
+        mTracker.setScreenName("Image~" + name);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -69,9 +90,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             super.onBackPressed();
         }
     }
-
-
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
@@ -80,6 +98,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         if (id == R.id.nav_allworksofarts) {
             allArtObjects(null);
         } else if (id == R.id.nav_allpaintings) {
+            // [START custom_event]
+            mTracker.send(new HitBuilders.EventBuilder().setCategory("Action").setAction("Visit paintings").build());
+            // [END custom_event]
             allPaintings(null);
         } else if (id == R.id.nav_favorites) {
             favorites();

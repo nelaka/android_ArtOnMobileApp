@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/AppTheme"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -18,18 +19,13 @@
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             android:background="@color/colorPrimary"
-            app:popupTheme="@style/Theme.AppCompat.Light" />
+            app:popupTheme="@style/Widget.AppCompat.PopupMenu" />
     </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <FrameLayout
             android:id="@+id/main_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/items_rv"
@@ -43,6 +39,7 @@
                 android:id="@+id/tv_error_message_display"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
                 android:padding="@dimen/default_padding"
                 android:text="@string/msg_error"
                 android:textSize="@dimen/text_size_error_message"
@@ -60,10 +57,11 @@
                 android:id="@+id/tv_no_fav_art_objects"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
                 android:padding="@dimen/default_padding"
                 android:text="@string/msg_no_fav_items"
                 android:textSize="@dimen/text_size_error_message"
                 android:visibility="invisible" />
         </FrameLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+
 </android.support.design.widget.CoordinatorLayout>

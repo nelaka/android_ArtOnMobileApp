@@ -1,7 +1,6 @@
 package com.example.android.android_artonmobileapp.holder;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -29,13 +28,7 @@ public class FavItemViewHolder extends RecyclerView.ViewHolder implements View.O
     }
 
     public void bindArtObjects(String url) {
-        //ArtObject artObject = mFavItems.get(position);
-
-        //String url = artObject.getWebImage();
-        Log.v("adapterART OBJECT", "url = " + url);
-
         Picasso.get().load(url).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).into(artObjectView);
-
     }
 
     @Override
@@ -43,7 +36,6 @@ public class FavItemViewHolder extends RecyclerView.ViewHolder implements View.O
         int adapterPosition = getAdapterPosition();
         mClickHandler.onClick(mFavItems.get(adapterPosition));
     }
-
 
     /**
      * The interface that receives onClick messages.

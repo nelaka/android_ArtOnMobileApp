@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArtObjectResponse implements Parcelable {
@@ -14,7 +15,7 @@ public class ArtObjectResponse implements Parcelable {
         @SerializedName("countFacets")
         private CountFacets mCountFacets;
         @SerializedName("artObjects")
-        private List<ArtObject> mArtObjects = null;
+        private ArrayList<ArtObject> mArtObjects = null;
         @SerializedName("facets")
         private List<Facet> mFacets = null;
 
@@ -35,7 +36,7 @@ public class ArtObjectResponse implements Parcelable {
             in.readList(mFacets, (Facet.class.getClassLoader()));
         }
 
-    public ArtObjectResponse(Integer count, CountFacets countFacets, List<ArtObject> artObjects, List<Facet> facets) {
+    public ArtObjectResponse(Integer count, CountFacets countFacets, ArrayList<ArtObject> artObjects, List<Facet> facets) {
             super();
             mCount = count;
             mCountFacets = countFacets;
@@ -49,7 +50,8 @@ public class ArtObjectResponse implements Parcelable {
         public CountFacets getCountFacets() {
             return mCountFacets;
         }
-        public List<ArtObject> getArtObjects() {
+
+    public ArrayList<ArtObject> getArtObjects() {
             return mArtObjects;
         }
         public List<Facet> getFacets() {

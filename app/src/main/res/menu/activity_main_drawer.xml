@@ -24,7 +24,12 @@
             android:title="@string/nav_favorites" />
     </group>
 
-    <item android:title="@string/nav_sort_by_label">
+    <group
+        android:id="@+id/menu_third"
+        android:checkableBehavior="single">
+        <item
+            android:contentDescription="@string/desc_nav_drawer_sort_by"
+            android:title="@string/nav_sort_by_label">
         <menu>
             <item
                 android:id="@+id/nav_sort_by_date"
@@ -37,5 +42,6 @@
 
         </menu>
     </item>
+    </group>
 
 </menu>

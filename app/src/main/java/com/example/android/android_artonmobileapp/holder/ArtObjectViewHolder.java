@@ -29,7 +29,6 @@ public class ArtObjectViewHolder extends RecyclerView.ViewHolder implements View
             mArtObjects = artObjects;
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
-
         }
 
         public void bindArtObjects (int position) {
