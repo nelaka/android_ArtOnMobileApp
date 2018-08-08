@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         mToggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
+
         if (getLoaderManager().getLoader(Config.ID_FAV_ITEMS_LOADER) != null) {
             mLoader = getLoaderManager().getLoader(Config.ID_FAV_ITEMS_LOADER);
             mLoader.reset();

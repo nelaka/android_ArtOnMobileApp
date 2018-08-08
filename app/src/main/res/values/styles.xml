@@ -1,24 +1,18 @@
 <resources>
-
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar" >
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
+        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
     </style>
+
 
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
     <item name="colorPrimary">@color/colorSecondaryLight</item>
     <item name="colorPrimaryDark">@color/colorSecondaryDark</item>
         <item name="colorAccent">@color/colorSecondaryText</item></style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
 
     <style name="subTitles">
         <item name="android:textColorLink">@color/colorAccent</item>
@@ -26,5 +20,9 @@
         <item name="android:textSize">@dimen/text_size_subtitle</item>
     </style>
 
-    <dimen name="text_size_subtitle">22sp</dimen>
+
+
+
+
 </resources>
+

@@ -76,15 +76,8 @@ public class DetailFragment extends Fragment {
     private Boolean mFavorite = false;
     private String mId;
 
-
     public DetailFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -98,8 +91,10 @@ public class DetailFragment extends Fragment {
         super.onViewStateRestored(savedInstanceState);
 
         if (savedInstanceState != null) {
-            mDetails = savedInstanceState.getParcelable(Config.BUNDLE_ART_OBJECT);
+            if (savedInstanceState.containsKey(Config.BUNDLE_ART_OBJECT)) {
+                mDetails = savedInstanceState.getParcelable(Config.BUNDLE_ART_OBJECT);
 
+            }
         }
     }
 
@@ -111,7 +106,8 @@ public class DetailFragment extends Fragment {
 
         if (savedInstanceState != null && savedInstanceState.containsKey(Config.BUNDLE_ART_OBJECT)) {
             mDetails = savedInstanceState.getParcelable(Config.BUNDLE_ART_OBJECT);
-        } else {
+        }
+
             Intent intent = getActivity().getIntent();
 
             if (intent != null) {
@@ -136,7 +132,7 @@ public class DetailFragment extends Fragment {
                     }
                 }
             });
-        }
+
         return rootView;
     }
 
@@ -151,49 +147,7 @@ public class DetailFragment extends Fragment {
                 public void onResponse(@NonNull Call<ArtObjectDetailResponse> call, @NonNull Response<ArtObjectDetailResponse> response) {
                     if ((response.body()) != null) {
                         mDetails = response.body().getArtObject();
-
-                        // Display the current selected movie title on the Action Bar
-                        mToolbar.setTitle(mDetails.getTitle());
-                        //mToolbar.setTitleTextColor(Color.WHITE);
-                        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
-                        // add back arrow to toolbar
-                        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-                            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
-                        }
-
-                        Picasso.get().load(mDetails.getWebImage().getUrl()).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).into(mArtObjectView);
-                        mArtObjectTitleLongView.setText(mDetails.getLongTitle());
-                        mArtObjectDescView.setText(mDetails.getPlaqueDescriptionEnglish());
-                        mArtObjectMakerView.setText(mDetails.getPrincipalOrFirstMaker());
-                        int size = mDetails.getNormalizedColors().size();
-                        int intColorValue;
-                        switch (size) {
-                            case 6:
-                                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(5).replaceAll(" ", ""));
-                                mArtObjectColor6.setBackgroundColor(intColorValue);
-                                mArtObjectColor6.setVisibility(View.VISIBLE);
-                            case 5:
-                                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(4).replaceAll(" ", ""));
-                                mArtObjectColor5.setBackgroundColor(intColorValue);
-                                mArtObjectColor5.setVisibility(View.VISIBLE);
-                            case 4:
-                                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(3).replaceAll(" ", ""));
-                                mArtObjectColor4.setBackgroundColor(intColorValue);
-                                mArtObjectColor4.setVisibility(View.VISIBLE);
-                            case 3:
-                                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(2).replaceAll(" ", ""));
-                                mArtObjectColor3.setBackgroundColor(intColorValue);
-                                mArtObjectColor3.setVisibility(View.VISIBLE);
-                            case 2:
-                                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(1).replaceAll(" ", ""));
-                                mArtObjectColor2.setBackgroundColor(intColorValue);
-                                mArtObjectColor2.setVisibility(View.VISIBLE);
-                            case 1:
-                                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(0).replaceAll(" ", ""));
-                                mArtObjectColor1.setBackgroundColor(intColorValue);
-                                mArtObjectColor1.setVisibility(View.VISIBLE);
-                        }
+                        setUpView(mDetails);
                     }
                     mLoadingIndicator.setVisibility(View.INVISIBLE);
                 }
@@ -205,10 +159,56 @@ public class DetailFragment extends Fragment {
                 }
             });
         } else {
-
+            setUpView(mDetails);
         }
+
     }
 
+    public void setUpView(ArtObjectDetail artObject){
+
+        // Display the current selected movie title on the Action Bar
+        mToolbar.setTitle(mDetails.getTitle());
+        //mToolbar.setTitleTextColor(Color.WHITE);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        // add back arrow to toolbar
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        Picasso.get().load(mDetails.getWebImage().getUrl()).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).into(mArtObjectView);
+        mArtObjectTitleLongView.setText(mDetails.getLongTitle());
+        mArtObjectDescView.setText(mDetails.getPlaqueDescriptionEnglish());
+        mArtObjectMakerView.setText(mDetails.getPrincipalOrFirstMaker());
+        int size = mDetails.getNormalizedColors().size();
+        int intColorValue;
+        switch (size) {
+            case 6:
+                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(5).replaceAll(" ", ""));
+                mArtObjectColor6.setBackgroundColor(intColorValue);
+                mArtObjectColor6.setVisibility(View.VISIBLE);
+            case 5:
+                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(4).replaceAll(" ", ""));
+                mArtObjectColor5.setBackgroundColor(intColorValue);
+                mArtObjectColor5.setVisibility(View.VISIBLE);
+            case 4:
+                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(3).replaceAll(" ", ""));
+                mArtObjectColor4.setBackgroundColor(intColorValue);
+                mArtObjectColor4.setVisibility(View.VISIBLE);
+            case 3:
+                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(2).replaceAll(" ", ""));
+                mArtObjectColor3.setBackgroundColor(intColorValue);
+                mArtObjectColor3.setVisibility(View.VISIBLE);
+            case 2:
+                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(1).replaceAll(" ", ""));
+                mArtObjectColor2.setBackgroundColor(intColorValue);
+                mArtObjectColor2.setVisibility(View.VISIBLE);
+            case 1:
+                intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(0).replaceAll(" ", ""));
+                mArtObjectColor1.setBackgroundColor(intColorValue);
+                mArtObjectColor1.setVisibility(View.VISIBLE);
+    }
+}
     private boolean isFavorite(String id) {
         boolean isFavorite;
         String[] favoriteId = new String[]{String.valueOf(id)};
