@@ -27,23 +27,8 @@ public class ArtObjectDetailResponse implements Parcelable {
         mArtObjectPage = ((ArtObjectPage) in.readValue((ArtObjectPage.class.getClassLoader())));
     }
 
-    public ArtObjectDetailResponse() {
-    }
-
     public ArtObjectDetail getArtObject() {
         return mArtObject;
-    }
-
-    public void setArtObject(ArtObjectDetail artObject) {
-        mArtObject = artObject;
-    }
-
-    public ArtObjectPage getArtObjectPage() {
-        return mArtObjectPage;
-    }
-
-    public void setArtObjectPage(ArtObjectPage artObjectPage) {
-        mArtObjectPage = artObjectPage;
     }
 
     public void writeToParcel(Parcel out, int flags) {

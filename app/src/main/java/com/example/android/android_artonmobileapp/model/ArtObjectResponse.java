@@ -36,29 +36,11 @@ public class ArtObjectResponse implements Parcelable {
             in.readList(mFacets, (Facet.class.getClassLoader()));
         }
 
-    public ArtObjectResponse(Integer count, CountFacets countFacets, ArrayList<ArtObject> artObjects, List<Facet> facets) {
-            super();
-            mCount = count;
-            mCountFacets = countFacets;
-            mArtObjects = artObjects;
-            mFacets = facets;
-        }
-
-        public Integer getCount() {
-            return mCount;
-        }
-        public CountFacets getCountFacets() {
-            return mCountFacets;
-        }
-
     public ArrayList<ArtObject> getArtObjects() {
             return mArtObjects;
         }
-        public List<Facet> getFacets() {
-            return mFacets;
-        }
 
-        public void writeToParcel(Parcel out, int flags) {
+    public void writeToParcel(Parcel out, int flags) {
             out.writeInt(mCount);
             out.writeValue(mCountFacets);
             out.writeList(mArtObjects);

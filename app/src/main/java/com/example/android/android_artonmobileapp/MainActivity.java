@@ -34,10 +34,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     NavigationView mNavigationView;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    ActionBarDrawerToggle mToggle;
+    private ActionBarDrawerToggle mToggle;
     @BindView(R.id.fab_mail)
     FloatingActionButton mFab;
-    Tracker mTracker;
+    private Tracker mTracker;
     private Boolean mAllArtObjects = true;
 
     @Override
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     /**
      * Send email intent
      */
-    public void composeEmail(String[] addresses, String subject) {
+    private void composeEmail(String[] addresses, String subject) {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setData(Uri.parse("mailto:")); // only email apps should handle this
         intent.putExtra(Intent.EXTRA_EMAIL, addresses);

@@ -53,46 +53,6 @@ public class Dating implements Parcelable
     public Dating() {
     }
 
-    public String getPresentingDate() {
-        return presentingDate;
-    }
-
-    public void setPresentingDate(String presentingDate) {
-        this.presentingDate = presentingDate;
-    }
-
-    public int getSortingDate() {
-        return sortingDate;
-    }
-
-    public void setSortingDate(int sortingDate) {
-        this.sortingDate = sortingDate;
-    }
-
-    public int getPeriod() {
-        return period;
-    }
-
-    public void setPeriod(int period) {
-        this.period = period;
-    }
-
-    public int getYearEarly() {
-        return yearEarly;
-    }
-
-    public void setYearEarly(int yearEarly) {
-        this.yearEarly = yearEarly;
-    }
-
-    public int getYearLate() {
-        return yearLate;
-    }
-
-    public void setYearLate(int yearLate) {
-        this.yearLate = yearLate;
-    }
-
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(presentingDate);
         dest.writeValue(sortingDate);

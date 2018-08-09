@@ -42,23 +42,7 @@ public class Facet implements Parcelable {
             mPrettyName = prettyName;
         }
 
-        public List<Facet_> getFacets() {
-            return mFacets;
-        }
-
-        public String getName() {
-            return mName;
-        }
-
-        public Integer getOtherTerms() {
-            return mOtherTerms;
-        }
-
-        public Integer getPrettyName() {
-            return mPrettyName;
-        }
-
-        public void writeToParcel(Parcel out, int flags) {
+    public void writeToParcel(Parcel out, int flags) {
             out.writeList(mFacets);
             out.writeString(mName);
             out.writeInt(mOtherTerms);

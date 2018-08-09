@@ -32,15 +32,7 @@ public class Facet_ implements Parcelable {
             mValue = value;
         }
 
-        public String getKey() {
-            return mKey;
-        }
-
-        public Integer getValue() {
-            return mValue;
-        }
-
-        public void writeToParcel(Parcel out, int flags) {
+    public void writeToParcel(Parcel out, int flags) {
             out.writeString(mKey);
             out.writeInt(mValue);
         }

@@ -44,30 +44,6 @@ public class AdlibOverrides implements Parcelable
         public AdlibOverrides() {
         }
 
-        public Object getTitel() {
-            return titel;
-        }
-
-        public void setTitel(Object titel) {
-            this.titel = titel;
-        }
-
-        public Object getMaker() {
-            return maker;
-        }
-
-        public void setMaker(Object maker) {
-            this.maker = maker;
-        }
-
-        public Object getEtiketText() {
-            return etiketText;
-        }
-
-        public void setEtiketText(Object etiketText) {
-            this.etiketText = etiketText;
-        }
-
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeValue(titel);
             dest.writeValue(maker);

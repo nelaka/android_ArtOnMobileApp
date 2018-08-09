@@ -26,15 +26,7 @@ public class CountFacets implements Parcelable {
             mOnDisplay = in.readInt();
         }
 
-        public Integer getHasImage() {
-            return mHasImage;
-        }
-
-        public Integer getOnDisplay() {
-            return mOnDisplay;
-        }
-
-        public void writeToParcel(Parcel out, int flags) {
+    public void writeToParcel(Parcel out, int flags) {
             out.writeInt(mHasImage);
             out.writeInt(mOnDisplay);
         }

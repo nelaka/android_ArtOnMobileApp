@@ -59,10 +59,6 @@ private String mImage;
         mTitle = title;
     }
 
-    public String getPrincipalOrFirstMaker() {
-        return mPrincipalOrFirstMaker;
-    }
-
     public void setPrincipalOrFirstMaker(String principalOrFirstMaker) {
         mPrincipalOrFirstMaker = principalOrFirstMaker;
     }

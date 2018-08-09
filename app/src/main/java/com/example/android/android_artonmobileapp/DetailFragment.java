@@ -177,7 +177,7 @@ public class DetailFragment extends Fragment {
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
-    public void setUpView() {
+    private void setUpView() {
 
         // Display the current selected movie title on the Action Bar
         mToolbar.setTitle(mDetails.getTitle());

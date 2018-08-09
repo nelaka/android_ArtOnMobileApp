@@ -48,38 +48,6 @@ public class Dimension implements Parcelable
     public Dimension() {
     }
 
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Object getPart() {
-        return part;
-    }
-
-    public void setPart(Object part) {
-        this.part = part;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(unit);
         dest.writeValue(type);

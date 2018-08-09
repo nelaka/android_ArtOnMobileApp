@@ -17,10 +17,6 @@ public class ArtObjectDetail implements Parcelable {
     private WebImage mWebImage;
     @SerializedName("normalizedColors")
     private List<String> mNormalizedColors = null;
-    @SerializedName("objectTypes")
-    private List<String> objectTypes = null;
-    @SerializedName("objectCollection")
-    private List<String> objectCollection = null;
     @SerializedName("plaqueDescriptionEnglish")
     private String mPlaqueDescriptionEnglish;
     @SerializedName("dating")
@@ -58,77 +54,28 @@ public class ArtObjectDetail implements Parcelable {
     public ArtObjectDetail() {
     }
 
-    public String getObjectNumber() {
-        return mObjectId;
-    }
-
-    public void setObjectNumber(String objectNumber) {
-        mObjectId = objectNumber;
-    }
-
     public String getTitle() {
         return mTitle;
     }
 
-    public void setTitle(String title) {
-        mTitle = title;
-    }
-
     public WebImage getWebImage() {
         return mWebImage;
-    }
-    public String getImage() {return mWebImage.getUrl();}
-
-    public void setWebImage(WebImage webImage) {
-        mWebImage = webImage;
     }
 
     public List<String> getNormalizedColors() {
         return mNormalizedColors;
     }
 
-    public void setNormalizedColors(List<String> normalizedColors) {
-        mNormalizedColors = normalizedColors;
-    }
-
     public String getPlaqueDescriptionEnglish() {
         return mPlaqueDescriptionEnglish;
-    }
-
-    public void setPlaqueDescriptionEnglish(String plaqueDescriptionEnglish) {
-        mPlaqueDescriptionEnglish = plaqueDescriptionEnglish;
-    }
-
-    public Dating getDating() {
-        return dating;
-    }
-
-    public void setDating(Dating dating) {
-        this.dating = dating;
     }
 
     public String getPrincipalOrFirstMaker() {
         return mPrincipalOrFirstMaker;
     }
 
-    public void setPrincipalOrFirstMaker(String principalOrFirstMaker) {
-        mPrincipalOrFirstMaker = principalOrFirstMaker;
-    }
-
-    public List<Dimension> getDimensions() {
-        return dimensions;
-    }
-
-    public void setDimensions(List<Dimension> dimensions) {
-        this.dimensions = dimensions;
-    }
-
     public String getLongTitle() {
         return mLongTitle;
-    }
-
-    public void setLongTitle(String longTitle) {
-        mLongTitle = longTitle;
     }
 
     public void writeToParcel(Parcel dest, int flags) {

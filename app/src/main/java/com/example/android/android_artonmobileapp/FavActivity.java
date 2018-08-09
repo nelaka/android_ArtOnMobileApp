@@ -36,12 +36,8 @@ import static com.example.android.android_artonmobileapp.utils.Config.ID_FAV_ITE
 public class FavActivity extends AppCompatActivity implements FavItemViewHolder.FavItemsAdapterOnClickHandler, LoaderManager.LoaderCallbacks<Cursor> {
     @BindView(R.id.fav_items_rv)
     RecyclerView mRecyclerView;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.pb_loading_indicator)
-    ProgressBar mLoadingIndicator;
     @BindView(R.id.tv_error_message_display)
     TextView mErrorMessageDisplay;
 
