@@ -42,12 +42,15 @@ import retrofit2.Response;
  */
 public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObjectAdapterOnClickHandler {
 
+    private static final String TAG = MainFragment.class.getSimpleName();
+
     @BindView(R.id.items_rv)
     RecyclerView mRecyclerView;
     @BindView(R.id.pb_loading_indicator)
     ProgressBar mLoadingIndicator;
     @BindView(R.id.tv_error_message_display)
     TextView mErrorMessageDisplay;
+
     private String mQuery, mSortBy;
     private ArrayList<ArtObject> mItems;
     private Context mContext;
@@ -56,6 +59,7 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
     private GridLayoutManager mLayoutManager;
     private OnFragmentInteractionListener mListener;
     private String mErrorMsg = null;
+
     public MainFragment() {
         // Required empty public constructor
     }
@@ -109,7 +113,6 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
                     mSortBy = getArguments().getString(Config.BUNDLE_SORT_BY);
                 }
             }
-
         }
         itemsRequest();
         return rootView;
@@ -140,21 +143,18 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
             mRecyclerView.setAdapter(mArtObjectsAdapter);
             showDataView();
         }
-
     }
 
     private void showDataView() {
         /* First, make sure the error is invisible */
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
-        /* Then, make sure the movies are visible */
+        /* Then, make sure the art objects are visible */
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     private void showErrorMessage(String msg) {
         /* First, hide the currently visible data */
         mRecyclerView.setVisibility(View.INVISIBLE);
-        //mNoFavArtObjectsView.setVisibility(View.INVISIBLE);
-
         /* Then, show the error */
         mErrorMessageDisplay.setText(msg);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
@@ -195,22 +195,26 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
         void onFragmentInteraction(ArtObject artObject);
     }
 
+    /**
+     * AsyncTask to cover rubic requirements
+     */
     public class RetrieveArtObjectsTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
             String API_KEY = Config.rijksmuseumApiKey;
 
             if (API_KEY.isEmpty()) {
-                mErrorMsg = getResources().getString(R.string.msg_error_no_api_key);
+                mErrorMsg = getString(R.string.msg_error_no_api_key);
                 showErrorMessage(mErrorMsg);
                 mLoadingIndicator.setVisibility(View.INVISIBLE);
                 mErrorMessageDisplay.setVisibility(View.VISIBLE);
                 return null;
+
             } else {
-
-
                 ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
                 Call<ArtObjectResponse> call;
+
                 if (mQuery == null) {
                     call = apiService.getArtObjects(API_KEY, "json", Config.RESULTS_RETURNED, true, mSortBy);
                 } else {
@@ -235,7 +239,7 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
                             showDataView();
 
                         } else {
-                            mErrorMsg = getResources().getString(R.string.msg_error);
+                            mErrorMsg = getString(R.string.msg_error);
                             showErrorMessage(mErrorMsg);
                         }
                     }
@@ -244,17 +248,14 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
                     public void onFailure(@NonNull Call<ArtObjectResponse> call, @NonNull Throwable t) {
 
                         mLoadingIndicator.setVisibility(View.INVISIBLE);
-                        mErrorMsg = getResources().getString(R.string.msg_error);
+                        mErrorMsg = getString(R.string.msg_error);
                         showErrorMessage(mErrorMsg);
                         // Log error here since request failed
-                        Log.e("main", t.toString());
+                        Log.e(TAG, t.toString());
                     }
                 });
                 return null;
             }
         }
-
-
     }
-
 }

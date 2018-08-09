@@ -48,7 +48,7 @@ public class FavItemViewHolder extends RecyclerView.ViewHolder implements View.O
         artObject.setTitle(mCursor.getString(itemTitleIndex));
         artObject.setPrincipalOrFirstMaker(mCursor.getString(itemMakerIndex));
         artObject.setImage(mCursor.getString(itemImageIndex));
-        //mCursor.close();
+
         mClickHandler.onClick(artObject);
     }
 

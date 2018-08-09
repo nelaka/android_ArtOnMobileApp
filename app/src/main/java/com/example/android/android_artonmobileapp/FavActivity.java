@@ -41,13 +41,11 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.pb_loading_indicator)
-       ProgressBar mLoadingIndicator;
-    private ArrayList<ArtObject> mItems;
-       @BindView(R.id.tv_error_message_display)
-       TextView mErrorMessageDisplay;
-       @BindView(R.id.tv_no_fav_art_objects)
-       TextView mNoFavArtObjectsView;
+    ProgressBar mLoadingIndicator;
+    @BindView(R.id.tv_error_message_display)
+    TextView mErrorMessageDisplay;
 
+    private ArrayList<ArtObject> mItems;
     private int mPosition = RecyclerView.NO_POSITION;
     private FavItemsAdapter mFavItemsAdapter;
     private Parcelable mSavedRecyclerLayoutState;
@@ -81,23 +79,19 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
             mItems = savedInstanceState.getParcelableArrayList(Config.BUNDLE_ART_OBJECTS);
             mSavedRecyclerLayoutState = savedInstanceState.getParcelable(Config.BUNDLE_RECYCLER_LAYOUT);
         }
-
         /*
          * Ensures a loader is initialized and active. If the loader doesn't already exist, one is
          * created and (if the activity/fragment is currently started) starts the loader. Otherwise
          * the last created loader is re-used.
          */
         getSupportLoaderManager().initLoader(ID_FAV_ITEMS_LOADER, null, this);
-
     }
-
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(Config.BUNDLE_ART_OBJECTS, mItems);
         outState.putParcelable(Config.BUNDLE_RECYCLER_LAYOUT, mRecyclerView.getLayoutManager().onSaveInstanceState());
-
     }
 
     @Override
@@ -112,28 +106,20 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
         }
     }
 
-    /*
-        private void showDataView() {
-            /* First, make sure the error is invisible */
-    //      mErrorMessageDisplay.setVisibility(View.INVISIBLE);
-    /* Then, make sure the movies are visible */
-    /*  mRecyclerView.setVisibility(View.VISIBLE);
-    }
-*/
     private void showErrorMessage(String msg) {
         /* First, hide the currently visible data */
         mRecyclerView.setVisibility(View.INVISIBLE);
-        mNoFavArtObjectsView.setVisibility(View.INVISIBLE);
-
         /* Then, show the error */
         mErrorMessageDisplay.setText(msg);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
-    @Override
-    public void onClick(ArtObject artObject){
 
+    @Override
+    public void onClick(ArtObject artObject) {
         Intent intent = new Intent(this, DetailActivity.class);
+        //For the detail fragment
         intent.putExtra(Config.BUNDLE_ART_OBJECT_ID, artObject.getId());
+        //For the detail activity (share intent)
         intent.putExtra(Config.BUNDLE_ART_OBJECT, artObject);
         startActivity(intent);
     }
@@ -147,11 +133,10 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
      * @param args Any arguments supplied by the caller
      * @return A new Loader instance that is ready to start loading.
      */
-    //  @Override
     @NonNull
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
-//         If the loader requested is our fav_items loader, return the appropriate CursorLoader
+            //If the loader requested is our fav_items loader, return the appropriate CursorLoader
             case ID_FAV_ITEMS_LOADER:
                 Uri uri = ArtObjectsContract.ArtObjectsEntry.CONTENT_URI;
                 return new CursorLoader(this, uri, FAV_OBJECTS_PROJECTION, null, null, null);
@@ -162,11 +147,6 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
 
     /**
      * Called when a Loader has finished loading its data.
-     * <p>
-     * NOTE: There is one small bug in this code. If no data is present in the cursor do to an
-     * initial load being performed with no access to internet, the loading indicator will show
-     * indefinitely, until data is present from the ContentProvider. This will be fixed in a
-     * future version of the course.
      *
      * @param loader The Loader that has finished.
      */
@@ -188,12 +168,9 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
         mFavItemsAdapter.swapCursor(null);
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -203,6 +180,4 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }

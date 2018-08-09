@@ -19,15 +19,17 @@ public class ArtOnMobileWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int position, String imageUrl, String title, final int appWidgetId) {
 
-        // Create an Intent to launch FavActivity when clicked
-        Intent intent = new Intent(context, FavActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
         // Construct the RemoteViews object
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.art_on_mobile_widget);
 
-        // Widgets allow click handlers to only launch pending intents
-        views.setOnClickPendingIntent(R.id.appwidget_image, pendingIntent);
+        // Create an Intent to launch FavActivity when clicked
+        if (imageUrl != null) {
+            Intent intent = new Intent(context, FavActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+            // Widgets allow click handlers to only launch pending intents
+            views.setOnClickPendingIntent(R.id.appwidget_image, pendingIntent);
+        }
 
         // Add the showArtObjectService click handler
         Intent showArtObjectIntent = new Intent(context, WidgetServices.class);
@@ -89,20 +91,5 @@ public class ArtOnMobileWidget extends AppWidgetProvider {
 
         //Start the intent service update widget action, the service takes care of updating the widgets UI
         WidgetServices.startActionShowArtObject(context);
-    }
-
-    @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        // Perform any action when one or more AppWidget instances have been deleted
-    }
-
-    @Override
-    public void onEnabled(Context context) {
-        // Perform any action when an AppWidget for this provider is instantiated
-    }
-
-    @Override
-    public void onDisabled(Context context) {
-        // Perform any action when the last AppWidget instance for this provider is deleted
     }
 }

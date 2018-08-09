@@ -76,9 +76,13 @@ public class DetailFragment extends Fragment {
     Toolbar mToolbar;
     @BindView(R.id.pb_loading_indicator)
     ProgressBar mLoadingIndicator;
+    @BindView(R.id.tv_error_message_display)
+    TextView mErrorMessageDisplay;
+
     private ArtObjectDetail mDetails;
     private Boolean mFavorite = false;
     private String mId;
+    private String mErrorMsg = null;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -97,10 +101,10 @@ public class DetailFragment extends Fragment {
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(Config.BUNDLE_ART_OBJECT)) {
                 mDetails = savedInstanceState.getParcelable(Config.BUNDLE_ART_OBJECT);
-
             }
         }
     }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -134,7 +138,6 @@ public class DetailFragment extends Fragment {
                 }
             }
         });
-
         return rootView;
     }
 
@@ -156,6 +159,9 @@ public class DetailFragment extends Fragment {
 
                 @Override
                 public void onFailure(@NonNull Call<ArtObjectDetailResponse> call, @NonNull Throwable t) {
+                    mLoadingIndicator.setVisibility(View.INVISIBLE);
+                    mErrorMsg = getString(R.string.msg_error);
+                    showErrorMessage(mErrorMsg);
                     // Log error here since request failed
                     Log.e("detail", t.toString());
                 }
@@ -163,6 +169,12 @@ public class DetailFragment extends Fragment {
         } else {
             setUpView();
         }
+    }
+
+    private void showErrorMessage(String msg) {
+        /* Then, show the error */
+        mErrorMessageDisplay.setText(msg);
+        mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
     public void setUpView() {
@@ -179,14 +191,18 @@ public class DetailFragment extends Fragment {
 
         Picasso.get().load(mDetails.getWebImage().getUrl()).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).into(mArtObjectView);
         mArtObjectTitleLongView.setText(mDetails.getLongTitle());
-        if (mDetails.getPlaqueDescriptionEnglish() != null){
+        if (mDetails.getPlaqueDescriptionEnglish() != null) {
             mDescriptionLabel.setVisibility(View.VISIBLE);
-        } else { mDescriptionLabel.setVisibility(View.INVISIBLE);}
+        } else {
+            mDescriptionLabel.setVisibility(View.INVISIBLE);
+        }
         mArtObjectDescView.setText(mDetails.getPlaqueDescriptionEnglish());
         mArtObjectMakerView.setText(mDetails.getPrincipalOrFirstMaker());
         if (mDetails.getPrincipalOrFirstMaker() != null) {
             mArtistLabel.setVisibility(View.VISIBLE);
-        } else {mArtistLabel.setVisibility(View.INVISIBLE);}
+        } else {
+            mArtistLabel.setVisibility(View.INVISIBLE);
+        }
         int size = mDetails.getNormalizedColors().size();
         int intColorValue;
         switch (size) {
@@ -219,6 +235,7 @@ public class DetailFragment extends Fragment {
 
     private boolean isFavorite(String id) {
         boolean isFavorite;
+
         String[] favoriteId = new String[]{String.valueOf(id)};
         Cursor cursor = getActivity().getContentResolver().query(ArtObjectsContract.ArtObjectsEntry.CONTENT_URI, null, "id=?", favoriteId, null);
 
@@ -240,7 +257,6 @@ public class DetailFragment extends Fragment {
 
         int rowsDeleted = getContext().getContentResolver().delete(uri, null, null);
 
-        // [Hint] Don't forget to call finish() to return to MainActivity after this insert is complete
         Log.d(TAG, "rowsDeleted =" + rowsDeleted + " " + uri + " " + String.valueOf(id));
         if (rowsDeleted > 0) {
 

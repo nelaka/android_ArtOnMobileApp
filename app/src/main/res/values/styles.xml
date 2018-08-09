@@ -19,10 +19,5 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/text_size_subtitle</item>
     </style>
-
-
-
-
-
 </resources>
 

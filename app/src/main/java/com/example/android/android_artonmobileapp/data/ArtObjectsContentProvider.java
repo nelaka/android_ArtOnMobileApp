@@ -12,32 +12,19 @@ import android.support.annotation.Nullable;
 
 import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry.TABLE_NAME;
 
-
 public class ArtObjectsContentProvider extends ContentProvider {
 
-    /*
-     * These constant will be used to match URIs with the data they are looking for. We will take
-     * advantage of the UriMatcher class to make that matching MUCH easier than doing something
-     * ourselves, such as using regular expressions.
-     */
     private static final int CODE_ITEMS = 100;
     private static final int CODE_ITEM_WITH_ID = 101;
 
-    /*
-     * The URI Matcher used by this content provider. The leading "s" in this variable name
-     * signifies that this UriMatcher is a static member variable of WeatherProvider and is a
-     * common convention in Android programming.
-     */
     private static final UriMatcher sUriMatcher = buildUriMatcher();
-
-
     private ArtObjectsDbHelper mOpenHelper;
 
     /**
-     * Creates the UriMatcher that will match each URI to the CODE_MOVIES and
-     * CODE_MOVIE_WITH_ID constants defined above.
+     * Creates the UriMatcher that will match each URI to the CODE_ITEMS and
+     * CODE_ITEM_WITH_ID constants defined above.
      *
-     * @return A UriMatcher that correctly matches the constants for  CODE_MOVIES and CODE_MOVIE_WITH_ID
+     * @return A UriMatcher that correctly matches the constants for  CODE_ITEMS and CODE_ITEM_WITH_ID
      */
     private static UriMatcher buildUriMatcher() {
 
@@ -52,8 +39,8 @@ public class ArtObjectsContentProvider extends ContentProvider {
         matcher.addURI(authority, ArtObjectsContract.PATH_FAV, CODE_ITEMS);
 
         /*
-         * The "/#" signifies to the UriMatcher that if CODE_MOVIES is followed by ANY number,
-         * that it should return the CODE_MOVIE_WITH_ID code
+         * The "/*" signifies to the UriMatcher that if CODE_ITEMS is followed by ANY string,
+         * that it should return the CODE_ITEM_WITH_ID code
          */
         matcher.addURI(authority, ArtObjectsContract.PATH_FAV + "/*", CODE_ITEM_WITH_ID);
 
@@ -79,7 +66,7 @@ public class ArtObjectsContentProvider extends ContentProvider {
     public boolean onCreate() {
         /*
          * As noted in the comment above, onCreate is run on the main thread, so performing any
-         * lengthy operations will cause lag in your app. Since WeatherDbHelper's constructor is
+         * lengthy operations will cause lag in app. Since ArtObjectsDbHelper's constructor is
          * very lightweight, we are safe to perform that initialization here.
          */
         mOpenHelper = new ArtObjectsDbHelper(getContext());
@@ -126,7 +113,6 @@ public class ArtObjectsContentProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         throw new RuntimeException("We are not implementing getType.");
     }
-
 
     /**
      * Deletes data at a given URI with optional arguments for more fine tuned deletions.
@@ -209,6 +195,6 @@ public class ArtObjectsContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        throw new RuntimeException("No need to implement update in Popular Movies");
+        throw new RuntimeException("No need to implement update in Art On Mobile App");
     }
 }

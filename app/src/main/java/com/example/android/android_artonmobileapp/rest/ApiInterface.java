@@ -1,6 +1,5 @@
 package com.example.android.android_artonmobileapp.rest;
 
-
 import com.example.android.android_artonmobileapp.model.ArtObjectDetailResponse;
 import com.example.android.android_artonmobileapp.model.ArtObjectResponse;
 

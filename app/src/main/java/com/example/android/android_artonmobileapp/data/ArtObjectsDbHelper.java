@@ -34,7 +34,7 @@ class ArtObjectsDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         /*
          * This String will contain a simple SQL statement that will create a table that will
-         * cache our movie data.
+         * cache our art object data.
          */
         final String SQL_CREATE_ARTOBJECTS_TABLE =
 

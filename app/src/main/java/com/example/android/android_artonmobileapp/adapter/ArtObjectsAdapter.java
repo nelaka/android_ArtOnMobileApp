@@ -17,6 +17,7 @@ import java.util.List;
 public class ArtObjectsAdapter extends RecyclerView.Adapter<ArtObjectViewHolder> {
 
     private static final String TAG = ArtObjectsAdapter.class.getSimpleName();
+
     private final Context mContext;
     private final ArtObjectViewHolder.ArtObjectAdapterOnClickHandler mClickHandler;
     private List<ArtObject> mArtObjects = new ArrayList<>();

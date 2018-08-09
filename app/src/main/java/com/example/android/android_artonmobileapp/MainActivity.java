@@ -1,7 +1,6 @@
 package com.example.android.android_artonmobileapp;
 
 import android.content.Intent;
-import android.content.Loader;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +25,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @BindView(R.id.nav_view)
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     FloatingActionButton mFab;
     Tracker mTracker;
     private Boolean mAllArtObjects = true;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -68,9 +71,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     public void onResume() {
         super.onResume();
 
-        String name = "Main Activity";
-        Log.i("MainActivity", "Setting screen name: " + name);
-        mTracker.setScreenName("Image~" + name);
+        Log.i(TAG, "Setting screen name: " + TAG);
+        mTracker.setScreenName("Image~" + TAG);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             super.onBackPressed();
         }
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
@@ -90,7 +93,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         if (id == R.id.nav_allworksofarts) {
             allArtObjects(null);
         } else if (id == R.id.nav_allpaintings) {
-            // [START custom_event]
+            /**
+             * [START analytics custom_event]
+             */
             mTracker.send(new HitBuilders.EventBuilder().setCategory("Action").setAction("Visit paintings").build());
             // [END custom_event]
             allPaintings(null);
@@ -109,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 allPaintings(Config.ORDER_BY_ARTIST);
             }
         }
-
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -155,8 +159,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     public void onFragmentInteraction(ArtObject artObject) {
         mDrawerLayout.removeDrawerListener(mToggle);
         Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(Config.BUNDLE_ART_OBJECT_ID, artObject.getId());
         intent.putExtra(Config.BUNDLE_ART_OBJECT, artObject);
+        intent.putExtra(Config.BUNDLE_ART_OBJECT_ID, artObject.getId());
         startActivity(intent);
     }
 }

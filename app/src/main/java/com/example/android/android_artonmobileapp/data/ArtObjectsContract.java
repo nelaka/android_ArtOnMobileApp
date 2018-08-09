@@ -46,8 +46,5 @@ public class ArtObjectsContract {
         public static final String COLUMN_MAKER = "maker";
         public static final String COLUMN_IMAGE = "image";
         public static final String COLUMN_DESC = "description";
-
     }
-
-
 }

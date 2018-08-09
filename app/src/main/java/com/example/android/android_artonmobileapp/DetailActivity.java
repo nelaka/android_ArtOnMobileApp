@@ -16,6 +16,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
+
+    private static final String TAG = DetailActivity.class.getSimpleName();
+
     @BindView(R.id.publisherAdView)
     PublisherAdView mPublisherAdView;
 
@@ -51,15 +54,13 @@ public class DetailActivity extends AppCompatActivity {
             Intent intent = getIntent();
             ArtObject artObject;
             if (intent != null && intent.hasExtra(Config.BUNDLE_ART_OBJECT)) {
-                    artObject = intent.getParcelableExtra(Config.BUNDLE_ART_OBJECT);
+                artObject = intent.getParcelableExtra(Config.BUNDLE_ART_OBJECT);
 
-
-            Intent shareIntent = createShareArtObjectIntent(artObject);
-            startActivity(shareIntent);
-            return true;
+                Intent shareIntent = createShareArtObjectIntent(artObject);
+                startActivity(shareIntent);
+                return true;
             }
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -74,12 +75,9 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent shareIntent = ShareCompat.IntentBuilder.from(this).setType("text/plain").getIntent();
 
-        shareIntent.putExtra(Intent.EXTRA_TEXT, artObject.getTitle() );
-        shareIntent.putExtra(Intent.EXTRA_TEXT, artObject.getImage() );
+        shareIntent.putExtra(Intent.EXTRA_TEXT, artObject.getTitle());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, artObject.getImage());
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         return shareIntent;
-
     }
-
-
 }

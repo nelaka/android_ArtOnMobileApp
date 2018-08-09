@@ -20,43 +20,43 @@ public class ArtObjectViewHolder extends RecyclerView.ViewHolder implements View
 
     private final ArtObjectAdapterOnClickHandler mClickHandler;
 
-        private final List<ArtObject> mArtObjects;
-        @BindView(R.id.list_item)
-        ImageView artObjectView;
+    private final List<ArtObject> mArtObjects;
+    @BindView(R.id.list_item)
+    ImageView artObjectView;
 
 
-        public ArtObjectViewHolder(View itemView, ArtObjectAdapterOnClickHandler clickHandler, List<ArtObject> artObjects) {
-            super(itemView);
+    public ArtObjectViewHolder(View itemView, ArtObjectAdapterOnClickHandler clickHandler, List<ArtObject> artObjects) {
+        super(itemView);
 
-            mClickHandler = clickHandler;
-            mArtObjects = artObjects;
-            ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
-        }
-
-        public void bindArtObjects (int position) {
-            ArtObject artObject = mArtObjects.get(position);
-
-            String url = artObject.getWebImage().getUrl();
-            Log.v("adapterART OBJECT", "url = " + url );
-
-            Picasso.get().load(url).placeholder(R.drawable.placeholder).error(R.drawable.placeholder)
-                    .into(artObjectView);
-
-            artObjectView.setContentDescription(artObject.getTitle());
-
-        }
-
-        @Override
-        public void onClick(View v) {
-            int adapterPosition = getAdapterPosition();
-            mClickHandler.onClick(mArtObjects.get(adapterPosition));
-        }
-
-        /**
-         * The interface that receives onClick messages.
-         */
-        public interface ArtObjectAdapterOnClickHandler {
-            void onClick(ArtObject artObject);
-        }
+        mClickHandler = clickHandler;
+        mArtObjects = artObjects;
+        ButterKnife.bind(this, itemView);
+        itemView.setOnClickListener(this);
     }
+
+    public void bindArtObjects(int position) {
+        ArtObject artObject = mArtObjects.get(position);
+
+        String url = artObject.getWebImage().getUrl();
+        Log.v(TAG, "ART OBJECT URL: " + url);
+
+        Picasso.get().load(url).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).into(artObjectView);
+        /**
+         * Content Descriptions for people with disabilities
+         */
+        artObjectView.setContentDescription(artObject.getTitle());
+    }
+
+    @Override
+    public void onClick(View v) {
+        int adapterPosition = getAdapterPosition();
+        mClickHandler.onClick(mArtObjects.get(adapterPosition));
+    }
+
+    /**
+     * The interface that receives onClick messages.
+     */
+    public interface ArtObjectAdapterOnClickHandler {
+        void onClick(ArtObject artObject);
+    }
+}
