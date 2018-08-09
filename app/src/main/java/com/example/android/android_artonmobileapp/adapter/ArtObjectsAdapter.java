@@ -15,48 +15,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArtObjectsAdapter extends RecyclerView.Adapter<ArtObjectViewHolder> {
-        private final ArtObjectViewHolder.ArtObjectAdapterOnClickHandler mClickHandler;
-        private final Context mContext;
-        private List<ArtObject> mArtObjects = new ArrayList<>();
 
-        public ArtObjectsAdapter(ArtObjectViewHolder.ArtObjectAdapterOnClickHandler clickHandler, Context context) {
-            mClickHandler = clickHandler;
-            mContext = context;
+    private static final String TAG = ArtObjectsAdapter.class.getSimpleName();
+    private final Context mContext;
+    private final ArtObjectViewHolder.ArtObjectAdapterOnClickHandler mClickHandler;
+    private List<ArtObject> mArtObjects = new ArrayList<>();
 
-        }
-
-        @NonNull
-        @Override
-        public ArtObjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false);
-            view.setFocusable(true);
-            return new ArtObjectViewHolder(view, mClickHandler, mArtObjects);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ArtObjectViewHolder holder, int position) {
-
-            holder.bindArtObjects(position);
-
-        }
-
-        @Override
-        public int getItemCount() {
-            if (null == mArtObjects) return 0;
-            return mArtObjects.size();
-        }
-
-        /**
-         * This method is used to set the movies on a MoviesAdapter if we've already
-         * created one.
-         *
-         * @param data The new movie data to be displayed.
-         */
-        public void setData(List<ArtObject> data) {
-            mArtObjects = data;
-            notifyDataSetChanged();
-        }
+    public ArtObjectsAdapter(ArtObjectViewHolder.ArtObjectAdapterOnClickHandler clickHandler, Context context) {
+        mClickHandler = clickHandler;
+        mContext = context;
     }
 
+    @NonNull
+    @Override
+    public ArtObjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false);
+        view.setFocusable(true);
+        return new ArtObjectViewHolder(view, mClickHandler, mArtObjects);
+    }
 
+    @Override
+    public void onBindViewHolder(@NonNull ArtObjectViewHolder holder, int position) {
 
+        holder.bindArtObjects(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        if (null == mArtObjects) return 0;
+        return mArtObjects.size();
+    }
+
+    /**
+     * This method is used to set the art objects on an ArtObjectAdapter if we've already
+     * created one.
+     *
+     * @param data The new art objects data to be displayed.
+     */
+    public void setData(List<ArtObject> data) {
+        mArtObjects = data;
+        notifyDataSetChanged();
+    }
+}

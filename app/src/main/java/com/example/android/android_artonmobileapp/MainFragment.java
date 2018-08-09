@@ -48,8 +48,6 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
     ProgressBar mLoadingIndicator;
     @BindView(R.id.tv_error_message_display)
     TextView mErrorMessageDisplay;
-    @BindView(R.id.tv_no_fav_art_objects)
-    TextView mNoFavArtObjectsView;
     private String mQuery, mSortBy;
     private ArrayList<ArtObject> mItems;
     private Context mContext;
@@ -73,7 +71,6 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(Config.BUNDLE_ART_OBJECTS, mItems);
         outState.putParcelable(Config.BUNDLE_RECYCLER_LAYOUT, mRecyclerView.getLayoutManager().onSaveInstanceState());
-
     }
 
     @Override
@@ -96,7 +93,6 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
         ButterKnife.bind(this, rootView);
 
         mArtObjectsAdapter = new ArtObjectsAdapter(this, mContext);
-
 
         if (savedInstanceState != null) {
             mItems = savedInstanceState.getParcelableArrayList(Config.BUNDLE_ART_OBJECTS);
@@ -157,7 +153,7 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
     private void showErrorMessage(String msg) {
         /* First, hide the currently visible data */
         mRecyclerView.setVisibility(View.INVISIBLE);
-        mNoFavArtObjectsView.setVisibility(View.INVISIBLE);
+        //mNoFavArtObjectsView.setVisibility(View.INVISIBLE);
 
         /* Then, show the error */
         mErrorMessageDisplay.setText(msg);

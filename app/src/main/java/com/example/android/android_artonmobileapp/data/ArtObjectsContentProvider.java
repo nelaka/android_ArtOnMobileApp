@@ -106,9 +106,7 @@ public class ArtObjectsContentProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
 
             case CODE_ITEM_WITH_ID: {
-
                 String[] selectionArguments = new String[]{};
-
                 cursor = mOpenHelper.getReadableDatabase().query(TABLE_NAME, projection, ArtObjectsContract.ArtObjectsEntry.COLUMN_ART_OBJECT_ID + " = ? ", selectionArguments, null, null, sortOrder);
                 break;
             }
@@ -116,7 +114,6 @@ public class ArtObjectsContentProvider extends ContentProvider {
                 cursor = mOpenHelper.getReadableDatabase().query(TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             }
-
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

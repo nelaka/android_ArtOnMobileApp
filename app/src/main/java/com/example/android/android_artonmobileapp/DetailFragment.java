@@ -54,6 +54,10 @@ public class DetailFragment extends Fragment {
     TextView mArtObjectDescView;
     @BindView(R.id.art_object_maker_tv)
     TextView mArtObjectMakerView;
+    @BindView(R.id.label_desc)
+    TextView mDescriptionLabel;
+    @BindView(R.id.label_artist)
+    TextView mArtistLabel;
     @BindView(R.id.color1)
     Button mArtObjectColor1;
     @BindView(R.id.color2)
@@ -97,7 +101,6 @@ public class DetailFragment extends Fragment {
             }
         }
     }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -108,30 +111,29 @@ public class DetailFragment extends Fragment {
             mDetails = savedInstanceState.getParcelable(Config.BUNDLE_ART_OBJECT);
         }
 
+        if (getActivity().getIntent() != null) {
             Intent intent = getActivity().getIntent();
+            if (intent.hasExtra(Config.BUNDLE_ART_OBJECT_ID)) {
+                mId = intent.getStringExtra(Config.BUNDLE_ART_OBJECT_ID);
+                artObjectDetailsRequest(mId);
+            }
+        }
 
-            if (intent != null) {
-                if (intent.hasExtra(Config.BUNDLE_ART_OBJECT_ID)) {
-                    mId = intent.getStringExtra(Config.BUNDLE_ART_OBJECT_ID);
-                    artObjectDetailsRequest(mId);
+        mFavorite = isFavorite(mId);
+
+        // Setup FAB to open EditorActivity
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mFavorite) {
+                    fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+                    removeItemFromFavorites(mId);
+                } else {
+                    fab.setImageResource(R.drawable.ic_favorite_white_24dp);
+                    addItemToFavorites(mId);
                 }
             }
-
-            mFavorite = isFavorite(mId);
-
-            // Setup FAB to open EditorActivity
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mFavorite) {
-                        fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
-                        removeItemFromFavorites(mId);
-                    } else {
-                        fab.setImageResource(R.drawable.ic_favorite_white_24dp);
-                        addItemToFavorites(mId);
-                    }
-                }
-            });
+        });
 
         return rootView;
     }
@@ -147,7 +149,7 @@ public class DetailFragment extends Fragment {
                 public void onResponse(@NonNull Call<ArtObjectDetailResponse> call, @NonNull Response<ArtObjectDetailResponse> response) {
                     if ((response.body()) != null) {
                         mDetails = response.body().getArtObject();
-                        setUpView(mDetails);
+                        setUpView();
                     }
                     mLoadingIndicator.setVisibility(View.INVISIBLE);
                 }
@@ -159,12 +161,11 @@ public class DetailFragment extends Fragment {
                 }
             });
         } else {
-            setUpView(mDetails);
+            setUpView();
         }
-
     }
 
-    public void setUpView(ArtObjectDetail artObject){
+    public void setUpView() {
 
         // Display the current selected movie title on the Action Bar
         mToolbar.setTitle(mDetails.getTitle());
@@ -178,8 +179,14 @@ public class DetailFragment extends Fragment {
 
         Picasso.get().load(mDetails.getWebImage().getUrl()).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).into(mArtObjectView);
         mArtObjectTitleLongView.setText(mDetails.getLongTitle());
+        if (mDetails.getPlaqueDescriptionEnglish() != null){
+            mDescriptionLabel.setVisibility(View.VISIBLE);
+        } else { mDescriptionLabel.setVisibility(View.INVISIBLE);}
         mArtObjectDescView.setText(mDetails.getPlaqueDescriptionEnglish());
         mArtObjectMakerView.setText(mDetails.getPrincipalOrFirstMaker());
+        if (mDetails.getPrincipalOrFirstMaker() != null) {
+            mArtistLabel.setVisibility(View.VISIBLE);
+        } else {mArtistLabel.setVisibility(View.INVISIBLE);}
         int size = mDetails.getNormalizedColors().size();
         int intColorValue;
         switch (size) {
@@ -207,8 +214,9 @@ public class DetailFragment extends Fragment {
                 intColorValue = Color.parseColor(mDetails.getNormalizedColors().get(0).replaceAll(" ", ""));
                 mArtObjectColor1.setBackgroundColor(intColorValue);
                 mArtObjectColor1.setVisibility(View.VISIBLE);
+        }
     }
-}
+
     private boolean isFavorite(String id) {
         boolean isFavorite;
         String[] favoriteId = new String[]{String.valueOf(id)};

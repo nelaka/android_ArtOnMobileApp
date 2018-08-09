@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.android_artonmobileapp.model.ArtObject;
+import com.example.android.android_artonmobileapp.utils.Config;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
 
@@ -14,7 +16,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
-
     @BindView(R.id.publisherAdView)
     PublisherAdView mPublisherAdView;
 
@@ -23,6 +24,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
+        //Add ads
         PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
         mPublisherAdView.loadAd(adRequest);
     }
@@ -45,27 +47,35 @@ public class DetailActivity extends AppCompatActivity {
         if (id == android.R.id.home) {
             finish();
         }
-
         if (id == R.id.action_share) {
-            Intent shareIntent = createShareArtObjectIntent();
+            Intent intent = getIntent();
+            ArtObject artObject;
+            if (intent != null && intent.hasExtra(Config.BUNDLE_ART_OBJECT)) {
+                    artObject = intent.getParcelableExtra(Config.BUNDLE_ART_OBJECT);
+
+
+            Intent shareIntent = createShareArtObjectIntent(artObject);
             startActivity(shareIntent);
             return true;
+            }
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     /**
-     * Uses the ShareCompat Intent builder to create our Forecast intent for sharing.  All we need
+     * Uses the ShareCompat Intent builder to create our intent for sharing.  All we need
      * to do is set the type, text and the NEW_DOCUMENT flag so it treats our share as a new task.
      * See: http://developer.android.com/guide/components/tasks-and-back-stack.html for more info.
      *
-     * @return the Intent to use to share our weather forecast
+     * @return the Intent to use to share the art object
      */
-    private Intent createShareArtObjectIntent() {
+    private Intent createShareArtObjectIntent(ArtObject artObject) {
 
         Intent shareIntent = ShareCompat.IntentBuilder.from(this).setType("text/plain").getIntent();
-        //shareIntent.putExtra(Intent.EXTRA_TEXT, );
+
+        shareIntent.putExtra(Intent.EXTRA_TEXT, artObject.getTitle() );
+        shareIntent.putExtra(Intent.EXTRA_TEXT, artObject.getImage() );
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         return shareIntent;
 

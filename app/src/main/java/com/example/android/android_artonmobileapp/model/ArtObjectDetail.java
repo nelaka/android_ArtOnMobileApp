@@ -77,6 +77,7 @@ public class ArtObjectDetail implements Parcelable {
     public WebImage getWebImage() {
         return mWebImage;
     }
+    public String getImage() {return mWebImage.getUrl();}
 
     public void setWebImage(WebImage webImage) {
         mWebImage = webImage;

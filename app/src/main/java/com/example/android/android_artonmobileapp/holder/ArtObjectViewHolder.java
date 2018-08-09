@@ -15,7 +15,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ArtObjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final ArtObjectAdapterOnClickHandler mClickHandler;
+
+    private static final String TAG = ArtObjectViewHolder.class.getSimpleName();
+
+    private final ArtObjectAdapterOnClickHandler mClickHandler;
 
         private final List<ArtObject> mArtObjects;
         @BindView(R.id.list_item)
@@ -34,7 +37,7 @@ public class ArtObjectViewHolder extends RecyclerView.ViewHolder implements View
         public void bindArtObjects (int position) {
             ArtObject artObject = mArtObjects.get(position);
 
-            String url = artObject.getWebImage();
+            String url = artObject.getWebImage().getUrl();
             Log.v("adapterART OBJECT", "url = " + url );
 
             Picasso.get().load(url).placeholder(R.drawable.placeholder).error(R.drawable.placeholder)

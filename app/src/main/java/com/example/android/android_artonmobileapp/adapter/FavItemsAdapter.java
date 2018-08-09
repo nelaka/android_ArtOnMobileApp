@@ -9,30 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.android_artonmobileapp.R;
+import com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
 import com.example.android.android_artonmobileapp.holder.FavItemViewHolder;
-import com.example.android.android_artonmobileapp.model.ArtObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
 
 public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
-    private static final String TAG = FavItemsAdapter.class.getSimpleName();
 
-    /* The context we use to utility methods, app resources and layout inflaters */
-    private final Context mContext;
-    private final FavItemViewHolder.FavItemsAdapterOnClickHandler mClickHandler;
-    private List<ArtObject> mFavItems = new ArrayList<>();
-    private Cursor mCursor;
+    private static final String TAG = FavItemsAdapter.class.getSimpleName();
 
     // Create a String array containing the names of the desired data columns from our ContentProvider
     public static final String[] FAV_OBJECTS_PROJECTION = {
             ArtObjectsEntry.COLUMN_ART_OBJECT_ID,
             ArtObjectsEntry.COLUMN_TITLE,
             ArtObjectsEntry.COLUMN_MAKER,
-            ArtObjectsEntry.COLUMN_IMAGE
-    };
+            ArtObjectsEntry.COLUMN_IMAGE};
 
     //Create constant int values representing each column name's position above
     /*
@@ -40,21 +29,17 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
      * access the data from our query. If the order of the Strings above changes, these indices
      * must be adjusted to match the order of the Strings.
      */
-    private static final int INDEX_ART_OBJECT_ID = 0;
+    public static final int INDEX_ART_OBJECT_ID = 0;
     private static final int INDEX_ART_OBJECT_TITLE = 1;
     private static final int INDEX_ART_OBJECT_MAKER = 2;
     private static final int INDEX_ART_OBJECT_IMAGE = 3;
 
-
+    private final Context mContext;
+    private final FavItemViewHolder.FavItemsAdapterOnClickHandler mClickHandler;
+    private Cursor mCursor;
 
     public FavItemsAdapter(@NonNull Context context, FavItemViewHolder.FavItemsAdapterOnClickHandler clickHandler) {
         mContext = context;
-        mClickHandler = clickHandler;
-    }
-
-    private FavItemsAdapter(@NonNull Context context, Cursor cursor, FavItemViewHolder.FavItemsAdapterOnClickHandler clickHandler) {
-        mContext = context;
-        mCursor = cursor;
         mClickHandler = clickHandler;
     }
 
@@ -64,7 +49,7 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
         View view = LayoutInflater.from(mContext).inflate(R.layout.fav_list_item, viewGroup, false);
 
         view.setFocusable(true);
-        return new FavItemViewHolder(view, mClickHandler, mFavItems);
+        return new FavItemViewHolder(view, mClickHandler, mCursor);
     }
 
     @Override
@@ -77,47 +62,20 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
 
     @Override
     public int getItemCount() {
-        if (null == mFavItems) return 0;
-        return mFavItems.size();
+        if (null == mCursor) return 0;
+        return mCursor.getCount();
     }
 
     /**
-     * This method is used to set the movies on a MoviesAdapter if we've already
-     * created one.
-     *
-     * @param cursor The new movie data to be displayed.
-     */
-    public void setData(Cursor cursor) {
-      //  data = new ArrayList<>();
-        for (int i = 0; i < cursor.getCount(); i++) {
-            int itemIdIndex = cursor.getColumnIndex(ArtObjectsEntry.COLUMN_ART_OBJECT_ID);
-            int itemTitleIndex = cursor.getColumnIndex(ArtObjectsEntry.COLUMN_TITLE);
-            int itemMakerIndex = cursor.getColumnIndex(ArtObjectsEntry.COLUMN_MAKER);
-            int itemImageIndex = cursor.getColumnIndex(ArtObjectsEntry.COLUMN_IMAGE);
-
-            cursor.moveToPosition(i);
-            mFavItems.add(new ArtObject(cursor.getString(itemIdIndex),
-                    cursor.getString(itemTitleIndex),
-                    cursor.getString(itemMakerIndex),
-                    cursor.getString(itemImageIndex)));
-
-mCursor = cursor;
-        }
-        notifyDataSetChanged();
-
-    }
-
-    /**
-     * Swaps the cursor used by the ForecastAdapter for its weather data. This method is called by
+     * Swaps the cursor used by the FavAdapter for the favorite art objects. This method is called by
      * MainActivity after a load has finished, as well as when the Loader responsible for loading
-     * the weather data is reset. When this method is called, we assume we have a completely new
+     * the art object data is reset. When this method is called, we assume we have a completely new
      * set of data, so we call notifyDataSetChanged to tell the RecyclerView to update.
      *
-     * @param newCursor the new cursor to use as ForecastAdapter's data source
+     * @param newCursor the new cursor to use as FavAdapter's data source
      */
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
-
         notifyDataSetChanged();
     }
 }

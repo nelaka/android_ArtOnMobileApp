@@ -17,13 +17,6 @@ class ArtObjectsDbHelper extends SQLiteOpenHelper {
     /*
      * If you change the database schema, you must increment the database version or the onUpgrade
      * method will not be called.
-     *
-     * The reason DATABASE_VERSION starts at 3 is because Sunshine has been used in conjunction
-     * with the Android course for a while now. Believe it or not, older versions of Sunshine
-     * still exist out in the wild. If we started this DATABASE_VERSION off at 1, upgrading older
-     * versions of Sunshine could cause everything to break. Although that is certainly a rare
-     * use-case, we wanted to watch out for it and warn you what could happen if you mistakenly
-     * version your databases.
      */
     private static final int DATABASE_VERSION = 1;
 
@@ -43,17 +36,10 @@ class ArtObjectsDbHelper extends SQLiteOpenHelper {
          * This String will contain a simple SQL statement that will create a table that will
          * cache our movie data.
          */
-
         final String SQL_CREATE_ARTOBJECTS_TABLE =
 
-                "CREATE TABLE " + ArtObjectsEntry.TABLE_NAME + " (" +
+                "CREATE TABLE " + ArtObjectsEntry.TABLE_NAME + " (" + ArtObjectsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + ArtObjectsEntry.COLUMN_ART_OBJECT_ID + " TEXT NOT NULL, " + ArtObjectsEntry.COLUMN_TITLE + " TEXT NOT NULL, " + ArtObjectsEntry.COLUMN_MAKER + " TEXT, " + ArtObjectsEntry.COLUMN_IMAGE + " TEXT NOT NULL, " + ArtObjectsEntry.COLUMN_DESC + " TEXT " + ");";
 
-                        ArtObjectsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        ArtObjectsEntry.COLUMN_ART_OBJECT_ID + " TEXT NOT NULL, " +
-                        ArtObjectsEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
-                        ArtObjectsEntry.COLUMN_MAKER + " TEXT, " +
-                        ArtObjectsEntry.COLUMN_IMAGE + " TEXT NOT NULL, " +
-                        ArtObjectsEntry.COLUMN_DESC + " TEXT " +");";
         /*
          * Execute SQL with the execSQL method of the SQLite database object.
          */

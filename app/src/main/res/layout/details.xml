@@ -17,7 +17,8 @@
         android:text="@string/label_maker"
         android:textStyle="italic"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/art_object_maker_tv"
@@ -119,7 +120,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_long" />
+        app:layout_constraintTop_toBottomOf="@id/title_long"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/art_object_desc_tv"

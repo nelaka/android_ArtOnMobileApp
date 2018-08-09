@@ -34,7 +34,7 @@
                 android:clipToPadding="false"
                 android:paddingTop="?android:attr/actionBarSize"
                 android:scrollbarStyle="outsideOverlay" />
-
+            <!-- A message when there are no favorite movies in user list -->
             <TextView
                 android:id="@+id/tv_error_message_display"
                 android:layout_width="wrap_content"
@@ -52,16 +52,7 @@
                 android:layout_height="@dimen/progress_bar_dimension"
                 android:layout_gravity="center"
                 android:visibility="invisible" />
-            <!-- A message when there are no favorite movies in user list -->
-            <TextView
-                android:id="@+id/tv_no_fav_art_objects"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:padding="@dimen/default_padding"
-                android:text="@string/msg_no_fav_items"
-                android:textSize="@dimen/text_size_error_message"
-                android:visibility="invisible" />
+
         </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

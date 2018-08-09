@@ -130,11 +130,11 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
     @Override
-    public void onClick(ArtObject artObject) {
+    public void onClick(ArtObject artObject){
 
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(Config.BUNDLE_ART_OBJECT_ID, artObject.getId());
-
+        intent.putExtra(Config.BUNDLE_ART_OBJECT, artObject);
         startActivity(intent);
     }
 
@@ -173,14 +173,13 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         if (cursor.getCount() > 0) {
-            mFavItemsAdapter.setData(cursor);
+            mFavItemsAdapter.swapCursor(cursor);
             if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
             mRecyclerView.smoothScrollToPosition(mPosition);
             /* Setting the adapter attaches it to the RecyclerView in our layout. */
             mRecyclerView.setAdapter(mFavItemsAdapter);
         } else {
-
-            showErrorMessage(getResources().getString(R.string.msg_no_fav_items));
+            showErrorMessage(getString(R.string.msg_no_fav_items));
         }
     }
 

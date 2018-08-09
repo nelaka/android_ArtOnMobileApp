@@ -26,7 +26,6 @@ public class ArtOnMobileWidget extends AppWidgetProvider {
         // Construct the RemoteViews object
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.art_on_mobile_widget);
 
-
         // Widgets allow click handlers to only launch pending intents
         views.setOnClickPendingIntent(R.id.appwidget_image, pendingIntent);
 
@@ -35,10 +34,13 @@ public class ArtOnMobileWidget extends AppWidgetProvider {
         showArtObjectIntent.setAction(WidgetServices.ACTION_SHOW_ART_OBJECT);
         // Update image
         PendingIntent showArtObjectPendingIntent = PendingIntent.getService(context, 0, showArtObjectIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mImageUrl = imageUrl;
 
-        views.setTextViewText(R.id.appwidget_text, title);
-        //  views.setTextViewText(R.id.appwidget_text, Integer.toString(position));
+        if (imageUrl != null) {
+            mImageUrl = imageUrl;
+        } else {
+            //provide a placeholder when there are no images
+            mImageUrl = "http://via.placeholder.com/200x200";
+        }
 
         Handler uiHandler = new Handler(Looper.getMainLooper());
         uiHandler.post(new Runnable() {
@@ -48,14 +50,16 @@ public class ArtOnMobileWidget extends AppWidgetProvider {
             }
         });
 
+        views.setTextViewText(R.id.appwidget_text, title);
+
+        //Update the current widget instance only, by creating an array that contains the widget’s unique ID//
+        int[] idArray = new int[]{appWidgetId};
+
         // Add the prevArtObjectService click handler
         Intent prevArtObjectIntent = new Intent(context, WidgetServices.class);
-        prevArtObjectIntent.setAction(WidgetServices.ACTION_PREV_ART_OBJECT);
-        //Update the current widget instance only, by creating an array that contains the widget’s unique ID//
-
-        int[] idArray = new int[]{appWidgetId};
         prevArtObjectIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, idArray);
         prevArtObjectIntent.putExtra(WidgetServices.ART_OBJECT_POSITION, position);
+        prevArtObjectIntent.setAction(WidgetServices.ACTION_PREV_ART_OBJECT);
         PendingIntent prevArtObjectPendingIntent = PendingIntent.getService(context, 0, prevArtObjectIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         // Widgets allow click handlers to only launch pending intents
         views.setOnClickPendingIntent(R.id.widget_previous_button, prevArtObjectPendingIntent);
@@ -73,12 +77,8 @@ public class ArtOnMobileWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-
     public static void updateArtObjectWidgets(Context context, AppWidgetManager appWidgetManager, int position, String imageUrl, String title, int[] appWidgetIds) {
 
-        //  if (position > mPosition) WidgetServices.startActionNextArtObject(context, position);
-        //  else if (position < mPosition) WidgetServices.startActionPrevArtObject(context, position);
-        //  mPosition = position;
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, position, imageUrl, title, appWidgetId);
         }

@@ -23,7 +23,7 @@ public class Config {
     public static final String BUNDLE_ART_OBJECT_ID = "art_object_id";
 
     public static final String BUNDLE_FAVORITES = "favorites";
-
+public static final String BUNDLE_SHARE = "share";
     /*
      * This ID will be used to identify the Loader responsible for loading our weather forecast. In
      * some cases, one Activity can deal with many Loaders. However, in our case, there is only one.

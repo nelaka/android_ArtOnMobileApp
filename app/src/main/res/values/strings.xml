@@ -69,4 +69,8 @@
     <string name="desc_nav_drawer_sort_by">Menu options for sorting</string>
     <string name="desc_widget_go_to_prev">Arrow with action go to previous image</string>
     <string name="desc_widget_go_to_next">Arrow with action go to next image</string>
+
+    <string name="fab_email_text">Why don\'t you suggest this app to your friends? Send them an e-mail now!</string>
+    <string name="email_title">Maybe you should check out this app! It\'s awesome!</string>
+    <string name="widget_msg_no_fav">There are not any art objects in your favorites. Why don\'t you add some?</string>
 </resources>

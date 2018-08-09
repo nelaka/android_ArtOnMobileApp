@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     FloatingActionButton mFab;
     Tracker mTracker;
     private Boolean mAllArtObjects = true;
-    private Loader mLoader;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -49,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Why don' t you suggest this app to your friends? Send them an e-mail now!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                composeEmail(null, "Maybe you should check out this app! It's awesome!");
+                Snackbar.make(view, getResources().getString(R.string.fab_email_text), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                composeEmail(null, getResources().getString(R.string.email_title));
             }
         });
 
@@ -58,30 +57,22 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         AnalyticsApp application = (AnalyticsApp) getApplication();
         mTracker = application.getDefaultTracker();
 
-
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
-
-        if (getLoaderManager().getLoader(Config.ID_FAV_ITEMS_LOADER) != null) {
-            mLoader = getLoaderManager().getLoader(Config.ID_FAV_ITEMS_LOADER);
-            mLoader.reset();
-        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //  mLoader.reset();
 
         String name = "Main Activity";
         Log.i("MainActivity", "Setting screen name: " + name);
         mTracker.setScreenName("Image~" + name);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
-
 
     @Override
     public void onBackPressed() {
@@ -111,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             } else {
                 allPaintings(Config.ORDER_CHRONOLOGICAL);
             }
-
         } else if (id == R.id.nav_sort_by_artist) {
             if (mAllArtObjects) {
                 allArtObjects(Config.ORDER_BY_ARTIST);
@@ -166,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         mDrawerLayout.removeDrawerListener(mToggle);
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(Config.BUNDLE_ART_OBJECT_ID, artObject.getId());
+        intent.putExtra(Config.BUNDLE_ART_OBJECT, artObject);
         startActivity(intent);
     }
 }
