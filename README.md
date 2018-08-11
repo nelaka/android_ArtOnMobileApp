@@ -47,7 +47,7 @@ And you should then put the key in build.gradle (Module app) where you can find 
 
 
 <h2>App's preview</h2>
-<p><img src="artOnMobile_app.gif" title="Art On Mobile preview"/></p>
+<p><img src="screenshots/artOnMobile_app.gif width="33%""/></p>
 
 <h2>App's screenshots</h2>
 <p><img src="screenshots/artOnMobile_app_1.png" width="33%"/>   <img src="screenshots/artOnMobile_app_2.png" width="33%"/>   <img src="screenshots/artOnMobile_app_3.png" width="33%"/></p>
