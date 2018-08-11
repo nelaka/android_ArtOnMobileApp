@@ -42,7 +42,7 @@ The app will:
 </ul>
 
 ## Access to the API
-To access the data and images, you will first need to obtain an API key. You can do this via the advanced settings of your ![Rijksstudio account](https://www.rijksmuseum.nl/en/rijksstudio/my/profile). You will be given a key instantly upon request. Every request to the API must be accompanied by this key.
+To access the data and images, you will first need to obtain an API key. You can do this via the advanced settings of your [Rijksstudio account](https://www.rijksmuseum.nl/en/rijksstudio/my/profile). You will be given a key instantly upon request. Every request to the API must be accompanied by this key.
 And you should then put the key in build.gradle (Module app) where you can find RIJKSMUSEUM_API_KEY_GOES_HERE
 
 
