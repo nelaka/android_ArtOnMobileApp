@@ -46,7 +46,10 @@ To access the data and images, you will first need to obtain an API key. You can
 And you should then put the key in build.gradle (Module app) where you can find RIJKSMUSEUM_API_KEY_GOES_HERE
 
 
-<h2> App's screenshots</h2>
-<p><img src="screenshots/artOnMobile_app_1.png" width="33%"/>   <img src="screenshots/artOnMobile_app_2.png" width="33%"/></p>
-<p><img src="screenshots/artOnMobile_app_3.png" width="33%"/>   <img src="screenshots/artOnMobile_app_4.png" width="33%"/></p>
-<p><img src="screenshots/artOnMobile_app_5.png" width="33%"/>   </p>
+<h2>App's preview</h2>
+<p><img src="artOnMobile_app.gif" title="Art On Mobile preview"/></p>
+
+<h2>App's screenshots</h2>
+<p><img src="screenshots/artOnMobile_app_1.png" width="33%"/>   <img src="screenshots/artOnMobile_app_2.png" width="33%"/>   <img src="screenshots/artOnMobile_app_3.png" width="33%"/></p>
+<p><img src="screenshots/artOnMobile_app_4.png" width="33%"/>   <img src="screenshots/artOnMobile_app_5.png" width="33%"/>   <img src="screenshots/artOnMobile_app_6.png" width="33%"/></p>
+<p><img src="screenshots/artOnMobile_app_7.png" width="33%"/></p>
