@@ -49,4 +49,4 @@ And you should then put the key in build.gradle (Module app) where you can find 
 <h2> App's screenshots</h2>
 <p><img src="screenshots/artOnMobile_app_1.png" width="33%"/>   <img src="screenshots/artOnMobile_app_2.png" width="33%"/></p>
 <p><img src="screenshots/artOnMobile_app_3.png" width="33%"/>   <img src="screenshots/artOnMobile_app_4.png" width="33%"/></p>
-<p><img src="screenshots/artOnMobile_app_5.png" width="60%"/>   </p>
+<p><img src="screenshots/artOnMobile_app_5.png" width="33%"/>   </p>
