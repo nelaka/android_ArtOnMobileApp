@@ -24,7 +24,10 @@ import android.view.ViewGroup;
 
 import com.example.android.android_artonmobileapp.R;
 import com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
+import com.example.android.android_artonmobileapp.database.FavArtObjectEntry;
 import com.example.android.android_artonmobileapp.holder.FavItemViewHolder;
+
+import java.util.List;
 
 public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
 
@@ -50,46 +53,70 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
 
     private final Context mContext;
     private final FavItemViewHolder.FavItemsAdapterOnClickHandler mClickHandler;
-    private Cursor mCursor;
+    // Class variables for the List that holds task data and the Context
+    private List<FavArtObjectEntry> mFavArtObjectEntries;
 
+    /**
+     * Constructor for the FavItemsAdapter that initializes the Context.
+     *
+     * @param context  the current Context
+     * @param clickHandler the FavItemClickListener
+     */
     public FavItemsAdapter(@NonNull Context context, FavItemViewHolder.FavItemsAdapterOnClickHandler clickHandler) {
         mContext = context;
         mClickHandler = clickHandler;
     }
 
+    /**
+     * Called when ViewHolders are created to fill a RecyclerView.
+     *
+     * @return A new TaskViewHolder that holds the view for each task
+     */
     @NonNull
     @Override
     public FavItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.fav_list_item, viewGroup, false);
 
         view.setFocusable(true);
-        return new FavItemViewHolder(view, mClickHandler, mCursor);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull FavItemViewHolder holder, int position) {
-        // Move the cursor to the appropriate position
-        mCursor.moveToPosition(position);
-        String image_url = mCursor.getString(INDEX_ART_OBJECT_IMAGE);
-        holder.bindArtObjects(image_url);
-    }
-
-    @Override
-    public int getItemCount() {
-        if (null == mCursor) return 0;
-        return mCursor.getCount();
+        return new FavItemViewHolder(view, mClickHandler, mFavArtObjectEntries);
     }
 
     /**
-     * Swaps the cursor used by the FavAdapter for the favorite art objects. This method is called by
-     * MainActivity after a load has finished, as well as when the Loader responsible for loading
-     * the art object data is reset. When this method is called, we assume we have a completely new
-     * set of data, so we call notifyDataSetChanged to tell the RecyclerView to update.
+     * Called by the RecyclerView to display data at a specified position in the Cursor.
      *
-     * @param newCursor the new cursor to use as FavAdapter's data source
+     * @param holder   The ViewHolder to bind Cursor data to
+     * @param position The position of the data in the Cursor
      */
-    public void swapCursor(Cursor newCursor) {
-        mCursor = newCursor;
+
+    @Override
+    public void onBindViewHolder(@NonNull FavItemViewHolder holder, int position) {
+        FavArtObjectEntry favArtObjectEntry = mFavArtObjectEntries.get(position);
+
+        String image_url = favArtObjectEntry.getImageUrl();
+        holder.bindArtObjects(image_url);
+    }
+
+
+    /**
+     * When data changes, this method updates the list of taskEntries
+     * and notifies the adapter to use the new values on it
+     */
+    public void setData(List<FavArtObjectEntry> favArtObjectEntries) {
+        mFavArtObjectEntries = favArtObjectEntries;
         notifyDataSetChanged();
     }
+
+    /**
+     * Returns the number of items to display.
+     */
+    @Override
+    public int getItemCount() {
+        if (mFavArtObjectEntries == null) {
+            return 0;
+        }
+        return mFavArtObjectEntries.size();
+    }
+
+
+
 }

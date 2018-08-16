@@ -14,9 +14,8 @@
  * */
 package com.example.android.android_artonmobileapp;
 
-import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,8 +34,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.android.android_artonmobileapp.data.ArtObjectsContract;
 import com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
+import com.example.android.android_artonmobileapp.database.AppDatabase;
+import com.example.android.android_artonmobileapp.database.AppExecutors;
+import com.example.android.android_artonmobileapp.database.FavArtObjectEntry;
 import com.example.android.android_artonmobileapp.model.ArtObjectDetail;
 import com.example.android.android_artonmobileapp.model.ArtObjectDetailResponse;
 import com.example.android.android_artonmobileapp.rest.ApiClient;
@@ -97,7 +98,8 @@ public class DetailFragment extends Fragment {
     private Boolean mFavorite = false;
     private String mId;
     private String mErrorMsg = null;
-
+    private AppDatabase mDb;
+private Context mContext;
     public DetailFragment() {
         // Required empty public constructor
     }
@@ -120,11 +122,18 @@ public class DetailFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = getContext();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, rootView);
 
+        mDb = AppDatabase.getInstance(mContext);
         if (savedInstanceState != null && savedInstanceState.containsKey(Config.BUNDLE_ART_OBJECT)) {
             mDetails = savedInstanceState.getParcelable(Config.BUNDLE_ART_OBJECT);
         }
@@ -247,13 +256,22 @@ public class DetailFragment extends Fragment {
         }
     }
 
-    private boolean isFavorite(String id) {
-        boolean isFavorite;
+    private boolean isFavorite(final String id) {
+        boolean isFavorite = false;
 
-        String[] favoriteId = new String[]{String.valueOf(id)};
-        Cursor cursor = getActivity().getContentResolver().query(ArtObjectsContract.ArtObjectsEntry.CONTENT_URI, null, "id=?", favoriteId, null);
 
-        if (cursor.getCount() > 0) {
+       // String[] favoriteId = new String[]{String.valueOf(id)};
+      //  Cursor cursor = getActivity().getContentResolver().query(ArtObjectsContract.ArtObjectsEntry.CONTENT_URI, null, "id=?", favoriteId, null);
+
+        final FavArtObjectEntry[] favArtObjectEntry = new FavArtObjectEntry[1];
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+           favArtObjectEntry[0] = mDb.favArtObjectDao().loadFavArtObjectById(id); }
+        });
+
+
+        if (favArtObjectEntry[0] != null) {
             isFavorite = true;
             fab.setImageResource(R.drawable.ic_favorite_white_24dp);
         } else {
@@ -261,12 +279,22 @@ public class DetailFragment extends Fragment {
             fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
         }
 
-        cursor.close();
+     //   cursor.close();
         return isFavorite;
     }
 
     private void removeItemFromFavorites(String id) {
-        Uri uri = ArtObjectsEntry.CONTENT_URI;
+        final String fId = id;
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+            FavArtObjectEntry favArtObjectEntry = mDb.favArtObjectDao().loadFavArtObjectById(fId);
+
+            mDb.favArtObjectDao().deleteTask(favArtObjectEntry);
+            }
+        });
+
+     /*   Uri uri = ArtObjectsEntry.CONTENT_URI;
         uri = uri.buildUpon().appendPath(String.valueOf(id)).build();
 
         int rowsDeleted = getContext().getContentResolver().delete(uri, null, null);
@@ -278,12 +306,23 @@ public class DetailFragment extends Fragment {
             getContext().getContentResolver().notifyChange(uri, null);
             mFavorite = false;
             getActivity().setResult(RESULT_OK);
-        }
+        }*/
     }
 
     private void addItemToFavorites(String id) {
+        final FavArtObjectEntry favArtObjectEntry = new FavArtObjectEntry(id, mDetails.getTitle(), mDetails.getPrincipalOrFirstMaker(), mDetails.getWebImage().getUrl(), mDetails.getPlaqueDescriptionEnglish());
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.favArtObjectDao().insertFavArtObject(favArtObjectEntry);
+            }
+        });
+
+//getActivity().finish();
+
         // Create new empty ContentValues object
-        ContentValues contentValues = new ContentValues();
+        /*ContentValues contentValues = new ContentValues();
         // Put the task description and selected mPriority into the ContentValues
         contentValues.put(ArtObjectsEntry.COLUMN_ART_OBJECT_ID, id);
         contentValues.put(ArtObjectsEntry.COLUMN_TITLE, mDetails.getTitle());
@@ -296,6 +335,6 @@ public class DetailFragment extends Fragment {
         if (uri != null) {
             Utils.mySnackBar(getView(), R.string.msg_added_to_fav);
             mFavorite = true;
-        }
+        }*/
     }
 }

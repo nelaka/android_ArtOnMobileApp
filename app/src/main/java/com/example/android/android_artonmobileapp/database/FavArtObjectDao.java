@@ -27,8 +27,13 @@ import java.util.List;
 
 @Dao
 public interface FavArtObjectDao {
+
+
     @Query("SELECT * FROM fav_art ORDER BY id")
-    List<FavArtObjectEntry> loadAllTasks();
+    List<FavArtObjectEntry> loadAllFavArtObjecs();
+
+    @Query("SELECT * FROM fav_art WHERE artObjectId = :artObjectId")
+    FavArtObjectEntry loadFavArtObjectById(String artObjectId);
 
     @Insert
     void insertFavArtObject(FavArtObjectEntry favArtObjectEntry);

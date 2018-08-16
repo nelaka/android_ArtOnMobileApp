@@ -35,11 +35,15 @@ import android.widget.TextView;
 
 import com.example.android.android_artonmobileapp.adapter.FavItemsAdapter;
 import com.example.android.android_artonmobileapp.data.ArtObjectsContract;
+import com.example.android.android_artonmobileapp.database.AppDatabase;
+import com.example.android.android_artonmobileapp.database.AppExecutors;
+import com.example.android.android_artonmobileapp.database.FavArtObjectEntry;
 import com.example.android.android_artonmobileapp.holder.FavItemViewHolder;
 import com.example.android.android_artonmobileapp.model.ArtObject;
 import com.example.android.android_artonmobileapp.utils.Config;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +64,28 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
     private FavItemsAdapter mFavItemsAdapter;
     private Parcelable mSavedRecyclerLayoutState;
     private GridLayoutManager mLayoutManager;
+    private AppDatabase mDb;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+
+            @Override
+            public void run() {
+                final List<FavArtObjectEntry> tasks = mDb.favArtObjectDao().loadAllFavArtObjecs();
+                // We will be able to simplify this once we learn more
+                // about Android Architecture Components
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mFavItemsAdapter.setData(tasks);
+                    }
+                });
+            }
+        });
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +94,7 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
 
+        mDb = AppDatabase.getInstance(getApplicationContext());
         // add back arrow to toolbar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -85,6 +112,9 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
          */
         mRecyclerView.setHasFixedSize(true);
 
+        // Attach the adapter to the RecyclerView
+        mRecyclerView.setAdapter(mFavItemsAdapter);
+
         if (savedInstanceState != null) {
             mItems = savedInstanceState.getParcelableArrayList(Config.BUNDLE_ART_OBJECTS);
             mSavedRecyclerLayoutState = savedInstanceState.getParcelable(Config.BUNDLE_RECYCLER_LAYOUT);
@@ -94,7 +124,7 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
          * created and (if the activity/fragment is currently started) starts the loader. Otherwise
          * the last created loader is re-used.
          */
-        getSupportLoaderManager().initLoader(ID_FAV_ITEMS_LOADER, null, this);
+     //   getSupportLoaderManager().initLoader(ID_FAV_ITEMS_LOADER, null, this);
     }
 
     @Override
@@ -163,7 +193,7 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         if (cursor.getCount() > 0) {
-            mFavItemsAdapter.swapCursor(cursor);
+         //   mFavItemsAdapter.swapCursor(cursor);
             if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
             mRecyclerView.smoothScrollToPosition(mPosition);
             /* Setting the adapter attaches it to the RecyclerView in our layout. */
@@ -175,7 +205,7 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mFavItemsAdapter.swapCursor(null);
+ //       mFavItemsAdapter.swapCursor(null);
     }
 
     @Override
@@ -190,4 +220,6 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
