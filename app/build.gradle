@@ -51,9 +51,11 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
+
         }
     }
 }
@@ -84,6 +86,10 @@ dependencies {
     //Room dependencies
     implementation 'android.arch.persistence.room:runtime:1.1.1'
     annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+    //LiveData and ViewModel dependencies
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
+
     //Google play services
     implementation 'com.google.android.gms:play-services-analytics:16.0.1'
     implementation 'com.google.android.gms:play-services-ads:15.0.1'

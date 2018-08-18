@@ -23,6 +23,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -217,7 +218,7 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
         protected Void doInBackground(Void... voids) {
             String API_KEY = Config.rijksmuseumApiKey;
 
-            if (API_KEY.isEmpty()) {
+            if (TextUtils.isEmpty(API_KEY)) {
                 mErrorMsg = getString(R.string.msg_error_no_api_key);
                 showErrorMessage(mErrorMsg);
                 mLoadingIndicator.setVisibility(View.INVISIBLE);
