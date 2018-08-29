@@ -14,12 +14,15 @@
  * */
 package com.example.android.android_artonmobileapp;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -34,7 +37,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.android_artonmobileapp.adapter.FavItemsAdapter;
-import com.example.android.android_artonmobileapp.data.ArtObjectsContract;
+//import com.example.android.android_artonmobileapp.data.ArtObjectsContract;
 import com.example.android.android_artonmobileapp.database.AppDatabase;
 import com.example.android.android_artonmobileapp.database.AppExecutors;
 import com.example.android.android_artonmobileapp.database.FavArtObjectEntry;
@@ -48,10 +51,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.android.android_artonmobileapp.adapter.FavItemsAdapter.FAV_OBJECTS_PROJECTION;
-import static com.example.android.android_artonmobileapp.utils.Config.ID_FAV_ITEMS_LOADER;
+//import static com.example.android.android_artonmobileapp.adapter.FavItemsAdapter.FAV_OBJECTS_PROJECTION;
+//import static com.example.android.android_artonmobileapp.utils.Config.ID_FAV_ITEMS_LOADER;
 
-public class FavActivity extends AppCompatActivity implements FavItemViewHolder.FavItemsAdapterOnClickHandler, LoaderManager.LoaderCallbacks<Cursor> {
+public class FavActivity extends AppCompatActivity implements FavItemViewHolder.FavItemsAdapterOnClickHandler {
     @BindView(R.id.fav_items_rv)
     RecyclerView mRecyclerView;
     @BindView(R.id.toolbar)
@@ -66,25 +69,15 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
     private GridLayoutManager mLayoutManager;
     private AppDatabase mDb;
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+   private void retrieveFavObjects(){
 
+        final LiveData<List<FavArtObjectEntry>> favArtObjects = mDb.favArtObjectDao().loadAllFavArtObjects();
+        favArtObjects.observe(this, new Observer<List<FavArtObjectEntry>>() {
             @Override
-            public void run() {
-                final List<FavArtObjectEntry> tasks = mDb.favArtObjectDao().loadAllFavArtObjecs();
-                // We will be able to simplify this once we learn more
-                // about Android Architecture Components
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mFavItemsAdapter.setData(tasks);
-                    }
-                });
+            public void onChanged(@Nullable List<FavArtObjectEntry> favArtObjectEntries) {
+                mFavItemsAdapter.setData(favArtObjectEntries);
             }
         });
-
     }
 
     @Override
@@ -119,12 +112,8 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
             mItems = savedInstanceState.getParcelableArrayList(Config.BUNDLE_ART_OBJECTS);
             mSavedRecyclerLayoutState = savedInstanceState.getParcelable(Config.BUNDLE_RECYCLER_LAYOUT);
         }
-        /*
-         * Ensures a loader is initialized and active. If the loader doesn't already exist, one is
-         * created and (if the activity/fragment is currently started) starts the loader. Otherwise
-         * the last created loader is re-used.
-         */
-     //   getSupportLoaderManager().initLoader(ID_FAV_ITEMS_LOADER, null, this);
+        retrieveFavObjects();
+
     }
 
     @Override
@@ -164,49 +153,7 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
         startActivity(intent);
     }
 
-    /**
-     * Called by the {@link android.support.v4.app.LoaderManagerImpl} when a new Loader needs to be
-     * created. This Activity only uses one loader, so we don't necessarily NEED to check the
-     * loaderId, but this is certainly best practice.
-     *
-     * @param id   The loader ID for which we need to create a loader
-     * @param args Any arguments supplied by the caller
-     * @return A new Loader instance that is ready to start loading.
-     */
-    @NonNull
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            //If the loader requested is our fav_items loader, return the appropriate CursorLoader
-            case ID_FAV_ITEMS_LOADER:
-                Uri uri = ArtObjectsContract.ArtObjectsEntry.CONTENT_URI;
-                return new CursorLoader(this, uri, FAV_OBJECTS_PROJECTION, null, null, null);
-            default:
-                throw new RuntimeException("Loader Not Implemented: " + id);
-        }
-    }
 
-    /**
-     * Called when a Loader has finished loading its data.
-     *
-     * @param loader The Loader that has finished.
-     */
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-        if (cursor.getCount() > 0) {
-         //   mFavItemsAdapter.swapCursor(cursor);
-            if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
-            mRecyclerView.smoothScrollToPosition(mPosition);
-            /* Setting the adapter attaches it to the RecyclerView in our layout. */
-            mRecyclerView.setAdapter(mFavItemsAdapter);
-        } else {
-            showErrorMessage(getString(R.string.msg_no_fav_items));
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
- //       mFavItemsAdapter.swapCursor(null);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

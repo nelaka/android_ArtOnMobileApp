@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.example.android.android_artonmobileapp.data.ArtObjectsContract;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -108,7 +107,7 @@ public class WidgetServices extends IntentService {
         String imageUrl = null;
         String title = getResources().getString(R.string.widget_msg_no_fav);
 
-        Uri uri = ArtObjectsContract.ArtObjectsEntry.CONTENT_URI;
+   /*     Uri uri = ArtObjectsContract.ArtObjectsEntry.CONTENT_URI;
         ContentResolver resolver = getContentResolver();
         Cursor itemsResponse = resolver.query(uri, null, null, null, null);
 
@@ -126,7 +125,7 @@ public class WidgetServices extends IntentService {
             title = itemsResponse.getString(itemTitleIndex);
         }
         itemsResponse.close();
-
+*/
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, ArtOnMobileWidget.class));
         //Now update all widgets
@@ -141,7 +140,7 @@ public class WidgetServices extends IntentService {
         String imageUrl = null;
         String title = getResources().getString(R.string.widget_msg_no_fav);
 
-        Uri uri = ArtObjectsContract.ArtObjectsEntry.CONTENT_URI;
+   /*    Uri uri = ArtObjectsContract.ArtObjectsEntry.CONTENT_URI;
         ContentResolver resolver = getContentResolver();
         Cursor itemsResponse = resolver.query(uri, null, null, null, null);
 
@@ -159,7 +158,7 @@ public class WidgetServices extends IntentService {
             title = itemsResponse.getString(itemTitleIndex);
         }
         itemsResponse.close();
-
+*/
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, ArtOnMobileWidget.class));
         //Now update all widgets
@@ -175,7 +174,7 @@ public class WidgetServices extends IntentService {
         String imageUrl = null;
         String title = getResources().getString(R.string.widget_msg_no_fav);
 
-        Uri uri = ArtObjectsContract.ArtObjectsEntry.CONTENT_URI;
+    /*    Uri uri = ArtObjectsContract.ArtObjectsEntry.CONTENT_URI;
         ContentResolver resolver = getContentResolver();
         Cursor itemsResponse = resolver.query(uri, null, null, null, null);
 
@@ -188,7 +187,7 @@ public class WidgetServices extends IntentService {
             title = itemsResponse.getString(itemTitleIndex);
         }
         itemsResponse.close();
-
+*/
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, ArtOnMobileWidget.class));
         //Now update all widgets

@@ -20,7 +20,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.android.android_artonmobileapp.R;
-import com.example.android.android_artonmobileapp.data.ArtObjectsContract;
+//import com.example.android.android_artonmobileapp.data.ArtObjectsContract;
 import com.example.android.android_artonmobileapp.database.FavArtObjectEntry;
 import com.example.android.android_artonmobileapp.model.ArtObject;
 import com.squareup.picasso.Picasso;

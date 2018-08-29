@@ -1,23 +1,25 @@
-/**Copyright 2018 Eleni Kalkopoulou
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
- * */
+/**
+ * Copyright 2018 Eleni Kalkopoulou
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.android.android_artonmobileapp;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,6 +27,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +37,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
 import com.example.android.android_artonmobileapp.database.AppDatabase;
 import com.example.android.android_artonmobileapp.database.AppExecutors;
 import com.example.android.android_artonmobileapp.database.FavArtObjectEntry;
@@ -43,7 +45,6 @@ import com.example.android.android_artonmobileapp.model.ArtObjectDetailResponse;
 import com.example.android.android_artonmobileapp.rest.ApiClient;
 import com.example.android.android_artonmobileapp.rest.ApiInterface;
 import com.example.android.android_artonmobileapp.utils.Config;
-import com.example.android.android_artonmobileapp.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -51,9 +52,6 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.app.Activity.RESULT_OK;
-import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -99,7 +97,8 @@ public class DetailFragment extends Fragment {
     private String mId;
     private String mErrorMsg = null;
     private AppDatabase mDb;
-private Context mContext;
+    private Context mContext;
+
     public DetailFragment() {
         // Required empty public constructor
     }
@@ -125,6 +124,7 @@ private Context mContext;
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
+        mDb = AppDatabase.getInstance(mContext);
     }
 
     @Override
@@ -133,7 +133,7 @@ private Context mContext;
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, rootView);
 
-        mDb = AppDatabase.getInstance(mContext);
+
         if (savedInstanceState != null && savedInstanceState.containsKey(Config.BUNDLE_ART_OBJECT)) {
             mDetails = savedInstanceState.getParcelable(Config.BUNDLE_ART_OBJECT);
         }
@@ -257,84 +257,56 @@ private Context mContext;
     }
 
     private boolean isFavorite(final String id) {
-        boolean isFavorite = false;
-
-
-       // String[] favoriteId = new String[]{String.valueOf(id)};
-      //  Cursor cursor = getActivity().getContentResolver().query(ArtObjectsContract.ArtObjectsEntry.CONTENT_URI, null, "id=?", favoriteId, null);
-
+        boolean isFavorite = mFavorite;
         final FavArtObjectEntry[] favArtObjectEntry = new FavArtObjectEntry[1];
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-           favArtObjectEntry[0] = mDb.favArtObjectDao().loadFavArtObjectById(id); }
+                favArtObjectEntry[0] = mDb.favArtObjectDao().loadFavArtObjectById(id);
+            }
         });
+if (favArtObjectEntry[0] !=null) {
+    String a = favArtObjectEntry[0].getArtObjectId();
+    Log.v("Detail", "a = "+ favArtObjectEntry[0].getArtObjectId());
+    if (a != null) {
+        isFavorite = true;
+        fab.setImageResource(R.drawable.ic_favorite_white_24dp);
+    } else {
+        isFavorite = false;
+        fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+    }
+}
 
-
-        if (favArtObjectEntry[0] != null) {
-            isFavorite = true;
-            fab.setImageResource(R.drawable.ic_favorite_white_24dp);
-        } else {
-            isFavorite = false;
-            fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
-        }
-
-     //   cursor.close();
         return isFavorite;
     }
 
     private void removeItemFromFavorites(String id) {
+
+   //     final FavArtObjectEntry favArtObject;
         final String fId = id;
+        //final FavArtObjectEntry favArtObjectEntry = favArtObject.getValue();
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-            FavArtObjectEntry favArtObjectEntry = mDb.favArtObjectDao().loadFavArtObjectById(fId);
-
-            mDb.favArtObjectDao().deleteTask(favArtObjectEntry);
+                FavArtObjectEntry favArtObjectEntry;
+                favArtObjectEntry = mDb.favArtObjectDao().loadFavArtObjectById(fId);
+                mDb.favArtObjectDao().deleteTask(favArtObjectEntry);
             }
         });
 
-     /*   Uri uri = ArtObjectsEntry.CONTENT_URI;
-        uri = uri.buildUpon().appendPath(String.valueOf(id)).build();
+        mFavorite = false;
 
-        int rowsDeleted = getContext().getContentResolver().delete(uri, null, null);
-
-        Log.d(TAG, "rowsDeleted =" + rowsDeleted + " " + uri + " " + String.valueOf(id));
-        if (rowsDeleted > 0) {
-
-            Utils.mySnackBar(getView(), R.string.msg_removed_from_fav);
-            getContext().getContentResolver().notifyChange(uri, null);
-            mFavorite = false;
-            getActivity().setResult(RESULT_OK);
-        }*/
     }
 
     private void addItemToFavorites(String id) {
         final FavArtObjectEntry favArtObjectEntry = new FavArtObjectEntry(id, mDetails.getTitle(), mDetails.getPrincipalOrFirstMaker(), mDetails.getWebImage().getUrl(), mDetails.getPlaqueDescriptionEnglish());
-
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 mDb.favArtObjectDao().insertFavArtObject(favArtObjectEntry);
             }
         });
+        mFavorite = true;
 
-//getActivity().finish();
-
-        // Create new empty ContentValues object
-        /*ContentValues contentValues = new ContentValues();
-        // Put the task description and selected mPriority into the ContentValues
-        contentValues.put(ArtObjectsEntry.COLUMN_ART_OBJECT_ID, id);
-        contentValues.put(ArtObjectsEntry.COLUMN_TITLE, mDetails.getTitle());
-        contentValues.put(ArtObjectsEntry.COLUMN_MAKER, mDetails.getPrincipalOrFirstMaker());
-        contentValues.put(ArtObjectsEntry.COLUMN_IMAGE, mDetails.getWebImage().getUrl());
-        // Insert the content values via a ContentResolver
-        Uri uri = getContext().getContentResolver().insert(ArtObjectsEntry.CONTENT_URI, contentValues);
-        Log.d(TAG, "Uri =" + uri + " " + String.valueOf(id));
-
-        if (uri != null) {
-            Utils.mySnackBar(getView(), R.string.msg_added_to_fav);
-            mFavorite = true;
-        }*/
     }
 }

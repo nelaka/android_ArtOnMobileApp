@@ -23,7 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.android_artonmobileapp.R;
-import com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
+//import com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
 import com.example.android.android_artonmobileapp.database.FavArtObjectEntry;
 import com.example.android.android_artonmobileapp.holder.FavItemViewHolder;
 
@@ -34,12 +34,12 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
     private static final String TAG = FavItemsAdapter.class.getSimpleName();
 
     // Create a String array containing the names of the desired data columns from our ContentProvider
-    public static final String[] FAV_OBJECTS_PROJECTION = {
+/*    public static final String[] FAV_OBJECTS_PROJECTION = {
             ArtObjectsEntry.COLUMN_ART_OBJECT_ID,
             ArtObjectsEntry.COLUMN_TITLE,
             ArtObjectsEntry.COLUMN_MAKER,
             ArtObjectsEntry.COLUMN_IMAGE};
-
+*/
     //Create constant int values representing each column name's position above
     /*
      * We store the indices of the values in the array of Strings above to more quickly be able to

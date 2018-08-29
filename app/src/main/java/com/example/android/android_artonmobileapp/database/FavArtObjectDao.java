@@ -14,6 +14,7 @@
  * */
 package com.example.android.android_artonmobileapp.database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -30,7 +31,7 @@ public interface FavArtObjectDao {
 
 
     @Query("SELECT * FROM fav_art ORDER BY id")
-    List<FavArtObjectEntry> loadAllFavArtObjecs();
+    LiveData<List<FavArtObjectEntry>> loadAllFavArtObjects();
 
     @Query("SELECT * FROM fav_art WHERE artObjectId = :artObjectId")
     FavArtObjectEntry loadFavArtObjectById(String artObjectId);

@@ -24,6 +24,7 @@ import android.os.Looper;
 import android.widget.RemoteViews;
 
 import com.squareup.picasso.Picasso;
+import com.example.android.android_artonmobileapp.WidgetServices;
 
 /**
  * Implementation of App Widget functionality.

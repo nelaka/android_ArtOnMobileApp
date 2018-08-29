@@ -41,24 +41,7 @@
                 android:value=".MainActivity" />
         </activity>
 
-        <!-- Use of content provider  -->
-        <provider
-            android:name=".data.ArtObjectsContentProvider"
-            android:authorities="com.example.android.android_artonmobileapp"
-            android:exported="false" />
 
-        <receiver android:name=".ArtOnMobileWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
 
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/art_on_mobile_widget_info" />
-        </receiver>
-
-        <service
-            android:name=".WidgetServices"
-            android:exported="false" />
     </application>
 </manifest>
