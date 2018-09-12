@@ -76,7 +76,7 @@ public class  DetailActivity extends AppCompatActivity {
         Intent shareIntent = ShareCompat.IntentBuilder.from(this).setType("text/plain").getIntent();
 
         shareIntent.putExtra(Intent.EXTRA_TEXT, artObject.getTitle());
-        shareIntent.putExtra(Intent.EXTRA_TEXT, artObject.getImage());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, artObject.getWebImage().getUrl());
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         return shareIntent;
     }
