@@ -72,6 +72,9 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
    private void retrieveFavObjects(){
 
         final LiveData<List<FavArtObjectEntry>> favArtObjects = mDb.favArtObjectDao().loadAllFavArtObjects();
+
+        if (favArtObjects.getValue() == null) showErrorMessage(getString(R.string.msg_no_fav_items));
+
         favArtObjects.observe(this, new Observer<List<FavArtObjectEntry>>() {
             @Override
             public void onChanged(@Nullable List<FavArtObjectEntry> favArtObjectEntries) {
