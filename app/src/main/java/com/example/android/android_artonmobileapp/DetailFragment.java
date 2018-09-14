@@ -17,6 +17,7 @@ package com.example.android.android_artonmobileapp;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -125,6 +126,7 @@ public class DetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mContext = getContext();
         mDb = AppDatabase.getInstance(mContext);
+
     }
 
     @Override
@@ -256,47 +258,44 @@ public class DetailFragment extends Fragment {
         }
     }
 
-    private boolean isFavorite(final String id) {
-        boolean isFavorite = mFavorite;
-        final FavArtObjectEntry[] favArtObjectEntry = new FavArtObjectEntry[1];
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+    private boolean isFavorite(String id) {
+        final LiveData<FavArtObjectEntry> favArtObject = mDb.favArtObjectDao().loadFavArtObjectById(id);
+
+        favArtObject.observe(this, new Observer<FavArtObjectEntry>() {
             @Override
-            public void run() {
-                favArtObjectEntry[0] = mDb.favArtObjectDao().loadFavArtObjectById(id);
+            public void onChanged(@Nullable FavArtObjectEntry favArtObjectEntry) {
+                if (favArtObject.getValue() != null) {
+                    mFavorite = true;
+                    fab.setImageResource(R.drawable.ic_favorite_white_24dp);
+                } else {
+                    mFavorite = false;
+                    fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+
+                }
             }
         });
-if (favArtObjectEntry[0] !=null) {
-    String a = favArtObjectEntry[0].getArtObjectId();
-    Log.v("Detail", "a = "+ favArtObjectEntry[0].getArtObjectId());
-    if (a != null) {
-        isFavorite = true;
-        fab.setImageResource(R.drawable.ic_favorite_white_24dp);
-    } else {
-        isFavorite = false;
-        fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
-    }
-}
 
-        return isFavorite;
+        return mFavorite;
     }
 
-    private void removeItemFromFavorites(String id) {
+    private void removeItemFromFavorites(final String id) {
+        final LiveData<FavArtObjectEntry> favArtObject = mDb.favArtObjectDao().loadFavArtObjectById(id);
 
-   //     final FavArtObjectEntry favArtObject;
-        final String fId = id;
-        //final FavArtObjectEntry favArtObjectEntry = favArtObject.getValue();
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+        favArtObject.observe(this, new Observer<FavArtObjectEntry>() {
             @Override
-            public void run() {
-                FavArtObjectEntry favArtObjectEntry;
-                favArtObjectEntry = mDb.favArtObjectDao().loadFavArtObjectById(fId);
+            public void onChanged(@Nullable final FavArtObjectEntry favArtObjectEntry) {
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
                 mDb.favArtObjectDao().deleteTask(favArtObjectEntry);
+                    }
+                });
+                favArtObject.removeObserver(this);
             }
         });
 
         mFavorite = false;
-
-    }
+     }
 
     private void addItemToFavorites(String id) {
         final FavArtObjectEntry favArtObjectEntry = new FavArtObjectEntry(id, mDetails.getTitle(), mDetails.getPrincipalOrFirstMaker(), mDetails.getWebImage().getUrl(), mDetails.getPlaqueDescriptionEnglish());
@@ -307,6 +306,5 @@ if (favArtObjectEntry[0] !=null) {
             }
         });
         mFavorite = true;
-
     }
 }

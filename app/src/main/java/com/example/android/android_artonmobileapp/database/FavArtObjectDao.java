@@ -22,8 +22,6 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-
-
 import java.util.List;
 
 @Dao
@@ -34,7 +32,7 @@ public interface FavArtObjectDao {
     LiveData<List<FavArtObjectEntry>> loadAllFavArtObjects();
 
     @Query("SELECT * FROM fav_art WHERE artObjectId = :artObjectId")
-    FavArtObjectEntry loadFavArtObjectById(String artObjectId);
+    LiveData<FavArtObjectEntry> loadFavArtObjectById(String artObjectId);
 
     @Insert
     void insertFavArtObject(FavArtObjectEntry favArtObjectEntry);
@@ -45,3 +43,5 @@ public interface FavArtObjectDao {
     @Delete
     void deleteTask(FavArtObjectEntry favArtObjectEntry);
 }
+
+
