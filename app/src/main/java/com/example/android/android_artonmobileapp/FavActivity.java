@@ -14,47 +14,36 @@
  * */
 package com.example.android.android_artonmobileapp;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.android_artonmobileapp.adapter.FavItemsAdapter;
-//import com.example.android.android_artonmobileapp.data.ArtObjectsContract;
 import com.example.android.android_artonmobileapp.database.AppDatabase;
-import com.example.android.android_artonmobileapp.database.AppExecutors;
 import com.example.android.android_artonmobileapp.database.FavArtObjectEntry;
 import com.example.android.android_artonmobileapp.holder.FavItemViewHolder;
 import com.example.android.android_artonmobileapp.model.ArtObject;
 import com.example.android.android_artonmobileapp.utils.Config;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-//import static com.example.android.android_artonmobileapp.adapter.FavItemsAdapter.FAV_OBJECTS_PROJECTION;
-//import static com.example.android.android_artonmobileapp.utils.Config.ID_FAV_ITEMS_LOADER;
 
 public class FavActivity extends AppCompatActivity implements FavItemViewHolder.FavItemsAdapterOnClickHandler {
+
+    private static final String TAG = FavActivity.class.getSimpleName();
+
     @BindView(R.id.fav_items_rv)
     RecyclerView mRecyclerView;
     @BindView(R.id.toolbar)
@@ -62,20 +51,17 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
     @BindView(R.id.tv_error_message_display)
     TextView mErrorMessageDisplay;
 
-    private ArrayList<ArtObject> mItems;
-    private int mPosition = RecyclerView.NO_POSITION;
     private FavItemsAdapter mFavItemsAdapter;
-    private Parcelable mSavedRecyclerLayoutState;
     private GridLayoutManager mLayoutManager;
-    private AppDatabase mDb;
 
-   private void retrieveFavObjects(){
+    private void setupViewModel(){
 
-        final LiveData<List<FavArtObjectEntry>> favArtObjects = mDb.favArtObjectDao().loadAllFavArtObjects();
-
-        favArtObjects.observe(this, new Observer<List<FavArtObjectEntry>>() {
+       FavViewModel viewModel = ViewModelProviders.of(this).get(FavViewModel.class);
+       //Observe the LiveData object in the ViewModel
+       viewModel.getFavArtObjects().observe(this, new Observer<List<FavArtObjectEntry>>() {
             @Override
             public void onChanged(@Nullable List<FavArtObjectEntry> favArtObjectEntries) {
+                Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
                 if (favArtObjectEntries.size() <= 0) showErrorMessage(getString(R.string.msg_no_fav_items));
                 mFavItemsAdapter.setData(favArtObjectEntries);
             }
@@ -89,7 +75,6 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
 
-        mDb = AppDatabase.getInstance(getApplicationContext());
         // add back arrow to toolbar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -110,31 +95,8 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
         // Attach the adapter to the RecyclerView
         mRecyclerView.setAdapter(mFavItemsAdapter);
 
-        if (savedInstanceState != null) {
-            mItems = savedInstanceState.getParcelableArrayList(Config.BUNDLE_ART_OBJECTS);
-            mSavedRecyclerLayoutState = savedInstanceState.getParcelable(Config.BUNDLE_RECYCLER_LAYOUT);
-        }
-        retrieveFavObjects();
+        setupViewModel();
 
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(Config.BUNDLE_ART_OBJECTS, mItems);
-        outState.putParcelable(Config.BUNDLE_RECYCLER_LAYOUT, mRecyclerView.getLayoutManager().onSaveInstanceState());
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(Config.BUNDLE_RECYCLER_LAYOUT)) {
-                mItems = savedInstanceState.getParcelableArrayList(Config.BUNDLE_ART_OBJECTS);
-                mSavedRecyclerLayoutState = savedInstanceState.getParcelable(Config.BUNDLE_RECYCLER_LAYOUT);
-                mLayoutManager.onRestoreInstanceState(mSavedRecyclerLayoutState);
-            }
-        }
     }
 
     private void showErrorMessage(String msg) {
@@ -155,8 +117,6 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
         startActivity(intent);
     }
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -169,6 +129,4 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }
