@@ -1,23 +1,22 @@
-/**
- * Copyright 2018 Eleni Kalkopoulou
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+  Copyright 2018 Eleni Kalkopoulou
+  <p>
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  <p>
+  http://www.apache.org/licenses/LICENSE-2.0
+  <p>
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
  */
 package com.example.android.android_artonmobileapp;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.arch.persistence.room.Room;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -28,7 +27,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,33 +96,15 @@ public class DetailFragment extends Fragment {
     private String mId;
     private String mErrorMsg = null;
     private AppDatabase mDb;
-    private Context mContext;
 
     public DetailFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(Config.BUNDLE_ART_OBJECT, mDetails);
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(Config.BUNDLE_ART_OBJECT)) {
-                mDetails = savedInstanceState.getParcelable(Config.BUNDLE_ART_OBJECT);
-            }
-        }
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = getContext();
+        Context mContext = getContext();
         mDb = AppDatabase.getInstance(mContext);
 
     }
@@ -134,11 +114,6 @@ public class DetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, rootView);
-
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(Config.BUNDLE_ART_OBJECT)) {
-            mDetails = savedInstanceState.getParcelable(Config.BUNDLE_ART_OBJECT);
-        }
 
         if (getActivity().getIntent() != null) {
             Intent intent = getActivity().getIntent();
@@ -259,12 +234,16 @@ public class DetailFragment extends Fragment {
     }
 
     private boolean isFavorite(String id) {
-        final LiveData<FavArtObjectEntry> favArtObject = mDb.favArtObjectDao().loadFavArtObjectById(id);
 
-        favArtObject.observe(this, new Observer<FavArtObjectEntry>() {
+        DetailFavViewModelFactory factory = new DetailFavViewModelFactory(mDb, id);
+        final DetailFavViewModel viewModel
+                = ViewModelProviders.of(this, factory).get(DetailFavViewModel.class);
+
+        // CObserve the LiveData object in the ViewModel. Use it also when removing the observer
+        viewModel.getFavArtObject().observe(this, new Observer<FavArtObjectEntry>() {
             @Override
             public void onChanged(@Nullable FavArtObjectEntry favArtObjectEntry) {
-                if (favArtObject.getValue() != null) {
+                if (viewModel.getFavArtObject().getValue() != null) {
                     mFavorite = true;
                     fab.setImageResource(R.drawable.ic_favorite_white_24dp);
                 } else {
@@ -279,9 +258,12 @@ public class DetailFragment extends Fragment {
     }
 
     private void removeItemFromFavorites(final String id) {
-        final LiveData<FavArtObjectEntry> favArtObject = mDb.favArtObjectDao().loadFavArtObjectById(id);
 
-        favArtObject.observe(this, new Observer<FavArtObjectEntry>() {
+        DetailFavViewModelFactory factory = new DetailFavViewModelFactory(mDb, id);
+        final DetailFavViewModel viewModel
+                = ViewModelProviders.of(this, factory).get(DetailFavViewModel.class);
+
+        viewModel.getFavArtObject().observe(this, new Observer<FavArtObjectEntry>() {
             @Override
             public void onChanged(@Nullable final FavArtObjectEntry favArtObjectEntry) {
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
@@ -290,7 +272,7 @@ public class DetailFragment extends Fragment {
                 mDb.favArtObjectDao().deleteTask(favArtObjectEntry);
                     }
                 });
-                favArtObject.removeObserver(this);
+                viewModel.getFavArtObject().removeObserver(this);
             }
         });
 
