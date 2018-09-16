@@ -15,7 +15,7 @@ import com.google.android.gms.ads.doubleclick.PublisherAdView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class  DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity {
 
     private static final String TAG = DetailActivity.class.getSimpleName();
 

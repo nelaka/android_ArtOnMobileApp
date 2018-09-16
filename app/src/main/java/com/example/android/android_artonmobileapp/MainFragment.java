@@ -1,4 +1,4 @@
-/**Copyright 2018 Eleni Kalkopoulou
+/*Copyright 2018 Eleni Kalkopoulou
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -11,11 +11,10 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
- * */
+  */
 package com.example.android.android_artonmobileapp;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -146,9 +145,62 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
         mRecyclerView.setHasFixedSize(true);
 
         if (mItems == null) {
-            new RetrieveArtObjectsTask().execute();
+            String API_KEY = Config.rijksmuseumApiKey;
 
-        } else {
+            if (TextUtils.isEmpty(API_KEY)) {
+                mErrorMsg = getString(R.string.msg_error_no_api_key);
+                showErrorMessage(mErrorMsg);
+                mLoadingIndicator.setVisibility(View.INVISIBLE);
+                mErrorMessageDisplay.setVisibility(View.VISIBLE);
+
+            } else {
+                ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+                Call<ArtObjectResponse> call;
+
+                if (mQuery == null) {
+                    call = apiService.getArtObjects(API_KEY, "json", Config.RESULTS_RETURNED, true, mSortBy);
+                } else {
+                    call = apiService.getPaintings(API_KEY, "json", Config.RESULTS_RETURNED, true, mQuery, mSortBy);
+                }
+
+                call.enqueue(new Callback<ArtObjectResponse>() {
+
+                    @Override
+                    public void onResponse(@NonNull Call<ArtObjectResponse> call, @NonNull Response<ArtObjectResponse> response) {
+                        if (response.body() != null) {
+                            mItems = response.body().getArtObjects();
+                        }
+                        Log.d("MAIN ", "Number of results received: " + mItems.size());
+                        mLoadingIndicator.setVisibility(View.INVISIBLE);
+
+                        if (mItems != null) {
+                            mArtObjectsAdapter.setData(mItems);
+
+                            /* Setting the adapter attaches it to the RecyclerView in our layout. */
+                            mRecyclerView.setAdapter(mArtObjectsAdapter);
+                            showDataView();
+
+                        } else {
+                            mErrorMsg = getString(R.string.msg_error);
+                            showErrorMessage(mErrorMsg);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ArtObjectResponse> call, @NonNull Throwable t) {
+
+                        mLoadingIndicator.setVisibility(View.INVISIBLE);
+                        mErrorMsg = getString(R.string.msg_error);
+                        showErrorMessage(mErrorMsg);
+                        // Log error here since request failed
+                        Log.e(TAG, t.toString());
+                    }
+                });
+
+            }
+
+            } else {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
             mArtObjectsAdapter.setData(mItems);
 
@@ -208,69 +260,5 @@ public class MainFragment extends Fragment implements ArtObjectViewHolder.ArtObj
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(ArtObject artObject);
-    }
-
-    /**
-     * AsyncTask to cover rubic requirements
-     */
-    public class RetrieveArtObjectsTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... voids) {
-            String API_KEY = Config.rijksmuseumApiKey;
-
-            if (TextUtils.isEmpty(API_KEY)) {
-                mErrorMsg = getString(R.string.msg_error_no_api_key);
-                showErrorMessage(mErrorMsg);
-                mLoadingIndicator.setVisibility(View.INVISIBLE);
-                mErrorMessageDisplay.setVisibility(View.VISIBLE);
-                return null;
-
-            } else {
-                ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-
-                Call<ArtObjectResponse> call;
-
-                if (mQuery == null) {
-                    call = apiService.getArtObjects(API_KEY, "json", Config.RESULTS_RETURNED, true, mSortBy);
-                } else {
-                    call = apiService.getPaintings(API_KEY, "json", Config.RESULTS_RETURNED, true, mQuery, mSortBy);
-                }
-
-                call.enqueue(new Callback<ArtObjectResponse>() {
-
-                    @Override
-                    public void onResponse(@NonNull Call<ArtObjectResponse> call, @NonNull Response<ArtObjectResponse> response) {
-                        if (response.body() != null) {
-                            mItems = response.body().getArtObjects();
-                        }
-                        Log.d("MAIN ", "Number of results received: " + mItems.size());
-                        mLoadingIndicator.setVisibility(View.INVISIBLE);
-
-                        if (mItems != null) {
-                            mArtObjectsAdapter.setData(mItems);
-
-                            /* Setting the adapter attaches it to the RecyclerView in our layout. */
-                            mRecyclerView.setAdapter(mArtObjectsAdapter);
-                            showDataView();
-
-                        } else {
-                            mErrorMsg = getString(R.string.msg_error);
-                            showErrorMessage(mErrorMsg);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<ArtObjectResponse> call, @NonNull Throwable t) {
-
-                        mLoadingIndicator.setVisibility(View.INVISIBLE);
-                        mErrorMsg = getString(R.string.msg_error);
-                        showErrorMessage(mErrorMsg);
-                        // Log error here since request failed
-                        Log.e(TAG, t.toString());
-                    }
-                });
-                return null;
-            }
-        }
     }
 }

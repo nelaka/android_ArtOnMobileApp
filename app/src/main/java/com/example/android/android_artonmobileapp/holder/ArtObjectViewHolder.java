@@ -1,4 +1,4 @@
-/**Copyright 2018 Eleni Kalkopoulou
+/*Copyright 2018 Eleni Kalkopoulou
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -11,7 +11,7 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
- * */
+  */
 package com.example.android.android_artonmobileapp.holder;
 
 import android.support.v7.widget.RecyclerView;
@@ -55,8 +55,8 @@ public class ArtObjectViewHolder extends RecyclerView.ViewHolder implements View
         Log.v(TAG, "ART OBJECT URL: " + url);
 
         Picasso.get().load(url).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).into(artObjectView);
-        /**
-         * Content Descriptions for people with disabilities
+        /*
+          Content Descriptions for people with disabilities
          */
         artObjectView.setContentDescription(artObject.getTitle());
     }

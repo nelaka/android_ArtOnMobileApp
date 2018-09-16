@@ -1,4 +1,4 @@
-/**Copyright 2018 Eleni Kalkopoulou
+/*Copyright 2018 Eleni Kalkopoulou
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -11,7 +11,7 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
- * */
+  */
 package com.example.android.android_artonmobileapp;
 
 import android.content.Intent;
@@ -104,29 +104,35 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_allworksofarts) {
-            allArtObjects(null);
-        } else if (id == R.id.nav_allpaintings) {
-            /**
-             * [START analytics custom_event]
-             */
-            mTracker.send(new HitBuilders.EventBuilder().setCategory("Action").setAction("Visit paintings").build());
-            // [END custom_event]
-            allPaintings(null);
-        } else if (id == R.id.nav_favorites) {
-            favorites();
-        } else if (id == R.id.nav_sort_by_date) {
-            if (mAllArtObjects) {
-                allArtObjects(Config.ORDER_CHRONOLOGICAL);
-            } else {
-                allPaintings(Config.ORDER_CHRONOLOGICAL);
-            }
-        } else if (id == R.id.nav_sort_by_artist) {
-            if (mAllArtObjects) {
-                allArtObjects(Config.ORDER_BY_ARTIST);
-            } else {
-                allPaintings(Config.ORDER_BY_ARTIST);
-            }
+        switch (id) {
+            case R.id.nav_allworksofarts:
+                allArtObjects(null);
+                break;
+            case R.id.nav_allpaintings:
+                /**
+                 * [START analytics custom_event]
+                 */
+                mTracker.send(new HitBuilders.EventBuilder().setCategory("Action").setAction("Visit paintings").build());
+                // [END custom_event]
+                allPaintings(null);
+                break;
+            case R.id.nav_favorites:
+                favorites();
+                break;
+            case R.id.nav_sort_by_date:
+                if (mAllArtObjects) {
+                    allArtObjects(Config.ORDER_CHRONOLOGICAL);
+                } else {
+                    allPaintings(Config.ORDER_CHRONOLOGICAL);
+                }
+                break;
+            case R.id.nav_sort_by_artist:
+                if (mAllArtObjects) {
+                    allArtObjects(Config.ORDER_BY_ARTIST);
+                } else {
+                    allPaintings(Config.ORDER_BY_ARTIST);
+                }
+                break;
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;

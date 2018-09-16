@@ -1,4 +1,4 @@
-/**Copyright 2018 Eleni Kalkopoulou
+/*Copyright 2018 Eleni Kalkopoulou
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -11,11 +11,10 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
- * */
+  */
 package com.example.android.android_artonmobileapp.adapter;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.android_artonmobileapp.R;
-//import com.example.android.android_artonmobileapp.data.ArtObjectsContract.ArtObjectsEntry;
 import com.example.android.android_artonmobileapp.database.FavArtObjectEntry;
 import com.example.android.android_artonmobileapp.holder.FavItemViewHolder;
 
@@ -33,24 +31,6 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
 
     private static final String TAG = FavItemsAdapter.class.getSimpleName();
 
-    // Create a String array containing the names of the desired data columns from our ContentProvider
-/*    public static final String[] FAV_OBJECTS_PROJECTION = {
-            ArtObjectsEntry.COLUMN_ART_OBJECT_ID,
-            ArtObjectsEntry.COLUMN_TITLE,
-            ArtObjectsEntry.COLUMN_MAKER,
-            ArtObjectsEntry.COLUMN_IMAGE};
-*/
-    //Create constant int values representing each column name's position above
-    /*
-     * We store the indices of the values in the array of Strings above to more quickly be able to
-     * access the data from our query. If the order of the Strings above changes, these indices
-     * must be adjusted to match the order of the Strings.
-     */
-    public static final int INDEX_ART_OBJECT_ID = 0;
-    private static final int INDEX_ART_OBJECT_TITLE = 1;
-    private static final int INDEX_ART_OBJECT_MAKER = 2;
-    private static final int INDEX_ART_OBJECT_IMAGE = 3;
-
     private final Context mContext;
     private final FavItemViewHolder.FavItemsAdapterOnClickHandler mClickHandler;
     // Class variables for the List that holds task data and the Context
@@ -58,7 +38,6 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
 
     /**
      * Constructor for the FavItemsAdapter that initializes the Context.
-     *
      * @param context  the current Context
      * @param clickHandler the FavItemClickListener
      */
@@ -69,7 +48,6 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
 
     /**
      * Called when ViewHolders are created to fill a RecyclerView.
-     *
      * @return A new TaskViewHolder that holds the view for each task
      */
     @NonNull
@@ -83,7 +61,6 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
 
     /**
      * Called by the RecyclerView to display data at a specified position in the Cursor.
-     *
      * @param holder   The ViewHolder to bind Cursor data to
      * @param position The position of the data in the Cursor
      */
@@ -95,7 +72,6 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
         String image_url = favArtObjectEntry.getImageUrl();
         holder.bindArtObjects(image_url);
     }
-
 
     /**
      * When data changes, this method updates the list of taskEntries
@@ -116,7 +92,4 @@ public class FavItemsAdapter extends RecyclerView.Adapter<FavItemViewHolder> {
         }
         return mFavArtObjectEntries.size();
     }
-
-
-
 }

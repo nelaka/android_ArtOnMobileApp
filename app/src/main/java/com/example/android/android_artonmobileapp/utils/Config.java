@@ -15,15 +15,6 @@ public class Config {
     public static final String BUNDLE_QUERY = "query";
     public static final String BUNDLE_SORT_BY = "sort_by";
 
-    /*
-     * This ID will be used to identify the Loader responsible for loading our weather forecast. In
-     * some cases, one Activity can deal with many Loaders. However, in our case, there is only one.
-     * We will still use this ID to initialize the loader and create the loader for best practice.
-     * Please note that 44 was chosen arbitrarily. You can use whatever number you like, so long as
-     * it is unique and consistent.
-     */
-    public static final int ID_FAV_ITEMS_LOADER = 44;
-
     public static final int RESULTS_RETURNED = 60;
 
     public static final String ORDER_CHRONOLOGICAL = "chronologic";

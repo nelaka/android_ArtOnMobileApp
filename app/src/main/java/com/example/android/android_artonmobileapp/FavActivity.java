@@ -1,4 +1,4 @@
-/**Copyright 2018 Eleni Kalkopoulou
+/*Copyright 2018 Eleni Kalkopoulou
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -11,7 +11,7 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
- * */
+  */
 package com.example.android.android_artonmobileapp;
 
 import android.arch.lifecycle.Observer;
@@ -29,7 +29,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.android_artonmobileapp.adapter.FavItemsAdapter;
-import com.example.android.android_artonmobileapp.database.AppDatabase;
 import com.example.android.android_artonmobileapp.database.FavArtObjectEntry;
 import com.example.android.android_artonmobileapp.holder.FavItemViewHolder;
 import com.example.android.android_artonmobileapp.model.ArtObject;
@@ -52,7 +51,6 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
     TextView mErrorMessageDisplay;
 
     private FavItemsAdapter mFavItemsAdapter;
-    private GridLayoutManager mLayoutManager;
 
     private void setupViewModel(){
 
@@ -82,7 +80,7 @@ public class FavActivity extends AppCompatActivity implements FavItemViewHolder.
         }
 
         mFavItemsAdapter = new FavItemsAdapter(this, this);
-        mLayoutManager = new GridLayoutManager(this, getResources().getInteger(R.integer.no_of_columns));
+        GridLayoutManager mLayoutManager = new GridLayoutManager(this, getResources().getInteger(R.integer.no_of_columns));
 
         /* Association of the LayoutManager with the RecyclerView */
         mRecyclerView.setLayoutManager(mLayoutManager);

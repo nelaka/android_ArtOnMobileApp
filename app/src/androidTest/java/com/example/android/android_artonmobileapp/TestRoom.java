@@ -1,25 +1,8 @@
 package com.example.android.android_artonmobileapp;
 
-import android.arch.persistence.room.Room;
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.example.android.android_artonmobileapp.database.AppDatabase;
-import com.example.android.android_artonmobileapp.database.FavArtObjectDao;
-import com.example.android.android_artonmobileapp.database.FavArtObjectEntry;
-import com.example.android.android_artonmobileapp.model.ArtObject;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TestRoom {
 

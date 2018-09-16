@@ -36,7 +36,7 @@
     <string name="nav_favorites">My favorite art objects</string>
     <string name="nav_sort_by_date">by date (oldest first)</string>
     <string name="nav_sort_by_artist">by artist (a-z)</string>
-    <string name="nav_sort_by_label">Sort by...</string>
+    <string name="nav_sort_by_label">Sort by…</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_detail">Detail</string>
